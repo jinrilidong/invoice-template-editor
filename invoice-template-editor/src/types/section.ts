@@ -32,6 +32,7 @@ export interface HeaderData {
   logo?: string
   companyName?: string
   logoSize?: 'default' | 'large'
+  logoDescription?: string
 }
 
 // Info Section 数据

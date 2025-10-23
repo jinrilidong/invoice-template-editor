@@ -41,7 +41,7 @@
           <div :class="section.class" :id="section.id || undefined">
             <component 
               :is="section.component"
-              :model-value="section.modelValue"
+              :model-value="section.modelValue as any"
               @update:model-value="(newData: any) => updateTemplateData(section.dataKey, newData)"
             />
           </div>

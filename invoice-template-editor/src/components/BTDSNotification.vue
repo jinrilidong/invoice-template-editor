@@ -10,7 +10,7 @@
     <div
       v-if="visible"
       :class="notificationClasses"
-      class="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 px-4 py-3 rounded-lg shadow-lg border max-w-md mx-auto"
+      class="px-4 py-3 rounded-lg shadow-lg border max-w-md mx-auto"
     >
       <div class="flex items-center gap-3">
         <!-- Icon -->

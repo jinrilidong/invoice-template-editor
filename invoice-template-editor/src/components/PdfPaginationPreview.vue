@@ -121,31 +121,48 @@
                 <!-- Header Section -->
                 <div 
                   v-if="section.type === 'header'" 
-                  class="header-section flex items-center justify-between w-full cursor-pointer transition-all duration-200"
+                  class="header-section flex items-center w-full cursor-pointer transition-all duration-200"
+                  :class="[
+                    getSectionHighlightClass('header-section'),
+                    shouldHeaderAlignLeft(section.content) ? 'justify-start' : 'justify-between'
+                  ]"
                   :style="`margin-bottom: ${getSectionMarginBottom(section, 0)};`"
-                  :class="getSectionHighlightClass('header-section')"
                   @mouseenter="handleSectionHover('header-section')"
                   @mouseleave="handleSectionLeave"
                   @click.stop="handleSectionClick('header-section')"
                 >
-                  <div class="flex flex-col gap-px items-start justify-center">
-                    <h1 class="font-semibold text-black leading-6" style="font-size: 20px;">{{ section.content?.title || 'Title' }}</h1>
+                  <!-- Title and Description Section (only show if not empty) -->
+                  <div v-if="!shouldHeaderAlignLeft(section.content)" class="flex flex-col gap-px items-start justify-center">
+                    <h1 v-if="section.content?.title" class="font-semibold text-black leading-6" style="font-size: 20px;">{{ section.content.title }}</h1>
                     <p v-if="section.content?.description" class="font-normal leading-2.25" style="font-size: 7px;">
                       {{ section.content.description }}
                     </p>
                   </div>
-                <div class="logo-container w-60 overflow-hidden relative flex items-center justify-end"
-                     :style="{ height: (section.content?.logoSize === 'large' ? 72 : 48) + 'px' }">
-                    <img 
-                      v-if="section.content?.logo" 
-                      :src="section.content.logo" 
-                      alt="Logo" 
-                    class="h-full w-full object-contain object-right"
-                    />
-                  <div v-else class="border border-black border-dashed w-60 flex items-center justify-center"
-                       :style="{ height: (section.content?.logoSize === 'large' ? 72 : 48) + 'px' }">
-                      <span class="text-gray-400" style="font-size: 10px;">Logo Placeholder</span>
+                  
+                  <!-- Logo Container -->
+                  <div class="logo-container w-60 overflow-hidden relative flex flex-col justify-center"
+                       :class="shouldHeaderAlignLeft(section.content) ? 'items-start' : 'items-end'">
+                    <div class="w-full"
+                         :style="{ height: (section.content?.logoSize === 'large' ? 72 : 48) + 'px' }">
+                      <img 
+                        v-if="section.content?.logo" 
+                        :src="section.content.logo" 
+                        alt="Logo" 
+                        :class="shouldHeaderAlignLeft(section.content) ? 'object-contain object-left' : 'object-contain object-right'"
+                        class="h-full w-full"
+                      />
+                      <div v-else class="border border-black border-dashed w-full h-full flex items-center justify-center">
+                        <span class="text-gray-400" style="font-size: 10px;">Logo Placeholder</span>
+                      </div>
                     </div>
+                    
+                    <!-- Logo Description -->
+                    <p v-if="section.content?.logoDescription" 
+                       class="mt-1 text-xs"
+                       :class="shouldHeaderAlignLeft(section.content) ? 'text-left' : 'text-right'"
+                       style="font-size: 7px; margin-top: 4px; color: #919191;">
+                      {{ section.content.logoDescription }}
+                    </p>
                   </div>
                 </div>
 
@@ -161,7 +178,10 @@
                 >
                   <!-- Section Title -->
                   <div v-if="section.content.sectionTitle" class="info-section-title-container">
-                    <p class="info-section-title" :style="{ fontWeight: getFontWeight(props.styleConfig?.info?.sectionTitleWeight) }">{{ section.content.sectionTitle }}</p>
+                    <p class="info-section-title" :style="{ 
+                      fontWeight: getFontWeight(props.styleConfig?.info?.sectionTitleWeight),
+                      color: props.styleConfig?.info?.sectionTitleColor || '#6b7280'
+                    }">{{ section.content.sectionTitle }}</p>
                   </div>
                   
                   <!-- Items 按行渲染 -->
@@ -203,14 +223,22 @@
                   <!-- Section Title (只在第一部分显示) -->
                   <div v-if="section.content.sectionTitle && section.content.showHeader !== false" class="flex gap-1 h-2.25 items-start w-full">
                     <div class="flex grow items-start min-w-0">
-                      <p class="font-semibold leading-2.25" style="font-size: 7px; color: #6b7280;">{{ section.content.sectionTitle }}</p>
+                      <p class="font-semibold leading-2.25" :style="{ 
+                        fontSize: '7px',
+                        color: props.styleConfig?.table?.sectionTitleColor || '#6b7280',
+                        fontWeight: getFontWeight(props.styleConfig?.table?.sectionTitleWeight)
+                      }">{{ section.content.sectionTitle }}</p>
                     </div>
                   </div>
                   
                   <!-- Subsection Title (只在第一部分显示) -->
                   <div v-if="section.content.subsectionTitle && section.content.showHeader !== false" class="flex gap-1 h-2.25 items-start w-full">
                     <div class="flex grow items-start min-w-0">
-                      <p class="font-semibold leading-2.25 text-black" style="font-size: 7px;">{{ section.content.subsectionTitle }}</p>
+                      <p class="font-semibold leading-2.25" :style="{ 
+                        fontSize: '7px',
+                        color: props.styleConfig?.table?.subsectionTitleColor || '#000000',
+                        fontWeight: getFontWeight(props.styleConfig?.table?.subsectionTitleWeight)
+                      }">{{ section.content.subsectionTitle }}</p>
                     </div>
                   </div>
 
@@ -233,7 +261,14 @@
                           @mouseleave="handleItemLeave"
                           @click.stop="handleItemClick('table-section-' + section.id, column.id)"
                         >
-                          <span :class="{ 'text-right': column.alignment === 'right', 'text-left': column.alignment === 'left' }" style="display:block; width:100%; font-size: 7px; color: #919191; line-height: 9px;">{{ column.name || 'Column Name' }}</span>
+                          <span :class="{ 'text-right': column.alignment === 'right', 'text-left': column.alignment === 'left' }" :style="{ 
+                            display: 'block',
+                            width: '100%',
+                            fontSize: '7px',
+                            color: props.styleConfig?.table?.headerColor || '#919191',
+                            lineHeight: '9px',
+                            fontWeight: getFontWeight(props.styleConfig?.table?.headerWeight)
+                          }">{{ column.name || 'Column Name' }}</span>
                         </th>
                       </tr>
                     </thead>
@@ -352,7 +387,10 @@
                 >
                   <!-- Section Title -->
                   <div v-if="section.content.sectionTitle" class="item-section-title-container">
-                    <p class="item-section-title" :style="{ fontWeight: getFontWeight(props.styleConfig?.item?.sectionTitleWeight) }">{{ section.content.sectionTitle }}</p>
+                    <p class="item-section-title" :style="{ 
+                      fontWeight: getFontWeight(props.styleConfig?.item?.sectionTitleWeight),
+                      color: props.styleConfig?.item?.sectionTitleColor || '#6b7280'
+                    }">{{ section.content.sectionTitle }}</p>
                   </div>
                   
                   <!-- Items 按行渲染 -->
@@ -393,7 +431,10 @@
                 >
                   <!-- Section Title -->
                   <div v-if="section.content.sectionTitle" class="h-info-section-title-container">
-                    <p class="h-info-section-title" :style="{ fontWeight: getFontWeight(props.styleConfig?.hInfo?.sectionTitleWeight) }">{{ section.content.sectionTitle }}</p>
+                    <p class="h-info-section-title" :style="{ 
+                      fontWeight: getFontWeight(props.styleConfig?.hInfo?.sectionTitleWeight),
+                      color: props.styleConfig?.hInfo?.sectionTitleColor || '#6b7280'
+                    }">{{ section.content.sectionTitle }}</p>
                   </div>
                   
                   <!-- Columns Container -->
@@ -522,8 +563,23 @@
                          @mouseleave="handleSectionLeave"
                          @click.stop="handleSectionClick('header-section')"
                          :style="`margin-bottom: ${getSectionMarginBottom(section, 0)};`">
-                      <h1 :style="{ ...getDynamicStyle('header', 'title'), fontWeight: '600', margin: '0' }">{{ section.content?.title || 'Title' }}</h1>
-                      <p v-if="section.content?.description" :style="{ ...getDynamicStyle('header', 'description'), lineHeight: '9px', margin: '0' }">{{ section.content.description }}</p>
+                      
+                      <!-- Title and Description (only show if not empty) -->
+                      <div v-if="!shouldHeaderAlignLeft(section.content)">
+                        <h1 v-if="section.content?.title" :style="{ ...getDynamicStyle('header', 'title'), fontWeight: '600', margin: '0' }">{{ section.content.title }}</h1>
+                        <p v-if="section.content?.description" :style="{ ...getDynamicStyle('header', 'description'), lineHeight: '9px', margin: '0' }">{{ section.content.description }}</p>
+                      </div>
+                      
+                      <!-- Logo Description -->
+                      <p v-if="section.content?.logoDescription" 
+                         :style="{
+                           fontSize: '7px',
+                           color: '#919191',
+                           textAlign: shouldHeaderAlignLeft(section.content) ? 'left' : 'right',
+                           margin: '4px 0 0 0'
+                         }">
+                        {{ section.content.logoDescription }}
+                      </p>
                     </div>
 
                     <!-- Info Section - 完整的 section block -->
@@ -535,7 +591,12 @@
                          :style="`margin-bottom: ${getSectionMarginBottom(section, 0)};`">
                       <!-- Section Title -->
                       <div v-if="section.content.sectionTitle" style="margin-bottom: 2px;">
-                        <p :style="{ ...getDynamicStyle('info', 'title'), fontWeight: '600', lineHeight: '9px', margin: '0' }">{{ section.content.sectionTitle }}</p>
+                        <p :style="{ 
+                          ...getDynamicStyle('info', 'title'),
+                          fontWeight: getFontWeight(props.styleConfig?.info?.sectionTitleWeight),
+                          lineHeight: '9px',
+                          margin: '0'
+                        }">{{ section.content.sectionTitle }}</p>
                       </div>
                       
                       <!-- Items 按行渲染 - 使用表格布局 -->
@@ -563,8 +624,20 @@
                          @mouseleave="handleSectionLeave"
                          @click.stop="handleSectionClick('table-section-' + section.id)"
                          :style="`margin-bottom: ${getSectionMarginBottom(section, 0)};`">
-                      <p v-if="section.content.sectionTitle && section.content.showHeader !== false" style="font-size: 7px; color: #6b7280; font-weight: 600; line-height: 9px; margin: 0 0 2px;">{{ section.content.sectionTitle }}</p>
-                      <p v-if="section.content.subsectionTitle && section.content.showHeader !== false" style="font-size: 7px; font-weight: 600; line-height: 9px; margin: 0 0 2px;">{{ section.content.subsectionTitle }}</p>
+                      <p v-if="section.content.sectionTitle && section.content.showHeader !== false" :style="{ 
+                        fontSize: '7px',
+                        color: props.styleConfig?.table?.sectionTitleColor || '#6b7280',
+                        fontWeight: getFontWeight(props.styleConfig?.table?.sectionTitleWeight),
+                        lineHeight: '9px',
+                        margin: '0 0 2px'
+                      }">{{ section.content.sectionTitle }}</p>
+                      <p v-if="section.content.subsectionTitle && section.content.showHeader !== false" :style="{ 
+                        fontSize: '7px',
+                        fontWeight: getFontWeight(props.styleConfig?.table?.subsectionTitleWeight),
+                        color: props.styleConfig?.table?.subsectionTitleColor || '#000000',
+                        lineHeight: '9px',
+                        margin: '0 0 2px'
+                      }">{{ section.content.subsectionTitle }}</p>
                       <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
                         <thead v-if="section.content.showHeader !== false">
                           <tr>
@@ -575,7 +648,15 @@
                                 @mouseleave="handleItemLeave"
                                 @click.stop="handleItemClick('table-section-' + section.id, column.id)"
                                 :style="{ width: getColumnWidth(section.content.columns, column), padding: (columnIndex === 0 ? '0 8px 0 0' : (columnIndex === (section.content.columns?.length || 1) - 1 ? '0 0 0 8px' : '0 8px')), 'vertical-align': 'bottom', 'border-bottom': '1px solid #d2d2d2', height: '13px' }">
-                              <span :style="{ display: 'block', width: '100%', fontSize: '7px', color: '#919191', lineHeight: '9px', fontWeight: '500', textAlign: (column.alignment === 'right' ? 'right' : 'left') }">{{ column.name || 'Column Name' }}</span>
+                              <span :style="{ 
+                                display: 'block',
+                                width: '100%',
+                                fontSize: '7px',
+                                color: props.styleConfig?.table?.headerColor || '#919191',
+                                lineHeight: '9px',
+                                fontWeight: getFontWeight(props.styleConfig?.table?.headerWeight),
+                                textAlign: (column.alignment === 'right' ? 'right' : 'left')
+                              }">{{ column.name || 'Column Name' }}</span>
                             </th>
                           </tr>
                         </thead>
@@ -589,8 +670,16 @@
                             <td v-for="(column, columnIndex) in section.content.columns || []"
                                 :key="column.id"
                                 :style="{ width: getColumnWidth(section.content.columns, column), padding: (columnIndex === 0 ? '2px 8px 2px 0' : (columnIndex === (section.content.columns?.length || 1) - 1 ? '2px 0 2px 8px' : '2px 8px')), 'vertical-align': 'top' }">
-                              <p class="font-normal text-black"
-                                 :style="{ fontSize: '7px', lineHeight: '9px', margin: '0', wordWrap: 'break-word', textAlign: (column.alignment === 'right' ? 'right' : 'left') }"
+                              <p class="font-normal"
+                                 :style="{ 
+                                   fontSize: '7px',
+                                   color: props.styleConfig?.table?.rowTextColor || '#000000',
+                                   lineHeight: '9px',
+                                   margin: '0',
+                                   wordWrap: 'break-word',
+                                   textAlign: (column.alignment === 'right' ? 'right' : 'left'),
+                                   fontWeight: getFontWeight(props.styleConfig?.table?.rowTextWeight)
+                                 }"
                                  :contenteditable="!props.exportMode"
                                  v-ce-model="row.data[column.id]"
                                  @input="onCellInput(section.content, row, column, $event)"></p>
@@ -632,7 +721,13 @@
                     >
                       <!-- Section Title -->
                       <div v-if="section.content.sectionTitle" style="margin-bottom: 2px;">
-                        <p style="font-size: 7px; font-weight: 600; color: #6b7280; line-height: 9px; margin: 0;">{{ section.content.sectionTitle }}</p>
+                        <p :style="{ 
+                          fontSize: '7px',
+                          fontWeight: getFontWeight(props.styleConfig?.item?.sectionTitleWeight),
+                          color: props.styleConfig?.item?.sectionTitleColor || '#6b7280',
+                          lineHeight: '9px',
+                          margin: '0'
+                        }">{{ section.content.sectionTitle }}</p>
                       </div>
                       
                       <!-- Items 按行渲染 - 使用表格布局 -->
@@ -1122,6 +1217,11 @@ const vCeModel: Directive<CeElement, string | undefined> = {
 const currentPageSections = computed(() => {
   return getPageSections(currentPage.value)
 })
+
+// 判断 Header Section 是否应该左对齐（当 title 和 description 都为空时）
+const shouldHeaderAlignLeft = (headerContent: any) => {
+  return !headerContent?.title && !headerContent?.description
+}
 
 // 动态生成表格行数据
 const getTableRows = (table: any) => {

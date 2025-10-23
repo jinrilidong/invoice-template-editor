@@ -18,6 +18,13 @@
       label="Logo upload"
     />
 
+    <!-- Logo Description Input -->
+    <UnifiedLInput
+      v-model="headerData.logoDescription"
+      label="Logo Description"
+      placeholder="Enter logo description"
+    />
+
     <!-- Logo Size -->
     <div class="mt-2">
       <label class="text-sm font-medium">Logo size</label>
@@ -46,7 +53,8 @@ const headerData = computed({
     title: 'Invoice',
     description: '',
     logo: '',
-    logoSize: 'default' as 'default' | 'large'
+    logoSize: 'default' as 'default' | 'large',
+    logoDescription: ''
   },
   set: (value) => {
     emit('update:modelValue', value)

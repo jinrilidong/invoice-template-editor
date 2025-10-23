@@ -154,7 +154,8 @@ const templateData = reactive<TemplateData>({
     description: 'Description',
     logo: '',
     companyName: '',
-    logoSize: 'default' // 'default' | 'large'
+    logoSize: 'default', // 'default' | 'large'
+    logoDescription: ''
   },
   info: [
     {
@@ -362,14 +363,10 @@ const saveToLocalStorage = () => {
 
 // Manual save with notification
 const handleManualSave = () => {
-  console.log('handleManualSave called')
   const success = saveToLocalStorage()
-  console.log('Save result:', success)
   if (success) {
-    console.log('Showing success notification')
     showNotification('保存成功', 'success')
   } else {
-    console.log('Showing error notification')
     showNotification('保存失败，请重试', 'error')
   }
 }
@@ -465,6 +462,10 @@ const loadFromLocalStorage = () => {
       
       // Restore template data (适用于所有版本)
         if (parsedData.data) {
+          // 确保 header.logoDescription 有默认值（向后兼容）
+          if (parsedData.data.header && !parsedData.data.header.logoDescription) {
+            parsedData.data.header.logoDescription = ''
+          }
           Object.assign(templateData, parsedData.data)
         }
       
@@ -1522,18 +1523,24 @@ const generateHtmlTemplate = () => {
 
 // Generate header section HTML
 const generateHeaderSection = (header: any) => {
+  const hasTitleOrDescription = header.title || header.description
+  const logoAlign = hasTitleOrDescription ? 'right' : 'left'
+  
   return `
         <table class="header-table">
             <tr>
+                ${hasTitleOrDescription ? `
                 <td>
-                    <span class="header-title">${header.title || 'Title'}</span>
+                    ${header.title ? `<span class="header-title">${header.title}</span>` : ''}
                     ${header.description ? `<span class="header-description">${header.description}</span>` : ''}
                 </td>
-                <td class="logo-container ${header.logoSize === 'large' ? 'large' : 'default'}">
+                ` : ''}
+                <td class="logo-container ${header.logoSize === 'large' ? 'large' : 'default'}" ${!hasTitleOrDescription ? 'colspan="2"' : ''}>
                     ${header.logo ? 
-                        `<img src="${header.logo}" alt="Logo" />` : 
+                        `<img src="${header.logo}" alt="Logo" style="object-position: ${logoAlign};" />` : 
                         `<table class="logo-placeholder"><tr><td>Logo Placeholder</td></tr></table>`
                     }
+                    ${header.logoDescription ? `<div class="logo-description" style="font-size: 7px; color: #919191; text-align: ${logoAlign}; margin-top: 4px;">${header.logoDescription}</div>` : ''}
                 </td>
             </tr>
         </table>
@@ -1795,13 +1802,8 @@ const generateFooterSection = (footer: any, currentPage: number, totalPages: num
 
 // Show notification message
 const showNotification = (message: string, type: 'success' | 'error' | 'info' = 'success') => {
-  console.log('showNotification called:', message, type)
-  console.log('notificationManager.value:', notificationManager.value)
   if (notificationManager.value) {
-    console.log('Calling addNotification')
     notificationManager.value.addNotification(message, type)
-  } else {
-    console.log('notificationManager.value is null/undefined')
   }
 }
 
@@ -2053,7 +2055,8 @@ onUnmounted(() => {
               </template>
               <template v-else>
             <PdfStylePanel 
-              v-model="styleConfig"
+              :model-value="styleConfig"
+              @update:model-value="(newStyleConfig) => Object.assign(styleConfig, newStyleConfig)"
               :selected-section="selectedSection"
               @refresh-preview="handleRefreshPreview"
             />

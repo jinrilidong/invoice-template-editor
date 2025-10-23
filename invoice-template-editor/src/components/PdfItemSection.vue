@@ -291,7 +291,8 @@ const addItemHandler = (itemIndex: number) => {
   
   const newItemSections = [...itemSectionsData.value]
   if (newItemSections[itemIndex]) {
-    const newItems = [...newItemSections[itemIndex].items, newItem]
+    const currentItems = newItemSections[itemIndex].items || []
+    const newItems = [...currentItems, newItem]
     newItemSections[itemIndex] = { ...newItemSections[itemIndex], items: newItems }
     emit('update:modelValue', newItemSections)
   }

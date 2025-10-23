@@ -289,7 +289,8 @@ const addInfoItem = (infoIndex: number) => {
   
   const newInfoSections = [...infoSectionsData.value]
   if (newInfoSections[infoIndex]) {
-    const newItems = [...newInfoSections[infoIndex].items, newItem]
+    const currentItems = newInfoSections[infoIndex].items || []
+    const newItems = [...currentItems, newItem]
     newInfoSections[infoIndex] = { ...newInfoSections[infoIndex], items: newItems }
     emit('update:modelValue', newInfoSections)
   }

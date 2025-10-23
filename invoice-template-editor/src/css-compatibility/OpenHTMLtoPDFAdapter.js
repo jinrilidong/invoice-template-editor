@@ -1,6 +1,6 @@
 /**
  * OpenHTMLtoPDF CSS兼容性适配器
- * 将现代CSS转换为OpenHTMLtoPDF兼容的CSS
+ * 将现代CSS转换为OpenHTMLtoPDF兼容的样式
  */
 export class OpenHTMLtoPDFAdapter {
   /**
@@ -36,10 +36,13 @@ export class OpenHTMLtoPDFAdapter {
 
   /**
    * 预计算宽度，避免calc()函数
+   * 使用固定宽度，与预览模式保持一致
    */
   static preCalculateWidth(itemsPerRow, gap) {
-    const totalGap = (itemsPerRow - 1) * gap
-    const itemWidth = (100 - totalGap) / itemsPerRow
+    // 使用固定宽度，与预览模式的CSS保持一致
+    // 预览模式使用 calc(20% - 0.8px)，这里使用20%
+    // 不考虑实际items数量，始终使用配置的itemsPerRow宽度
+    const itemWidth = 100 / itemsPerRow
     return `${itemWidth}%`
   }
 

@@ -117,7 +117,7 @@
             }">
               
               <!-- Render sections for current page (excluding footer) -->
-              <template v-for="section in currentPageSections.filter(s => s.type !== 'footer')" :key="section.id">
+              <template v-for="section in currentPageSections.filter((s: any) => s.type !== 'footer')" :key="section.id">
                 <!-- Header Section -->
                 <div 
                   v-if="section.type === 'header'" 
@@ -500,7 +500,7 @@
             
             <!-- Footer Section -->
             <div 
-              v-if="currentPageSections.some(s => s.type === 'footer')" 
+              v-if="currentPageSections.some((s: any) => s.type === 'footer')" 
               class="footer-section flex items-start justify-between w-full cursor-pointer transition-all duration-200"
               :class="getSectionHighlightClass('footer-section')"
               @mouseenter="handleSectionHover('footer-section')"
@@ -555,7 +555,7 @@
             <tbody>
               <tr>
                 <td style="vertical-align: top; padding: 0; height: 727px;">
-                  <template v-for="section in currentPageSections.filter(s => s.type !== 'footer')" :key="section.id">
+                  <template v-for="section in currentPageSections.filter((s: any) => s.type !== 'footer')" :key="section.id">
                     <!-- Header -->
                     <div v-if="section.type === 'header'"
                          :class="getSectionHighlightClass('header-section')"
@@ -604,13 +604,13 @@
                         <table :style="StyleCalculator.generateInfoSectionStyles(props.styleConfig || {}).container">
                           <tr>
                             <td v-for="item in row" :key="item.id"
-                                :class="getItemHighlightClass('info-section', item.id)"
-                                @mouseenter="handleItemHover('info-section', item.id)"
-                                @mouseleave="handleItemLeave"
-                                @click.stop="handleItemClick('info-section', item.id)"
-                                :style="StyleCalculator.generateInfoSectionStyles(props.styleConfig || {}).item">
-                              <p :style="{ ...getDynamicStyle('info', 'label'), lineHeight: '9px', margin: '0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }">{{ item.label || '&nbsp;' }}</p>
-                              <p :style="{ ...getDynamicStyle('info', 'value'), lineHeight: '9px', margin: '2px 0 0 0', wordWrap: 'break-word' }">{{ item.value || '&nbsp;' }}</p>
+                                :class="item.isEmpty ? '' : getItemHighlightClass('info-section', item.id)"
+                                @mouseenter="!item.isEmpty && handleItemHover('info-section', item.id)"
+                                @mouseleave="!item.isEmpty && handleItemLeave"
+                                @click.stop="!item.isEmpty && handleItemClick('info-section', item.id)"
+                                :style="getItemWidthStyle('info')">
+                              <p v-if="!item.isEmpty" :style="{ ...getDynamicStyle('info', 'label'), lineHeight: '9px', margin: '0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }">{{ item.label || '&nbsp;' }}</p>
+                              <p v-if="!item.isEmpty" :style="{ ...getDynamicStyle('info', 'value'), lineHeight: '9px', margin: '2px 0 0 0', wordWrap: 'break-word' }">{{ item.value || '&nbsp;' }}</p>
                             </td>
                           </tr>
                         </table>
@@ -735,13 +735,13 @@
                         <table :style="StyleCalculator.generateItemSectionStyles(props.styleConfig || {}).container">
                           <tr>
                             <td v-for="item in row" :key="item.id"
-                                :class="getItemHighlightClass('item-section', item.id)"
-                                @mouseenter="handleItemHover('item-section', item.id)"
-                                @mouseleave="handleItemLeave"
-                                @click.stop="handleItemClick('item-section', item.id)"
-                                :style="StyleCalculator.generateItemSectionStyles(props.styleConfig || {}).item">
-                              <p :style="{ ...getDynamicStyle('item', 'label'), lineHeight: '9px', margin: '0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }">{{ item.label || '&nbsp;' }}</p>
-                              <p :style="{ ...getDynamicStyle('item', 'value'), lineHeight: '9px', margin: '2px 0 0 0', wordWrap: 'break-word' }">{{ item.value || '&nbsp;' }}</p>
+                                :class="item.isEmpty ? '' : getItemHighlightClass('item-section', item.id)"
+                                @mouseenter="!item.isEmpty && handleItemHover('item-section', item.id)"
+                                @mouseleave="!item.isEmpty && handleItemLeave"
+                                @click.stop="!item.isEmpty && handleItemClick('item-section', item.id)"
+                                :style="getItemWidthStyle('item')">
+                              <p v-if="!item.isEmpty" :style="{ ...getDynamicStyle('item', 'label'), lineHeight: '9px', margin: '0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }">{{ item.label || '&nbsp;' }}</p>
+                              <p v-if="!item.isEmpty" :style="{ ...getDynamicStyle('item', 'value'), lineHeight: '9px', margin: '2px 0 0 0', wordWrap: 'break-word' }">{{ item.value || '&nbsp;' }}</p>
                             </td>
                           </tr>
                         </table>
@@ -814,7 +814,7 @@
               <tr><td style="height: 7px;"></td></tr>
               <tr>
                 <td style="vertical-align: bottom; padding: 0; height: 8px;">
-                  <div v-if="currentPageSections.some(s => s.type === 'footer')"
+                  <div v-if="currentPageSections.some((s: any) => s.type === 'footer')"
                        :class="getSectionHighlightClass('footer-section')"
                        @mouseenter="handleSectionHover('footer-section')"
                        @mouseleave="handleSectionLeave"
@@ -842,8 +842,8 @@ import IconButton from './IconButton.vue'
 import TextButton from './TextButton.vue'
 import { usePdfInteraction } from '../composables/usePdfInteraction'
 import { usePdfPagination, type SectionData } from '../composables/usePdfPagination'
-import { OpenHTMLtoPDFAdapter } from '../css-compatibility/OpenHTMLtoPDFAdapter.js'
-import { StyleCalculator } from '../css-compatibility/StyleCalculator.js'
+import { OpenHTMLtoPDFAdapter } from '../css-compatibility/OpenHTMLtoPDFAdapter'
+import { StyleCalculator } from '../css-compatibility/StyleCalculator'
 
 interface SectionStates {
   header: boolean
@@ -1480,8 +1480,19 @@ const getInfoRows = (items: any[]) => {
   if (!items || items.length === 0) return []
   const itemsPerRow = props.styleConfig?.info?.itemsPerRow || 5
   const rows = []
+  
   for (let i = 0; i < items.length; i += itemsPerRow) {
-    rows.push(items.slice(i, i + itemsPerRow))
+    const row = items.slice(i, i + itemsPerRow)
+    // 填充空位到固定数量，确保每行都有固定数量的items
+    while (row.length < itemsPerRow) {
+      row.push({ 
+        id: `empty-${i}-${row.length}`, 
+        label: '', 
+        value: '', 
+        isEmpty: true 
+      })
+    }
+    rows.push(row)
   }
   return rows
 }
@@ -1491,8 +1502,19 @@ const getItemRows = (items: any[]) => {
   if (!items || items.length === 0) return []
   const itemsPerRow = props.styleConfig?.item?.itemsPerRow || 5
   const rows = []
+  
   for (let i = 0; i < items.length; i += itemsPerRow) {
-    rows.push(items.slice(i, i + itemsPerRow))
+    const row = items.slice(i, i + itemsPerRow)
+    // 填充空位到固定数量，确保每行都有固定数量的items
+    while (row.length < itemsPerRow) {
+      row.push({ 
+        id: `empty-${i}-${row.length}`, 
+        label: '', 
+        value: '', 
+        isEmpty: true 
+      })
+    }
+    rows.push(row)
   }
   return rows
 }
@@ -1548,9 +1570,13 @@ const getCompatibleItemWidthStyle = (section: 'info' | 'item') => {
   const itemsPerRow = (section === 'info' ? (props.styleConfig?.info?.itemsPerRow || 5) : (props.styleConfig?.item?.itemsPerRow || 5))
   const gap = (section === 'info' ? (props.styleConfig?.info?.itemGap ?? 2) : (props.styleConfig?.item?.itemGap ?? 2))
   
+  // 使用固定宽度，与预览模式保持一致
+  // 预览模式使用 calc(20% - 0.8px)，这里使用20%
+  const fixedWidth = 100 / itemsPerRow
+  
   return {
     display: 'table-cell',
-    width: StyleCalculator.calculateItemWidth(itemsPerRow, gap),
+    width: `${fixedWidth}%`,
     paddingRight: `${gap}px`,
     verticalAlign: 'top'
   }

@@ -2,7 +2,7 @@ import { OpenHTMLtoPDFAdapter } from './OpenHTMLtoPDFAdapter.js'
 
 /**
  * 样式计算器
- * 为OpenHTMLtoPDF生成兼容的样式
+ * 为不同section生成OpenHTMLtoPDF兼容的样式
  */
 export class StyleCalculator {
   /**
@@ -81,7 +81,7 @@ export class StyleCalculator {
    * 生成兼容的H-Info Section样式
    */
   static generateHInfoSectionStyles(styleConfig, hInfoConfig) {
-    const columnsSpacing = styleConfig?.hInfo?.columnsSpacing || 8
+    const columnGap = styleConfig?.hInfo?.columnGap || 8
     const itemGap = styleConfig?.hInfo?.itemGap || 4
     const labelValueGap = styleConfig?.hInfo?.labelValueGap || 8
     const labelWidth = styleConfig?.hInfo?.labelWidth || 80
@@ -96,7 +96,7 @@ export class StyleCalculator {
       column: {
         display: 'table-cell',
         width: this.calculateHInfoColumnWidth(hInfoConfig.columnWidth),
-        paddingRight: `${columnsSpacing}px`,
+        paddingRight: `${columnGap}px`,
         verticalAlign: 'top'
       },
       item: {

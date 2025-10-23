@@ -792,7 +792,6 @@ ${formattedBody}
   }
 }
 
-
 // Generate pages with pagination logic for HTML export
 const generatePagesWithPagination = (data: any, sections: any) => {
   const PAGE_WIDTH = 612
@@ -2056,7 +2055,7 @@ onUnmounted(() => {
               <template v-else>
             <PdfStylePanel 
               :model-value="styleConfig"
-              @update:model-value="(newStyleConfig) => Object.assign(styleConfig, newStyleConfig)"
+              @update:model-value="(newStyleConfig: any) => Object.assign(styleConfig, newStyleConfig)"
               :selected-section="selectedSection"
               @refresh-preview="handleRefreshPreview"
             />

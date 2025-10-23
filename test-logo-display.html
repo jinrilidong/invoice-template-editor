@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Logo Display Test</title>
+    <style type="text/css">
+        @page {
+            size: 612px 792px;
+            margin: 0;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+        }
+
+        .header-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .header-table td {
+            vertical-align: top;
+            padding: 0;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: black;
+        }
+
+        .header-description {
+            font-size: 10px;
+            color: black;
+        }
+
+        .logo-container {
+            text-align: right;
+            width: 240px;
+            height: 48px;
+        }
+
+        .logo-container img {
+            height: 48px;
+            width: 240px;
+            max-width: 240px;
+            max-height: 48px;
+        }
+
+        .logo-placeholder {
+            border: 1px dashed black;
+            text-align: center;
+            color: gray;
+            font-size: 10px;
+            height: 48px;
+            width: 240px;
+        }
+
+        .logo-placeholder td {
+            text-align: center;
+            height: 48px;
+            width: 240px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Logo Display Test</h2>
+    
+    <h3>Test 1: Logo Placeholder (should always show)</h3>
+    <table class="header-table">
+        <tr>
+            <td>
+                <span class="header-title">Invoice</span><br/>
+                <span class="header-description">Invoice Description</span>
+            </td>
+            <td class="logo-container">
+                <table class="logo-placeholder">
+                    <tr>
+                        <td>Logo Placeholder</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    <h3>Test 2: Base64 Image (should work in OpenHTMLtoPDF)</h3>
+    <table class="header-table">
+        <tr>
+            <td>
+                <span class="header-title">Invoice</span><br/>
+                <span class="header-description">Invoice Description</span>
+            </td>
+            <td class="logo-container">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQwIiBoZWlnaHQ9IjQ4IiB2aWV3Qm94PSIwIDAgMjQwIDQ4IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cmVjdCB3aWR0aD0iMjQwIiBoZWlnaHQ9IjQ4IiBmaWxsPSIjRjBGMEYwIiBzdHJva2U9IiMwMDAiIHN0cm9rZS13aWR0aD0iMSIvPgo8dGV4dCB4PSIxMjAiIHk9IjMwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjMDAwIj5MT0dPPC90ZXh0Pgo8L3N2Zz4K" alt="Logo" />
+            </td>
+        </tr>
+    </table>
+
+    <h3>Test 3: External Image (may not work in OpenHTMLtoPDF)</h3>
+    <table class="header-table">
+        <tr>
+            <td>
+                <span class="header-title">Invoice</span><br/>
+                <span class="header-description">Invoice Description</span>
+            </td>
+            <td class="logo-container">
+                <img src="https://via.placeholder.com/240x48/000000/FFFFFF?text=LOGO" alt="Logo" />
+            </td>
+        </tr>
+    </table>
+
+    <h3>Expected Results:</h3>
+    <ul>
+        <li>✅ Test 1: Logo Placeholder should always show</li>
+        <li>✅ Test 2: Base64 image should work in OpenHTMLtoPDF</li>
+        <li>❌ Test 3: External image may not work in OpenHTMLtoPDF</li>
+    </ul>
+
+    <h3>OpenHTMLtoPDF Image Support:</h3>
+    <ul>
+        <li>✅ Base64 encoded images (data: URLs)</li>
+        <li>✅ Local file paths (if accessible)</li>
+        <li>❌ External HTTP/HTTPS URLs (may not work)</li>
+        <li>❌ Complex image formats (stick to PNG/JPG)</li>
+    </ul>
+</body>
+</html>

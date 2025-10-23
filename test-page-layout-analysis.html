@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>页面结构布局分析</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .analysis-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .analysis-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .analysis-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        .layout-diagram {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 15px 0;
+            font-family: monospace;
+            font-size: 14px;
+            border: 1px solid #e9ecef;
+        }
+        .dimensions {
+            background-color: #e8f5e8;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .structure-tree {
+            background-color: #f0f8ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        .code-example {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 14px;
+            margin: 10px 0;
+            border: 1px solid #e9ecef;
+        }
+        .highlight {
+            background-color: #fff3cd;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        .section-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 15px 0;
+        }
+        .section-item {
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .section-item.layout {
+            background-color: #e3f2fd;
+        }
+        .section-item.styles {
+            background-color: #f3e5f5;
+        }
+        .measurements {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        .measurement-item {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .measurement-item.page {
+            background-color: #e3f2fd;
+        }
+        .measurement-item.content {
+            background-color: #e8f5e8;
+        }
+        .measurement-item.sections {
+            background-color: #fff3e0;
+        }
+    </style>
+</head>
+<body>
+    <div class="analysis-container">
+        <h1>HTML导出页面结构布局分析</h1>
+        
+        <div class="analysis-section">
+            <div class="analysis-title">整体页面尺寸</div>
+            <div class="dimensions">
+                <h4>页面规格</h4>
+                <ul>
+                    <li><strong>页面总尺寸：</strong>612px × 792px (U.S. Letter标准)</li>
+                    <li><strong>页面内边距：</strong>20px (上下左右)</li>
+                    <li><strong>内容区域尺寸：</strong>572px × 752px</li>
+                    <li><strong>字体设置：</strong>Inter字体族，12px基础字体</li>
+                    <li><strong>行高：</strong>1.2</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="analysis-section">
+            <div class="analysis-title">页面结构层次</div>
+            <div class="structure-tree">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;style&gt;...&lt;/style&gt;
+  &lt;/head&gt;
+  &lt;body&gt; (612px × 792px, padding: 20px)
+    &lt;table class="invoice-container"&gt; (572px × 752px)
+      &lt;tr&gt;
+        &lt;td&gt;
+          &lt;!-- Section 1: Header --&gt;
+          &lt;table class="header-table"&gt;
+            &lt;tr&gt;
+              &lt;td&gt;标题 + 描述&lt;/td&gt;
+              &lt;td class="logo-container"&gt;Logo&lt;/td&gt;
+            &lt;/tr&gt;
+          &lt;/table&gt;
+          
+          &lt;!-- Section 2: Info --&gt;
+          &lt;table class="info-items-table"&gt;
+            &lt;tr&gt;&lt;td&gt;信息项1&lt;/td&gt;&lt;td&gt;信息项2&lt;/td&gt;...&lt;/tr&gt;
+          &lt;/table&gt;
+          
+          &lt;!-- Section 3: Table --&gt;
+          &lt;table class="data-table"&gt;
+            &lt;thead&gt;&lt;tr&gt;&lt;th&gt;列1&lt;/th&gt;&lt;th&gt;列2&lt;/th&gt;...&lt;/tr&gt;&lt;/thead&gt;
+            &lt;tbody&gt;&lt;tr&gt;&lt;td&gt;数据1&lt;/td&gt;&lt;td&gt;数据2&lt;/td&gt;...&lt;/tr&gt;&lt;/tbody&gt;
+          &lt;/table&gt;
+          &lt;table class="subtotal-table"&gt;
+            &lt;tr&gt;&lt;td&gt;小计&lt;/td&gt;&lt;/tr&gt;
+          &lt;/table&gt;
+          
+          &lt;!-- Section 4: Summary --&gt;
+          &lt;table class="summary-table"&gt;
+            &lt;tr&gt;&lt;td&gt;总计&lt;/td&gt;&lt;/tr&gt;
+          &lt;/table&gt;
+          
+          &lt;!-- Section 5: Description --&gt;
+          &lt;span class="description-label"&gt;描述标签&lt;/span&gt;
+          &lt;span class="description-text"&gt;描述内容&lt;/span&gt;
+          
+          &lt;!-- Section 6: Item --&gt;
+          &lt;table class="item-items-table"&gt;
+            &lt;tr&gt;&lt;td&gt;项目1&lt;/td&gt;&lt;td&gt;项目2&lt;/td&gt;...&lt;/tr&gt;
+          &lt;/table&gt;
+          
+          &lt;!-- Section 7: Footer --&gt;
+          &lt;table class="footer-section"&gt;
+            &lt;tr&gt;&lt;td&gt;页脚信息&lt;/td&gt;&lt;td&gt;页脚名称&lt;/td&gt;&lt;td&gt;页码&lt;/td&gt;&lt;/tr&gt;
+          &lt;/table&gt;
+        &lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/table&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+            </div>
+        </div>
+
+        <div class="analysis-section">
+            <div class="analysis-title">布局尺寸分析</div>
+            <div class="measurements">
+                <div class="measurement-item page">
+                    <h4>页面级别</h4>
+                    <p><strong>总尺寸：</strong>612×792px</p>
+                    <p><strong>内边距：</strong>20px</p>
+                    <p><strong>可用空间：</strong>572×752px</p>
+                </div>
+                
+                <div class="measurement-item content">
+                    <h4>内容区域</h4>
+                    <p><strong>容器宽度：</strong>572px</p>
+                    <p><strong>容器高度：</strong>752px</p>
+                    <p><strong>位置：</strong>相对定位</p>
+                </div>
+                
+                <div class="measurement-item sections">
+                    <h4>Section间距</h4>
+                    <p><strong>Section间距：</strong>8px</p>
+                    <p><strong>Header上边距：</strong>24px</p>
+                    <p><strong>Footer位置：</strong>绝对定位底部</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="analysis-section">
+            <div class="analysis-title">各Section详细布局</div>
+            <div class="section-details">
+                <div class="section-item layout">
+                    <h4>1. Header Section</h4>
+                    <div class="code-example">
+.header-table {
+  width: 100%;
+  margin-top: 24px;
+}
+
+.header-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.logo-container {
+  width: 240px;
+  height: 48px;
+  text-align: right;
+}
+                    </div>
+                </div>
+                
+                <div class="section-item styles">
+                    <h4>2. Info Section</h4>
+                    <div class="code-example">
+.info-items-table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.info-items-table td {
+  width: 20%; /* 5列 */
+  padding: 0 8px;
+  vertical-align: top;
+}
+
+.info-item-label {
+  font-size: 7px;
+  font-weight: 600;
+}
+                    </div>
+                </div>
+                
+                <div class="section-item layout">
+                    <h4>3. Data Table</h4>
+                    <div class="code-example">
+.data-table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.data-table td {
+  width: 25%; /* 4列 */
+  padding: 2px 8px;
+  height: 13px;
+  vertical-align: top;
+}
+
+.subtotal-table {
+  width: 100%;
+  border-top: 1px solid #d2d2d2;
+}
+                    </div>
+                </div>
+                
+                <div class="section-item styles">
+                    <h4>4. Summary Section</h4>
+                    <div class="code-example">
+.summary-table {
+  width: 100%;
+  text-align: right;
+}
+
+.summary-content {
+  font-size: 14px;
+  font-weight: 600;
+  color: #000000;
+}
+                    </div>
+                </div>
+                
+                <div class="section-item layout">
+                    <h4>5. Description Section</h4>
+                    <div class="code-example">
+.description-label {
+  font-size: 7px;
+  font-weight: 600;
+  color: #000000;
+}
+
+.description-text {
+  font-size: 7px;
+  font-weight: 400;
+  color: #919191;
+}
+                    </div>
+                </div>
+                
+                <div class="section-item styles">
+                    <h4>6. Item Section</h4>
+                    <div class="code-example">
+.item-items-table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.item-items-table td {
+  width: 20%; /* 5列 */
+  padding: 0 8px;
+  vertical-align: top;
+}
+
+.item-item-label {
+  font-size: 7px;
+  font-weight: 600;
+}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="analysis-section">
+            <div class="analysis-title">列间距设置</div>
+            <div class="dimensions">
+                <h4>列间距规格</h4>
+                <ul>
+                    <li><strong>列与列间距：</strong>16px（每列左右各8px padding）</li>
+                    <li><strong>表格边缘：</strong>第一列左边和最后一列右边无额外间距</li>
+                    <li><strong>数据表格：</strong>4列，每列25%宽度</li>
+                    <li><strong>信息/项目表格：</strong>5列，每列20%宽度</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="analysis-section">
+            <div class="analysis-title">分页支持</div>
+            <div class="structure-tree">
+分页逻辑：
+1. 页面高度限制：752px
+2. Section高度计算：动态计算每个section的高度
+3. 表格分页：支持表格跨页拆分
+4. 分页后页面：
+   - 第一部分：标题 + 表头 + 部分数据行
+   - 第二部分：剩余数据行 + 小计 + 底部边框
+5. Footer：每页都有footer显示
+            </div>
+        </div>
+
+        <div class="analysis-section">
+            <div class="analysis-title">CSS特性支持</div>
+            <div class="dimensions">
+                <h4>支持的CSS特性</h4>
+                <ul>
+                    <li><strong>换行支持：</strong>word-wrap, overflow-wrap, white-space</li>
+                    <li><strong>文本对齐：</strong>vertical-align: top</li>
+                    <li><strong>表格布局：</strong>table-layout: fixed, border-collapse: collapse</li>
+                    <li><strong>分页控制：</strong>page-break-before: always</li>
+                    <li><strong>字体设置：</strong>Inter字体族，多种字体大小</li>
+                    <li><strong>颜色系统：</strong>#6b7280, #919191, #000000, #d2d2d2</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="analysis-section">
+            <div class="analysis-title">布局特点总结</div>
+            <div class="layout-diagram">
+当前HTML导出页面结构特点：
+
+1. 固定尺寸布局：
+   - 页面尺寸：612×792px (U.S. Letter)
+   - 内容区域：572×752px
+   - 所有元素使用固定像素值
+
+2. 表格驱动布局：
+   - 使用HTML table元素进行布局
+   - 支持OpenHTMLtoPDF兼容性
+   - 列宽使用百分比分配
+
+3. 分页支持：
+   - 支持多页内容
+   - 表格可跨页拆分
+   - 每页都有完整的footer
+
+4. 响应式文本：
+   - 支持文本换行
+   - 顶部对齐显示
+   - 16px列间距
+
+5. 样式一致性：
+   - 与PDF预览完全一致
+   - 统一的字体和颜色系统
+   - 精确的间距控制
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

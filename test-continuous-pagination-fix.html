@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>连续分页修复测试 - Footer和内容高度分页</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .test-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .test-steps {
+            margin: 10px 0;
+        }
+        .test-step {
+            margin: 5px 0;
+            padding: 5px;
+            background-color: #f5f5f5;
+            border-radius: 3px;
+        }
+        .expected-result {
+            color: #0066cc;
+            font-weight: bold;
+        }
+        .debug-info {
+            background-color: #fff3cd;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .fix-details {
+            background-color: #e8f5e8;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .bug-fix {
+            background-color: #f8d7da;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .code-block {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>连续分页修复测试 - Footer和内容高度分页</h1>
+        
+        <div class="bug-fix">
+            <h2>🐛 修复的问题</h2>
+            <ul>
+                <li><strong>问题1</strong>：如果有分页，每一页页脚都应该有 footer section。现在只有最后一页有 footer。</li>
+                <li><strong>问题2</strong>：每一页的内容区域高度是700px，超出700px的内容分到下一页显示。</li>
+                <li><strong>问题3</strong>：需要按照实际内容高度进行分页，比如ABCDE5行内容，当页面高度只能显示ABD时，则把DE放在下一页。</li>
+            </ul>
+        </div>
+
+        <div class="fix-details">
+            <h2>🔧 修复方案</h2>
+            
+            <h3>1. 元素化分页系统</h3>
+            <div class="code-block">
+// 获取所有内容元素及其高度
+const getAllContentElements = () => {
+  const elements = []
+  
+  // Header: 48px
+  if (props.sectionStates.header) {
+    elements.push({ type: 'header', height: 48, content: 'header' })
+  }
+  
+  // Info: 20px per item
+  if (props.sectionStates.info) {
+    elements.push({ type: 'info', height: items.length * 20, content: 'info' })
+  }
+  
+  // Table Header: 40px
+  elements.push({ type: 'table-header', height: 40, content: 'table-header' })
+  
+  // Table Rows: 15px per row
+  allRows.forEach((row, index) => {
+    elements.push({ type: 'table-row', height: 15, content: row, rowIndex: index })
+  })
+  
+  // Description: 20px per 100 characters
+  if (props.sectionStates.description) {
+    elements.push({ type: 'description', height: Math.ceil(contentLength / 100) * 20, content: 'description' })
+  }
+  
+  // Item: 20px per item
+  if (props.sectionStates.item) {
+    elements.push({ type: 'item', height: items.length * 20, content: 'item' })
+  }
+  
+  return elements
+}
+            </div>
+            
+            <h3>2. 连续分页逻辑</h3>
+            <div class="code-block">
+// 计算每页应该显示的内容
+const getPageContent = (pageIndex: number) => {
+  const maxHeightPerPage = 700
+  const allElements = getAllContentElements()
+  
+  let currentHeight = 0
+  let elementIndex = 0
+  
+  // 计算前面页面已经显示的元素
+  for (let i = 1; i < pageIndex; i++) {
+    const prevPageElements = getPageElements(i)
+    elementIndex += prevPageElements.length
+  }
+  
+  // 为当前页面分配元素
+  while (elementIndex < allElements.length && currentHeight < maxHeightPerPage - 30) {
+    const element = allElements[elementIndex]
+    
+    if (currentHeight + element.height <= maxHeightPerPage - 30) {
+      // 可以添加这个元素
+      currentHeight += element.height
+      elementIndex++
+    } else {
+      // 无法添加这个元素，停止
+      break
+    }
+  }
+  
+  // 每一页都显示footer
+  if (props.sectionStates.footer) {
+    pageContent.footer = true
+  }
+  
+  return pageContent
+}
+            </div>
+            
+            <h3>3. 精确页数计算</h3>
+            <div class="code-block">
+// 基于元素高度计算总页数
+const totalPages = computed(() => {
+  const maxHeightPerPage = 700
+  const allElements = getAllContentElements()
+  
+  let currentPageHeight = 0
+  let pages = 1
+  
+  for (const element of allElements) {
+    // 如果添加这个元素会超过页面高度，需要新页面
+    if (currentPageHeight + element.height > maxHeightPerPage - 30) {
+      pages++
+      currentPageHeight = element.height
+    } else {
+      currentPageHeight += element.height
+    }
+  }
+  
+  return Math.max(1, pages)
+})
+            </div>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">测试场景 1: Footer每页显示</div>
+            <div class="test-steps">
+                <div class="test-step">1. 打开应用程序 (http://localhost:5174/)</div>
+                <div class="test-step">2. 设置 Table Rows Number 为 30</div>
+                <div class="test-step">3. 观察第一页的底部</div>
+                <div class="test-step">4. 观察第二页的底部</div>
+                <div class="test-step">5. 观察第三页的底部（如果有）</div>
+            </div>
+            <div class="expected-result">预期结果: 
+                <ul>
+                    <li>第一页底部应该有 footer section</li>
+                    <li>第二页底部应该有 footer section</li>
+                    <li>第三页底部应该有 footer section</li>
+                    <li>每一页都应该显示 "Page: X of Y"</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">测试场景 2: 连续内容分页</div>
+            <div class="test-steps">
+                <div class="test-step">1. 设置 Table Rows Number 为 20</div>
+                <div class="test-step">2. 观察第一页显示的table行数</div>
+                <div class="test-step">3. 观察第二页显示的table行数</div>
+                <div class="test-step">4. 验证两页的table行数之和是否等于20</div>
+                <div class="test-step">5. 验证第二页的行是否从第一页结束的地方开始</div>
+            </div>
+            <div class="expected-result">预期结果: 
+                <ul>
+                    <li>第一页显示的table行数 + 第二页显示的table行数 = 20</li>
+                    <li>第二页的table行应该从第一页结束的地方开始</li>
+                    <li>不应该有重复的table行</li>
+                    <li>不应该有遗漏的table行</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">测试场景 3: 内容高度分页</div>
+            <div class="test-steps">
+                <div class="test-step">1. 设置 Table Rows Number 为 50</div>
+                <div class="test-step">2. 观察每页的内容高度</div>
+                <div class="test-step">3. 检查每页内容是否接近700px</div>
+                <div class="test-step">4. 验证内容是否按照高度连续分布</div>
+                <div class="test-step">5. 检查是否有内容溢出700px</div>
+            </div>
+            <div class="expected-result">预期结果: 
+                <ul>
+                    <li>每页内容高度应该接近700px</li>
+                    <li>不应该有内容溢出700px</li>
+                    <li>内容应该按照高度连续分布</li>
+                    <li>表格行可以跨页显示</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">测试场景 4: ABCD分页示例</div>
+            <div class="test-steps">
+                <div class="test-step">1. 设置 Table Rows Number 为 5</div>
+                <div class="test-step">2. 观察第一页显示的内容（假设显示A、B、C）</div>
+                <div class="test-step">3. 观察第二页显示的内容（应该显示D、E）</div>
+                <div class="test-step">4. 验证内容是否按照ABCDE顺序连续分布</div>
+                <div class="test-step">5. 验证每页都有footer</div>
+            </div>
+            <div class="expected-result">预期结果: 
+                <ul>
+                    <li>第一页：显示A、B、C（如果高度允许）</li>
+                    <li>第二页：显示D、E（剩余内容）</li>
+                    <li>内容按照ABCDE顺序连续分布</li>
+                    <li>每页都有footer section</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="debug-info">
+            <h3>🐛 调试信息检查</h3>
+            <p>打开浏览器开发者工具的 Console 标签，应该看到：</p>
+            
+            <h4>1. 元素分页信息</h4>
+            <div class="code-block">
+PdfPreviewPanel: Total pages calculation {
+  totalElements: 25,        // 总元素数量
+  maxHeightPerPage: 700,    // 每页最大高度
+  calculatedPages: 3,       // 计算的页数
+  elements: [               // 所有元素
+    { type: 'header', height: 48 },
+    { type: 'info', height: 60 },
+    { type: 'table-header', height: 40 },
+    { type: 'table-row', height: 15 },
+    { type: 'table-row', height: 15 },
+    // ... 更多元素
+  ]
+}
+            </div>
+            
+            <h4>2. 表格数据更新</h4>
+            <div class="code-block">
+PdfPreviewPanel: table data updated [{
+  id: "table-1",
+  rowsNumber: 20,           // 设置的行数
+  baseRowsCount: 5,         // 基础行数
+  actualRowsToShow: 20      // 实际显示的行数
+}]
+            </div>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">测试场景 5: 边界情况测试</div>
+            <div class="test-steps">
+                <div class="test-step">1. 测试少量内容 (Rows = 3)</div>
+                <div class="test-step">2. 测试临界内容 (Rows = 10)</div>
+                <div class="test-step">3. 测试大量内容 (Rows = 30)</div>
+                <div class="test-step">4. 测试超大量内容 (Rows = 100)</div>
+                <div class="test-step">5. 验证每种情况下的分页和footer</div>
+            </div>
+            <div class="expected-result">预期结果: 
+                <ul>
+                    <li>少量内容: 显示1页，有footer</li>
+                    <li>临界内容: 显示1-2页，每页都有footer</li>
+                    <li>大量内容: 显示2-3页，每页都有footer</li>
+                    <li>超大量内容: 显示3+页，每页都有footer</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="fix-details">
+            <h2>📝 修复总结</h2>
+            <p><strong>主要改进：</strong></p>
+            <ol>
+                <li><strong>Footer每页显示</strong>：每一页都有footer section，不只是最后一页</li>
+                <li><strong>元素化分页</strong>：将内容分解为元素，按高度进行分页</li>
+                <li><strong>连续内容分页</strong>：内容按照ABCDE顺序连续分布到不同页面</li>
+                <li><strong>精确高度控制</strong>：每页内容高度控制在700px以内</li>
+                <li><strong>表格行跨页</strong>：表格行可以跨页显示，保持连续性</li>
+            </ol>
+            
+            <p><strong>技术特点：</strong></p>
+            <ul>
+                <li>每页内容高度控制在700px以内</li>
+                <li>每一页都有footer section</li>
+                <li>内容按照高度连续分布</li>
+                <li>表格行可以跨页显示</li>
+                <li>支持任意数量的内容元素</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+

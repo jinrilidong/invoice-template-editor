@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>页面布局验证测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .test-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .calculation-box {
+            background-color: #e8f5e8;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .layout-diagram {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .page-visual {
+            display: inline-block;
+            width: 300px;
+            height: 400px;
+            border: 2px solid #333;
+            position: relative;
+            background-color: rgba(0, 0, 255, 0.1);
+        }
+        .content-area {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            bottom: 29px;
+            background-color: rgba(255, 0, 0, 0.1);
+            border: 1px dashed #ff0000;
+        }
+        .footer-area {
+            position: absolute;
+            bottom: 0;
+            left: 20px;
+            right: 20px;
+            height: 9px;
+            background-color: rgba(0, 255, 0, 0.2);
+            border: 1px dashed #00ff00;
+        }
+        .dimension-label {
+            position: absolute;
+            font-size: 12px;
+            color: #666;
+        }
+        .test-steps {
+            margin: 10px 0;
+        }
+        .test-step {
+            margin: 5px 0;
+            padding: 5px;
+            background-color: #f5f5f5;
+            border-radius: 3px;
+        }
+        .expected-result {
+            color: #0066cc;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>页面布局验证测试</h1>
+        
+        <div class="test-section">
+            <div class="test-title">📐 布局尺寸计算验证</div>
+            
+            <div class="calculation-box">
+                <h3>页面布局计算</h3>
+                <p><strong>页面总尺寸:</strong> 612px × 792px</p>
+                
+                <h4>垂直布局计算：</h4>
+                <ul>
+                    <li>页面总高度: 792px</li>
+                    <li>上边距: 20px</li>
+                    <li>红色内容区域高度: 743px</li>
+                    <li>Footer高度: 9px</li>
+                    <li>下边距: 20px</li>
+                </ul>
+                
+                <h4>验证计算：</h4>
+                <ul>
+                    <li>上边距: 20px</li>
+                    <li>红色区域: 743px (从20px到763px)</li>
+                    <li>Footer: 9px (从763px到772px)</li>
+                    <li>下边距: 20px (从772px到792px)</li>
+                    <li><strong>总计: 20 + 743 + 9 + 20 = 792px ✓</strong></li>
+                </ul>
+                
+                <h4>水平布局计算：</h4>
+                <ul>
+                    <li>页面总宽度: 612px</li>
+                    <li>左边距: 20px</li>
+                    <li>红色内容区域宽度: 572px</li>
+                    <li>右边距: 20px</li>
+                    <li><strong>总计: 20 + 572 + 20 = 612px ✓</strong></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">🎨 布局示意图</div>
+            
+            <div class="layout-diagram">
+                <h3>PDF页面布局示意图</h3>
+                <div class="page-visual">
+                    <div class="content-area">
+                        <div style="padding: 10px; font-size: 12px;">
+                            红色内容区域<br/>
+                            572px × 743px<br/>
+                            位置: 20px, 20px
+                        </div>
+                    </div>
+                    <div class="footer-area">
+                        <div style="padding: 2px; font-size: 10px; text-align: center;">
+                            Footer (9px)
+                        </div>
+                    </div>
+                    
+                    <!-- 尺寸标签 -->
+                    <div class="dimension-label" style="top: 10px; left: -60px;">
+                        上边距: 20px
+                    </div>
+                    <div class="dimension-label" style="bottom: 10px; left: -60px;">
+                        下边距: 20px
+                    </div>
+                    <div class="dimension-label" style="left: 10px; top: -20px;">
+                        左边距: 20px
+                    </div>
+                    <div class="dimension-label" style="right: 10px; top: -20px;">
+                        右边距: 20px
+                    </div>
+                </div>
+                
+                <div style="margin-top: 20px; font-size: 14px;">
+                    <p><strong>页面总尺寸:</strong> 612px × 792px</p>
+                    <p><strong>红色内容区域:</strong> 572px × 743px</p>
+                    <p><strong>Footer区域:</strong> 572px × 9px</p>
+                    <p><strong>边距:</strong> 上下左右各20px</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">🧪 验证测试步骤</div>
+            <div class="test-steps">
+                <div class="test-step">1. 打开应用程序 (http://localhost:5174/)</div>
+                <div class="test-step">2. 观察PDF预览页面的布局</div>
+                <div class="test-step">3. 检查红色内容区域是否完全在页面内部</div>
+                <div class="test-step">4. 验证红色区域尺寸: 572px × 743px</div>
+                <div class="test-step">5. 检查Footer是否在红色区域下方</div>
+                <div class="test-step">6. 验证边距是否均匀分布</div>
+            </div>
+            <div class="expected-result">预期结果: 
+                <ul>
+                    <li>红色内容区域完全在页面内部</li>
+                    <li>红色区域尺寸: 572px × 743px</li>
+                    <li>Footer在红色区域下方，高度9px</li>
+                    <li>边距均匀分布: 上下左右各20px</li>
+                    <li>总高度计算正确: 792px</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">🔍 可能的问题排查</div>
+            <div class="test-steps">
+                <div class="test-step">1. <strong>gap间距问题:</strong> gap-2.5 = 10px，可能影响布局</div>
+                <div class="test-step">2. <strong>box-sizing问题:</strong> 需要确保使用border-box</div>
+                <div class="test-step">3. <strong>margin计算问题:</strong> margin可能影响实际占用空间</div>
+                <div class="test-step">4. <strong>内容溢出问题:</strong> 内容可能超出设定的高度</div>
+                <div class="test-step">5. <strong>缩放问题:</strong> zoom可能影响实际显示</div>
+            </div>
+            <div class="expected-result">预期结果: 
+                <ul>
+                    <li>所有间距和边距计算正确</li>
+                    <li>内容完全在设定区域内</li>
+                    <li>没有意外的溢出或重叠</li>
+                    <li>布局在不同缩放级别下都正确</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">📝 技术实现要点</div>
+            <div class="test-steps">
+                <div class="test-step">1. 使用 <code>box-sizing: border-box</code> 确保尺寸计算正确</div>
+                <div class="test-step">2. 明确设置 <code>gap: 10px</code> 而不是使用Tailwind类</div>
+                <div class="test-step">3. 精确计算margin和padding</div>
+                <div class="test-step">4. 确保Footer在内容区域外部</div>
+                <div class="test-step">5. 验证所有尺寸计算</div>
+            </div>
+            <div class="expected-result">预期结果: 
+                <ul>
+                    <li>布局计算精确无误</li>
+                    <li>所有元素都在正确位置</li>
+                    <li>没有意外的溢出或重叠</li>
+                    <li>在不同设备上显示一致</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+

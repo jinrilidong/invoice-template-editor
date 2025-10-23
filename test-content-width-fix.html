@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>内容区域宽度修复测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .test-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        .width-comparison {
+            background-color: #e8f5e8;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .before-after {
+            display: flex;
+            gap: 20px;
+            margin: 15px 0;
+        }
+        .before, .after {
+            flex: 1;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .before {
+            background-color: #ffe6e6;
+            border: 1px solid #ffcccc;
+        }
+        .after {
+            background-color: #e6ffe6;
+            border: 1px solid #ccffcc;
+        }
+        .before-title, .after-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .before-title {
+            color: #cc0000;
+        }
+        .after-title {
+            color: #006600;
+        }
+        .code-example {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 14px;
+            margin: 10px 0;
+            border: 1px solid #e9ecef;
+        }
+        .highlight {
+            background-color: #fff3cd;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        .test-steps {
+            margin: 10px 0;
+        }
+        .test-step {
+            margin: 8px 0;
+            padding: 8px;
+            background-color: #f5f5f5;
+            border-radius: 3px;
+            border-left: 4px solid #007bff;
+        }
+        .expected-result {
+            color: #0066cc;
+            font-weight: bold;
+        }
+        .width-specs {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        .width-item {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .width-item.pdf {
+            background-color: #e3f2fd;
+        }
+        .width-item.html {
+            background-color: #f3e5f5;
+        }
+        .width-item.sync {
+            background-color: #e8f5e8;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>内容区域宽度修复测试</h1>
+        
+        <div class="test-section">
+            <div class="test-title">修复目标</div>
+            <div class="width-comparison">
+                将HTML导出的宽度改为与PDF预览的内容区域一致：
+                <ul>
+                    <li>PDF页面总宽度：612px</li>
+                    <li>PDF页面内边距：20px</li>
+                    <li>PDF内容区域宽度：572px (612 - 20*2)</li>
+                    <li>HTML导出应该匹配这个宽度设置</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">宽度规格对比</div>
+            
+            <div class="width-specs">
+                <div class="width-item pdf">
+                    <h4>PDF预览设置</h4>
+                    <p><strong>页面宽度：</strong>612px</p>
+                    <p><strong>页面内边距：</strong>20px</p>
+                    <p><strong>内容区域：</strong>572px</p>
+                    <p><strong>计算：</strong>612 - 20*2</p>
+                </div>
+                
+                <div class="width-item html">
+                    <h4>HTML导出（修复前）</h4>
+                    <p><strong>页面宽度：</strong>792px</p>
+                    <p><strong>页面内边距：</strong>20px</p>
+                    <p><strong>内容区域：</strong>100%</p>
+                    <p><strong>问题：</strong>宽度不匹配</p>
+                </div>
+                
+                <div class="width-item sync">
+                    <h4>HTML导出（修复后）</h4>
+                    <p><strong>页面宽度：</strong>612px ✅</p>
+                    <p><strong>页面内边距：</strong>20px ✅</p>
+                    <p><strong>内容区域：</strong>572px ✅</p>
+                    <p><strong>状态：</strong>完全匹配</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">修复前后对比</div>
+            
+            <div class="before-after">
+                <div class="before">
+                    <div class="before-title">修复前（宽度不匹配）</div>
+                    <h5>HTML导出设置：</h5>
+                    <div class="code-example">
+body {
+  padding: 20px;
+  width: 792px; /* 错误的宽度 */
+  max-width: 792px;
+}
+
+.invoice-container {
+  width: 100%; /* 自适应宽度 */
+}
+                    </div>
+                    
+                    <h5>问题：</h5>
+                    <ul>
+                        <li>HTML导出宽度792px与PDF预览612px不匹配</li>
+                        <li>内容区域宽度不一致</li>
+                        <li>布局效果不同</li>
+                    </ul>
+                </div>
+                
+                <div class="after">
+                    <div class="after-title">修复后（宽度一致）</div>
+                    <h5>HTML导出设置：</h5>
+                    <div class="code-example">
+body {
+  padding: 20px;
+  width: 612px; /* PDF页面宽度 */
+  max-width: 612px;
+}
+
+.invoice-container {
+  width: 572px; /* 内容区域宽度 */
+}
+                    </div>
+                    
+                    <h5>优势：</h5>
+                    <ul>
+                        <li>HTML导出宽度612px与PDF预览完全匹配</li>
+                        <li>内容区域宽度572px一致</li>
+                        <li>布局效果完全相同</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">技术修复详情</div>
+            
+            <div class="width-comparison">
+                <h4>1. 页面宽度修复</h4>
+                <div class="code-example">
+/* 修复前 */
+body {
+  width: 792px; /* 错误的宽度 */
+  max-width: 792px;
+}
+
+/* 修复后 */
+body {
+  width: 612px; /* PDF页面宽度 */
+  max-width: 612px;
+}
+                </div>
+
+                <h4>2. 内容区域宽度修复</h4>
+                <div class="code-example">
+/* 修复前 */
+.invoice-container {
+  width: 100%; /* 自适应宽度 */
+}
+
+/* 修复后 */
+.invoice-container {
+  width: 572px; /* 内容区域宽度 (612px - 20px*2) */
+}
+                </div>
+
+                <h4>3. 宽度计算说明</h4>
+                <div class="code-example">
+PDF页面总宽度: 612px
+PDF页面内边距: 20px (上下左右)
+内容区域宽度: 612px - (20px * 2) = 572px
+
+HTML导出现在使用相同的计算方式
+                </div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">测试步骤</div>
+            <div class="test-steps">
+                <div class="test-step">
+                    <strong>步骤 1：</strong>在PDF预览中检查内容区域宽度
+                </div>
+                <div class="test-step">
+                    <strong>步骤 2：</strong>导出HTML并检查页面宽度
+                </div>
+                <div class="test-step">
+                    <strong>步骤 3：</strong>使用浏览器开发者工具测量宽度
+                </div>
+                <div class="test-step">
+                    <strong>步骤 4：</strong>对比PDF预览和HTML导出的视觉效果
+                </div>
+                <div class="test-step">
+                    <strong>步骤 5：</strong>验证内容区域宽度为572px
+                </div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">预期结果</div>
+            <div class="expected-result">
+                ✅ 修复后应该：
+                <ul>
+                    <li>HTML导出页面宽度为612px</li>
+                    <li>HTML导出内容区域宽度为572px</li>
+                    <li>与PDF预览的宽度设置完全一致</li>
+                    <li>布局效果完全相同</li>
+                    <li>所有元素位置精确匹配</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">验证方法</div>
+            <div class="test-steps">
+                <div class="test-step">
+                    <strong>1. 代码审查：</strong>检查HTML导出中的宽度设置
+                </div>
+                <div class="test-step">
+                    <strong>2. 视觉对比：</strong>并排对比PDF预览和HTML导出
+                </div>
+                <div class="test-step">
+                    <strong>3. 测量验证：</strong>使用开发者工具测量实际宽度
+                </div>
+                <div class="test-step">
+                    <strong>4. 布局测试：</strong>检查元素位置是否一致</div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">相关文件</div>
+            <div class="code-example">
+修改的文件：
+- /src/App.vue (HTML导出宽度设置)
+
+参考文件：
+- /src/components/PdfPreviewPanel.vue (PDF预览宽度设置)
+- /src/components/PdfPaginationPreview.vue (PDF分页预览宽度设置)
+
+测试文件：
+- test-content-width-fix.html (本文件)
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

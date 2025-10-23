@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>动态行数测试 - Table Rows Number</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .test-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .test-steps {
+            margin: 10px 0;
+        }
+        .test-step {
+            margin: 5px 0;
+            padding: 5px;
+            background-color: #f5f5f5;
+            border-radius: 3px;
+        }
+        .expected-result {
+            color: #0066cc;
+            font-weight: bold;
+        }
+        .debug-info {
+            background-color: #fff3cd;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .fix-details {
+            background-color: #e8f5e8;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .test-cases {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>动态行数测试 - Table Rows Number 功能</h1>
+        
+        <div class="fix-details">
+            <h2>🔧 修复内容</h2>
+            <ul>
+                <li><strong>PdfPreviewPanel.vue</strong>：
+                    <ul>
+                        <li>添加了 <code>getTableRows()</code> 函数来动态生成行数据</li>
+                        <li>当输入大于5的数字时，自动生成额外的行数据</li>
+                        <li>使用第一行数据作为模板，自动递增行号</li>
+                    </ul>
+                </li>
+                <li><strong>App.vue</strong>：
+                    <ul>
+                        <li>更新了 PDF 生成逻辑，支持动态行数</li>
+                        <li>确保导出的 PDF 也能正确显示动态行数</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">测试场景 1: 大数字输入测试</div>
+            <div class="test-steps">
+                <div class="test-step">1. 打开应用程序 (http://localhost:5174/)</div>
+                <div class="test-step">2. 确保 Table Section 已启用</div>
+                <div class="test-step">3. 在 "Rows Number" 输入框中输入数字 10</div>
+                <div class="test-step">4. 观察 PDF 预览面板中的表格行数</div>
+                <div class="test-step">5. 将鼠标悬停在表格行上，查看 title 提示</div>
+            </div>
+            <div class="expected-result">预期结果: PDF 预览应该显示 10 行数据，title 显示 "Row 1 of 10 (rowsNumber: 10)" 到 "Row 10 of 10 (rowsNumber: 10)"</div>
+        </div>
+
+        <div class="test-cases">
+            <h3>📋 测试用例</h3>
+            <table border="1" style="width: 100%; border-collapse: collapse;">
+                <tr style="background-color: #f0f0f0;">
+                    <th style="padding: 8px;">输入数字</th>
+                    <th style="padding: 8px;">预期显示行数</th>
+                    <th style="padding: 8px;">数据来源</th>
+                </tr>
+                <tr>
+                    <td style="padding: 8px;">1</td>
+                    <td style="padding: 8px;">1 行</td>
+                    <td style="padding: 8px;">现有数据</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px;">5</td>
+                    <td style="padding: 8px;">5 行</td>
+                    <td style="padding: 8px;">现有数据</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px;">10</td>
+                    <td style="padding: 8px;">10 行</td>
+                    <td style="padding: 8px;">5行现有 + 5行动态生成</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px;">15</td>
+                    <td style="padding: 8px;">15 行</td>
+                    <td style="padding: 8px;">5行现有 + 10行动态生成</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px;">20</td>
+                    <td style="padding: 8px;">20 行</td>
+                    <td style="padding: 8px;">5行现有 + 15行动态生成</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">测试场景 2: 数据内容验证</div>
+            <div class="test-steps">
+                <div class="test-step">1. 输入数字 10</div>
+                <div class="test-step">2. 检查前5行的数据内容</div>
+                <div class="test-step">3. 检查第6-10行的数据内容</div>
+                <div class="test-step">4. 验证动态生成的行数据是否正确</div>
+            </div>
+            <div class="expected-result">预期结果: 
+                <ul>
+                    <li>前5行：显示原始数据 (Line 1, Line 2, Line 3, Line 4, Line 5)</li>
+                    <li>第6-10行：显示动态生成的数据 (Line 6, Line 7, Line 8, Line 9, Line 10)</li>
+                    <li>每行的数据应该基于第一行模板，自动递增行号</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">测试场景 3: PDF 导出测试</div>
+            <div class="test-steps">
+                <div class="test-step">1. 设置 Rows Number 为 15</div>
+                <div class="test-step">2. 点击 "Export PDF" 按钮</div>
+                <div class="test-step">3. 检查导出的 PDF 文件</div>
+                <div class="test-step">4. 验证 PDF 中是否显示 15 行数据</div>
+            </div>
+            <div class="expected-result">预期结果: 导出的 PDF 应该包含 15 行数据，与预览中显示的一致</div>
+        </div>
+
+        <div class="debug-info">
+            <h3>🐛 调试信息检查</h3>
+            <p>打开浏览器开发者工具的 Console 标签，应该看到：</p>
+            <ol>
+                <li><code>PdfPreviewPanel: table data updated</code> - 包含：
+                    <ul>
+                        <li><code>rowsNumber</code>: 设置的行数</li>
+                        <li><code>baseRowsCount</code>: 基础数据行数 (5)</li>
+                        <li><code>actualRowsToShow</code>: 实际显示的行数 (应该等于 rowsNumber)</li>
+                    </ul>
+                </li>
+                <li>鼠标悬停时的 title 提示应该显示正确的行数信息</li>
+            </ol>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">测试场景 4: 边界值测试</div>
+            <div class="test-steps">
+                <div class="test-step">1. 输入数字 0</div>
+                <div class="test-step">2. 输入负数 -5</div>
+                <div class="test-step">3. 输入小数 10.5</div>
+                <div class="test-step">4. 输入非常大的数字 100</div>
+            </div>
+            <div class="expected-result">预期结果: 
+                <ul>
+                    <li>输入 0: 显示默认 2 行</li>
+                    <li>输入负数: 显示默认 2 行</li>
+                    <li>输入小数: 四舍五入为整数</li>
+                    <li>输入 100: 显示 100 行（动态生成 95 行）</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="fix-details">
+            <h2>📝 技术实现</h2>
+            <p><strong>动态行生成逻辑</strong>：</p>
+            <ol>
+                <li>检查 <code>rowsNumber</code> 是否大于现有行数</li>
+                <li>如果需要更多行，动态生成额外的行数据</li>
+                <li>使用第一行数据作为模板，自动递增行号</li>
+                <li>为每个列生成对应的数据</li>
+                <li>返回完整的行数据数组</li>
+            </ol>
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+

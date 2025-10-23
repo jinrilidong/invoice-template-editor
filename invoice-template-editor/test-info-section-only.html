@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Info Section Layout Test</title>
+    <style type="text/css">
+        @page {
+            size: 612px 792px;
+            margin: 0;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .test-container {
+            width: 612px;
+            margin: 0 auto;
+            border: 1px solid #ccc;
+            padding: 20px;
+        }
+
+        .info-section-title {
+            font-size: 7px;
+            font-weight: 600;
+            color: #6b7280;
+            line-height: 9px;
+            margin: 0 0 10px 0;
+        }
+
+        .info-items-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .info-item {
+            width: 19.2%;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 0;
+            border: 1px solid #ddd;
+            padding: 4px;
+        }
+
+        .info-item-label {
+            font-size: 7px;
+            font-weight: 600;
+            color: black;
+            margin: 0;
+        }
+
+        .info-item-value {
+            font-size: 7px;
+            font-weight: 400;
+            color: #919191;
+            margin: 0;
+        }
+
+        /* Alternative approach using table */
+        .info-items-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .info-items-table td {
+            width: 20%;
+            padding: 4px;
+            border: 1px solid #ddd;
+            vertical-align: top;
+        }
+
+        .info-item-label-table {
+            font-size: 7px;
+            font-weight: 600;
+            color: black;
+            margin: 0;
+        }
+
+        .info-item-value-table {
+            font-size: 7px;
+            font-weight: 400;
+            color: #919191;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h2>Info Section Layout Test</h2>
+        
+        <h3>Method 1: Flex Layout</h3>
+        <div class="info-section-title">Info Section (Flex)</div>
+        <div class="info-items-container">
+            <div class="info-item">
+                <p class="info-item-label">Label 1</p>
+                <p class="info-item-value">Value 1</p>
+            </div>
+            <div class="info-item">
+                <p class="info-item-label">Label 2</p>
+                <p class="info-item-value">Value 2</p>
+            </div>
+            <div class="info-item">
+                <p class="info-item-label">Label 3</p>
+                <p class="info-item-value">Value 3</p>
+            </div>
+            <div class="info-item">
+                <p class="info-item-label">Label 4</p>
+                <p class="info-item-value">Value 4</p>
+            </div>
+            <div class="info-item">
+                <p class="info-item-label">Label 5</p>
+                <p class="info-item-value">Value 5</p>
+            </div>
+            <div class="info-item">
+                <p class="info-item-label">Label 6</p>
+                <p class="info-item-value">Value 6</p>
+            </div>
+            <div class="info-item">
+                <p class="info-item-label">Label 7</p>
+                <p class="info-item-value">Value 7</p>
+            </div>
+        </div>
+
+        <h3>Method 2: Table Layout</h3>
+        <div class="info-section-title">Info Section (Table)</div>
+        <table class="info-items-table">
+            <tr>
+                <td>
+                    <p class="info-item-label-table">Label 1</p>
+                    <p class="info-item-value-table">Value 1</p>
+                </td>
+                <td>
+                    <p class="info-item-label-table">Label 2</p>
+                    <p class="info-item-value-table">Value 2</p>
+                </td>
+                <td>
+                    <p class="info-item-label-table">Label 3</p>
+                    <p class="info-item-value-table">Value 3</p>
+                </td>
+                <td>
+                    <p class="info-item-label-table">Label 4</p>
+                    <p class="info-item-value-table">Value 4</p>
+                </td>
+                <td>
+                    <p class="info-item-label-table">Label 5</p>
+                    <p class="info-item-value-table">Value 5</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p class="info-item-label-table">Label 6</p>
+                    <p class="info-item-value-table">Value 6</p>
+                </td>
+                <td>
+                    <p class="info-item-label-table">Label 7</p>
+                    <p class="info-item-value-table">Value 7</p>
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

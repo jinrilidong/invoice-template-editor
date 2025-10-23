@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>内容高度检测测试 - 如何判断是否超过700px</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .test-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .test-steps {
+            margin: 10px 0;
+        }
+        .test-step {
+            margin: 5px 0;
+            padding: 5px;
+            background-color: #f5f5f5;
+            border-radius: 3px;
+        }
+        .expected-result {
+            color: #0066cc;
+            font-weight: bold;
+        }
+        .debug-info {
+            background-color: #fff3cd;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .fix-details {
+            background-color: #e8f5e8;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .code-block {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>内容高度检测测试 - 如何判断是否超过700px</h1>
+        
+        <div class="fix-details">
+            <h2>🔧 内容高度检测方法</h2>
+            <p>系统使用多种方法来判断内容是否超过700px：</p>
+            
+            <h3>1. 实际高度测量 (ResizeObserver)</h3>
+            <div class="code-block">
+// 使用ResizeObserver监控内容高度变化
+const observeContentHeight = () => {
+  resizeObserver = new ResizeObserver((entries) => {
+    for (const entry of entries) {
+      const height = entry.contentRect.height
+      actualContentHeight.value = height
+      
+      console.log('Content height changed', {
+        actualHeight: height,
+        maxHeight: 700,
+        isOverflowing: height > 700
+      })
+    }
+  })
+  
+  resizeObserver.observe(containerRef.value)
+}
+            </div>
+            
+            <h3>2. 估算高度计算</h3>
+            <div class="code-block">
+// 估算各部分高度
+const getEstimatedHeight = () => {
+  let estimatedHeight = 0
+  
+  // Header: 48px
+  if (props.sectionStates.header) estimatedHeight += 48
+  
+  // Info: 20px per item
+  if (props.sectionStates.info) estimatedHeight += items.length * 20
+  
+  // Table: 40px + 15px per row
+  if (props.sectionStates.table) estimatedHeight += 40 + (rowsCount * 15)
+  
+  // Description: 20px per 100 characters
+  if (props.sectionStates.description) estimatedHeight += Math.ceil(contentLength / 100) * 20
+  
+  // Item: 20px per item
+  if (props.sectionStates.item) estimatedHeight += items.length * 20
+  
+  // Footer: 30px
+  if (props.sectionStates.footer) estimatedHeight += 30
+  
+  // Padding: 100px
+  estimatedHeight += 100
+  
+  return estimatedHeight
+}
+            </div>
+            
+            <h3>3. 分页判断逻辑</h3>
+            <div class="code-block">
+// 检查内容是否超过700px
+const isContentOverflowing = computed(() => {
+  return actualContentHeight.value > 700
+})
+
+// 计算总页数
+const totalPages = computed(() => {
+  const contentHeight = actualContentHeight.value > 0 ? 
+    actualContentHeight.value : getEstimatedHeight()
+  const pages = Math.ceil(contentHeight / 700)
+  return Math.max(1, pages)
+})
+            </div>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">测试场景 1: 实际高度监控</div>
+            <div class="test-steps">
+                <div class="test-step">1. 打开应用程序 (http://localhost:5174/)</div>
+                <div class="test-step">2. 打开浏览器开发者工具的 Console 标签</div>
+                <div class="test-step">3. 修改 Table Rows Number 输入框</div>
+                <div class="test-step">4. 观察控制台输出的高度信息</div>
+            </div>
+            <div class="expected-result">预期结果: 控制台应该显示：
+                <ul>
+                    <li><code>Content height changed</code> - 实际高度变化</li>
+                    <li><code>actualHeight</code> - 实际测量的高度</li>
+                    <li><code>isOverflowing</code> - 是否超过700px</li>
+                    <li><code>needsPagination</code> - 是否需要分页</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">测试场景 2: 分页计算测试</div>
+            <div class="test-steps">
+                <div class="test-step">1. 设置 Table Rows Number 为 5</div>
+                <div class="test-step">2. 观察控制台的 <code>Total pages calculation</code> 信息</div>
+                <div class="test-step">3. 设置 Table Rows Number 为 20</div>
+                <div class="test-step">4. 再次观察分页计算信息</div>
+                <div class="test-step">5. 设置 Table Rows Number 为 50</div>
+                <div class="test-step">6. 观察多页分页计算</div>
+            </div>
+            <div class="expected-result">预期结果: 控制台应该显示：
+                <ul>
+                    <li><code>actualHeight</code> - 实际高度 (如果有)</li>
+                    <li><code>estimatedHeight</code> - 估算高度</li>
+                    <li><code>usedHeight</code> - 使用的高度值</li>
+                    <li><code>calculatedPages</code> - 计算的页数</li>
+                    <li><code>isOverflowing</code> - 是否溢出</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="debug-info">
+            <h3>🐛 调试信息说明</h3>
+            <p>在控制台中，您会看到以下调试信息：</p>
+            
+            <h4>1. 内容高度变化监控</h4>
+            <div class="code-block">
+PdfPreviewPanel: Content height changed {
+  actualHeight: 650,        // 实际测量的高度
+  maxHeight: 700,          // 最大高度限制
+  isOverflowing: false,    // 是否超过700px
+  needsPagination: false   // 是否需要分页
+}
+            </div>
+            
+            <h4>2. 分页计算信息</h4>
+            <div class="code-block">
+PdfPreviewPanel: Total pages calculation {
+  actualHeight: 0,         // 实际高度 (0表示未测量)
+  estimatedHeight: 850,    // 估算高度
+  usedHeight: 850,         // 使用的高度值
+  maxHeightPerPage: 700,   // 每页最大高度
+  calculatedPages: 2,      // 计算的页数
+  isOverflowing: true      // 是否溢出
+}
+            </div>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">测试场景 3: 不同内容量的高度测试</div>
+            <div class="test-steps">
+                <div class="test-step">1. 测试少量内容 (Rows = 1-5)</div>
+                <div class="test-step">2. 测试中等内容 (Rows = 10-15)</div>
+                <div class="test-step">3. 测试大量内容 (Rows = 20-30)</div>
+                <div class="test-step">4. 测试超大量内容 (Rows = 50+)</div>
+                <div class="test-step">5. 观察每种情况下的高度计算和分页</div>
+            </div>
+            <div class="expected-result">预期结果: 
+                <ul>
+                    <li>少量内容: 高度 < 700px，显示 1 页</li>
+                    <li>中等内容: 高度 ≈ 700px，显示 1-2 页</li>
+                    <li>大量内容: 高度 > 700px，显示 2-3 页</li>
+                    <li>超大量内容: 高度 >> 700px，显示 3+ 页</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">测试场景 4: 实时高度监控</div>
+            <div class="test-steps">
+                <div class="test-step">1. 在 Table Rows Number 输入框中输入数字</div>
+                <div class="test-step">2. 使用上下箭头调整数字</div>
+                <div class="test-step">3. 观察控制台中的实时高度变化</div>
+                <div class="test-step">4. 验证高度监控是否实时响应</div>
+            </div>
+            <div class="expected-result">预期结果: 每次输入变化都应该在控制台看到新的高度计算信息</div>
+        </div>
+
+        <div class="fix-details">
+            <h2>📝 技术实现总结</h2>
+            <p><strong>判断内容是否超过700px的方法：</strong></p>
+            <ol>
+                <li><strong>ResizeObserver 实时监控</strong>：使用浏览器API监控DOM元素的实际高度变化</li>
+                <li><strong>估算高度计算</strong>：基于各部分内容的估算高度进行计算</li>
+                <li><strong>混合判断</strong>：优先使用实际测量高度，如果没有则使用估算高度</li>
+                <li><strong>分页计算</strong>：根据总高度除以700px计算需要的页数</li>
+                <li><strong>实时更新</strong>：内容变化时自动重新计算和更新分页</li>
+            </ol>
+            
+            <p><strong>关键阈值：</strong></p>
+            <ul>
+                <li>最大内容高度：<strong>700px</strong></li>
+                <li>页面总高度：792px</li>
+                <li>边距和填充：92px</li>
+                <li>分页触发：内容高度 > 700px</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+

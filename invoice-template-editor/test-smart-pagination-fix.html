@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能分页修复测试 - 内容溢出和重复问题</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .test-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .test-steps {
+            margin: 10px 0;
+        }
+        .test-step {
+            margin: 5px 0;
+            padding: 5px;
+            background-color: #f5f5f5;
+            border-radius: 3px;
+        }
+        .expected-result {
+            color: #0066cc;
+            font-weight: bold;
+        }
+        .debug-info {
+            background-color: #fff3cd;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .fix-details {
+            background-color: #e8f5e8;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .bug-fix {
+            background-color: #f8d7da;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .code-block {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>智能分页修复测试 - 内容溢出和重复问题</h1>
+        
+        <div class="bug-fix">
+            <h2>🐛 修复的问题</h2>
+            <ul>
+                <li><strong>问题1</strong>：当内容高度超过700px时，页面内容溢出700px外面</li>
+                <li><strong>问题2</strong>：第二页显示的内容是复制第一页的table section和Item section还有Description</li>
+                <li><strong>问题3</strong>：第二页应该显示第一页超过700px高度以外的内容，而不是重复内容</li>
+            </ul>
+        </div>
+
+        <div class="fix-details">
+            <h2>🔧 修复方案</h2>
+            
+            <h3>1. 智能内容分配</h3>
+            <div class="code-block">
+// 计算每页应该显示的内容
+const getPageContent = (pageIndex: number) => {
+  const maxHeightPerPage = 700
+  let currentHeight = 0
+  const pageContent = {
+    header: false,
+    info: false,
+    table: { show: false, rowsToShow: 0 },
+    description: false,
+    item: false,
+    footer: false
+  }
+  
+  // 第一页总是显示header
+  if (pageIndex === 1 && props.sectionStates.header) {
+    pageContent.header = true
+    currentHeight += 48
+  }
+  
+  // 计算table应该显示多少行
+  if (props.sectionStates.table) {
+    const availableHeight = maxHeightPerPage - currentHeight - 100
+    const maxRowsForThisPage = Math.max(0, Math.floor((availableHeight - 40) / 15))
+    
+    if (maxRowsForThisPage > 0) {
+      pageContent.table.show = true
+      pageContent.table.rowsToShow = Math.min(maxRowsForThisPage, totalRows)
+    }
+  }
+  
+  return pageContent
+}
+            </div>
+            
+            <h3>2. 表格行分页</h3>
+            <div class="code-block">
+// 获取当前页面应该显示的表格行数
+const getTableRowsForPage = (table: any, pageIndex: number) => {
+  const pageContent = getPageContent(pageIndex)
+  if (!pageContent.table.show) return []
+  
+  const allRows = getTableRows(table)
+  const rowsToShow = pageContent.table.rowsToShow
+  
+  // 计算从哪一行开始显示
+  let startIndex = 0
+  for (let i = 1; i < pageIndex; i++) {
+    const prevPageContent = getPageContent(i)
+    if (prevPageContent.table.show) {
+      startIndex += prevPageContent.table.rowsToShow
+    }
+  }
+  
+  return allRows.slice(startIndex, startIndex + rowsToShow)
+}
+            </div>
+            
+            <h3>3. 精确分页计算</h3>
+            <div class="code-block">
+// 重新设计分页计算逻辑
+const totalPages = computed(() => {
+  const maxHeightPerPage = 700
+  let totalHeight = 0
+  
+  // 计算各部分高度
+  if (props.sectionStates.header) totalHeight += 48
+  if (props.sectionStates.info) totalHeight += items.length * 20
+  if (props.sectionStates.table) totalHeight += 40 + (totalRows * 15)
+  // ... 其他部分
+  
+  const pages = Math.ceil(totalHeight / maxHeightPerPage)
+  return Math.max(1, pages)
+})
+            </div>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">测试场景 1: 内容溢出修复</div>
+            <div class="test-steps">
+                <div class="test-step">1. 打开应用程序 (http://localhost:5174/)</div>
+                <div class="test-step">2. 设置 Table Rows Number 为 30</div>
+                <div class="test-step">3. 观察第一页的内容</div>
+                <div class="test-step">4. 检查第一页内容是否超过700px高度</div>
+                <div class="test-step">5. 验证第一页内容是否被正确截断</div>
+            </div>
+            <div class="expected-result">预期结果: 
+                <ul>
+                    <li>第一页内容应该被限制在700px以内</li>
+                    <li>第一页不应该显示所有30行数据</li>
+                    <li>第一页应该显示header、info和部分table行</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">测试场景 2: 重复内容修复</div>
+            <div class="test-steps">
+                <div class="test-step">1. 设置 Table Rows Number 为 25</div>
+                <div class="test-step">2. 观察第二页的内容</div>
+                <div class="test-step">3. 检查第二页是否显示重复的table行</div>
+                <div class="test-step">4. 验证第二页显示的是第一页溢出的内容</div>
+                <div class="test-step">5. 检查第二页的table行是否从第一页结束的地方开始</div>
+            </div>
+            <div class="expected-result">预期结果: 
+                <ul>
+                    <li>第二页不应该显示重复的table行</li>
+                    <li>第二页应该显示第一页溢出的table行</li>
+                    <li>第二页的table行应该从第一页结束的地方开始</li>
+                    <li>第二页可能还包含description、item和footer</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">测试场景 3: 智能分页验证</div>
+            <div class="test-steps">
+                <div class="test-step">1. 设置 Table Rows Number 为 50</div>
+                <div class="test-step">2. 观察多页的内容分布</div>
+                <div class="test-step">3. 检查每页的内容是否合理分配</div>
+                <div class="test-step">4. 验证每页的内容高度是否接近700px</div>
+                <div class="test-step">5. 检查最后一页是否包含footer</div>
+            </div>
+            <div class="expected-result">预期结果: 
+                <ul>
+                    <li>应该显示3-4页</li>
+                    <li>每页内容应该合理分配</li>
+                    <li>每页内容高度应该接近700px</li>
+                    <li>最后一页应该包含footer</li>
+                    <li>table行应该连续分布在多页中</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="debug-info">
+            <h3>🐛 调试信息检查</h3>
+            <p>打开浏览器开发者工具的 Console 标签，应该看到：</p>
+            
+            <h4>1. 分页计算信息</h4>
+            <div class="code-block">
+PdfPreviewPanel: Total pages calculation {
+  totalHeight: 1200,        // 总内容高度
+  maxHeightPerPage: 700,    // 每页最大高度
+  calculatedPages: 2,       // 计算的页数
+  sections: {               // 各部分状态
+    header: true,
+    info: true,
+    table: true,
+    description: true,
+    item: true,
+    footer: true
+  }
+}
+            </div>
+            
+            <h4>2. 表格数据更新</h4>
+            <div class="code-block">
+PdfPreviewPanel: table data updated [{
+  id: "table-1",
+  rowsNumber: 25,           // 设置的行数
+  baseRowsCount: 5,         // 基础行数
+  actualRowsToShow: 25      // 实际显示的行数
+}]
+            </div>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">测试场景 4: 边界情况测试</div>
+            <div class="test-steps">
+                <div class="test-step">1. 测试少量内容 (Rows = 5)</div>
+                <div class="test-step">2. 测试临界内容 (Rows = 15)</div>
+                <div class="test-step">3. 测试大量内容 (Rows = 50)</div>
+                <div class="test-step">4. 测试超大量内容 (Rows = 100)</div>
+                <div class="test-step">5. 验证每种情况下的分页是否正确</div>
+            </div>
+            <div class="expected-result">预期结果: 
+                <ul>
+                    <li>少量内容: 显示1页，所有内容在一页内</li>
+                    <li>临界内容: 显示1-2页，内容合理分配</li>
+                    <li>大量内容: 显示2-3页，内容连续分布</li>
+                    <li>超大量内容: 显示3+页，内容连续分布</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">测试场景 5: 内容连续性验证</div>
+            <div class="test-steps">
+                <div class="test-step">1. 设置 Table Rows Number 为 20</div>
+                <div class="test-step">2. 记录第一页显示的table行数</div>
+                <div class="test-step">3. 记录第二页显示的table行数</div>
+                <div class="test-step">4. 验证两页的table行数之和是否等于20</li>
+                <div class="test-step">5. 验证第二页的行是否从第一页结束的地方开始</div>
+            </div>
+            <div class="expected-result">预期结果: 
+                <ul>
+                    <li>第一页显示的table行数 + 第二页显示的table行数 = 20</li>
+                    <li>第二页的table行应该从第一页结束的地方开始</li>
+                    <li>不应该有重复的table行</li>
+                    <li>不应该有遗漏的table行</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="fix-details">
+            <h2>📝 修复总结</h2>
+            <p><strong>主要改进：</strong></p>
+            <ol>
+                <li><strong>智能内容分配</strong>：根据700px限制智能分配内容到不同页面</li>
+                <li><strong>表格行分页</strong>：表格行可以跨页显示，避免重复</li>
+                <li><strong>精确高度计算</strong>：更准确的内容高度计算和分页</li>
+                <li><strong>连续性保证</strong>：确保内容在页面间连续，无重复无遗漏</li>
+                <li><strong>Footer位置</strong>：Footer只在最后一页显示</li>
+            </ol>
+            
+            <p><strong>技术特点：</strong></p>
+            <ul>
+                <li>每页内容高度控制在700px以内</li>
+                <li>表格行可以跨页连续显示</li>
+                <li>智能分配各部分内容到合适页面</li>
+                <li>避免内容重复和遗漏</li>
+                <li>支持任意数量的表格行</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+

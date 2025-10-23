@@ -1,0 +1,421 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Logo Fix Test</title>
+    <style type="text/css">
+        @page {
+            size: 612px 792px;
+            margin: 0;
+        }
+        
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Inter', Arial, sans-serif;
+            font-size: 12px;
+        }
+
+        .invoice-container {
+            width: 100%;
+        }
+
+        .section-spacer {
+            height: 10px;
+        }
+        
+        .section-spacer td {
+            height: 10px;
+        }
+
+        .header-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .header-table td {
+            vertical-align: top;
+            padding: 0;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #000000;
+        }
+
+        .header-description {
+            font-size: 10px;
+            color: #000000;
+        }
+
+        .logo-container {
+            text-align: right;
+            width: 240px;
+            height: 48px;
+        }
+
+        .logo-container img {
+            height: 48px;
+            width: 240px;
+        }
+
+        .logo-placeholder {
+            border: 1px dashed black;
+            text-align: center;
+            color: #999999;
+            font-size: 10px;
+            height: 48px;
+            width: 240px;
+        }
+
+        .logo-placeholder td {
+            text-align: center;
+            height: 48px;
+            width: 240px;
+        }
+
+        .info-section-title {
+            font-size: 10px;
+            font-weight: bold;
+            color: #6b7280;
+        }
+
+        .info-items-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .info-items-table td {
+            width: 20%;
+            padding: 5px;
+            vertical-align: top;
+        }
+
+        .info-item-label {
+            font-size: 10px;
+            font-weight: bold;
+            color: #000000;
+        }
+
+        .info-item-value {
+            font-size: 10px;
+            color: #919191;
+        }
+
+        .table-section-title {
+            font-size: 10px;
+            font-weight: bold;
+            color: #6b7280;
+        }
+
+        .table-subsection-title {
+            font-size: 10px;
+            font-weight: bold;
+            color: #000000;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 5px;
+            border-bottom: 1px solid black;
+            font-size: 10px;
+        }
+
+        .data-table th {
+            font-weight: bold;
+            text-align: left;
+            color: #919191;
+        }
+
+        .data-table th.text-right {
+            text-align: right;
+        }
+
+        .data-table td {
+            text-align: left;
+            color: #000000;
+        }
+
+        .data-table td.text-right {
+            text-align: right;
+        }
+
+        .subtotal-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .subtotal-table td {
+            padding: 5px;
+            font-size: 10px;
+        }
+
+        .subtotal-value {
+            font-weight: bold;
+            text-align: right;
+            color: #000000;
+        }
+
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .summary-table td {
+            padding: 5px;
+            vertical-align: bottom;
+        }
+
+        .summary-label {
+            font-size: 12px;
+            font-weight: bold;
+            text-align: right;
+            color: #919191;
+        }
+
+        .summary-value {
+            font-size: 14px;
+            font-weight: bold;
+            text-align: right;
+            color: #000000;
+        }
+
+        .description-label {
+            font-size: 10px;
+            font-weight: bold;
+            color: #000000;
+        }
+
+        .description-text {
+            font-size: 10px;
+            color: #919191;
+        }
+
+        .item-section-title {
+            font-size: 10px;
+            font-weight: bold;
+            color: #6b7280;
+        }
+
+        .item-items-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .item-items-table td {
+            padding: 5px;
+            vertical-align: top;
+            width: 20%;
+        }
+
+        .item-item-label {
+            font-size: 10px;
+            font-weight: bold;
+            color: #000000;
+        }
+
+        .item-item-value {
+            font-size: 10px;
+            color: #919191;
+        }
+
+        .footer-section {
+            width: 100%;
+            border-collapse: collapse;
+            border-top: 1px solid black;
+        }
+
+        .footer-section td {
+            padding: 5px;
+            font-size: 10px;
+            color: #000000;
+        }
+
+        .footer-info {
+            text-align: left;
+        }
+
+        .footer-name {
+            text-align: center;
+        }
+
+        .footer-page {
+            text-align: right;
+        }
+
+        tr, tfoot {
+            page-break-inside: avoid;
+        }
+    </style>
+</head>
+<body>
+    <table class="invoice-container">
+        <tr>
+            <td>
+                <table class="header-table">
+                    <tr>
+                        <td>
+                            <span class="header-title">Invoice</span><br/>
+                            <span class="header-description">Invoice Description</span>
+                        </td>
+                        <td class="logo-container">
+                            <table class="logo-placeholder">
+                                <tr>
+                                    <td>Logo Placeholder</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                
+                <table class="section-spacer">
+                    <tr>
+                        <td></td>
+                    </tr>
+                </table>
+                
+                <span class="info-section-title">Info Section</span><br/>
+                <table class="info-items-table">
+                    <tr>
+                        <td>
+                            <span class="info-item-label">Label 1</span><br/>
+                            <span class="info-item-value">Value 1</span>
+                        </td>
+                        <td>
+                            <span class="info-item-label">Label 2</span><br/>
+                            <span class="info-item-value">Value 2</span>
+                        </td>
+                        <td>
+                            <span class="info-item-label">Label 3</span><br/>
+                            <span class="info-item-value">Value 3</span>
+                        </td>
+                        <td>
+                            <span class="info-item-label">Label 4</span><br/>
+                            <span class="info-item-value">Value 4</span>
+                        </td>
+                        <td>
+                            <span class="info-item-label">Label 5</span><br/>
+                            <span class="info-item-value">Value 5</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="info-item-label">Label 6</span><br/>
+                            <span class="info-item-value">Value 6</span>
+                        </td>
+                        <td>
+                            <span class="info-item-label">Label 7</span><br/>
+                            <span class="info-item-value">Value 7</span>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+                
+                <table class="section-spacer">
+                    <tr>
+                        <td></td>
+                    </tr>
+                </table>
+                
+                <span class="table-section-title">Table Section</span><br/>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th class="text-right">Price</th>
+                            <th class="text-right">Quantity</th>
+                            <th class="text-right">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Item 1</td>
+                            <td class="text-right">$100.00</td>
+                            <td class="text-right">2</td>
+                            <td class="text-right">$200.00</td>
+                        </tr>
+                        <tr>
+                            <td>Item 2</td>
+                            <td class="text-right">$150.00</td>
+                            <td class="text-right">1</td>
+                            <td class="text-right">$150.00</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="subtotal-table">
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="subtotal-value">Subtotal $350.00</td>
+                    </tr>
+                </table>
+                
+                <table class="summary-table">
+                    <tr>
+                        <td class="summary-label">Total USD</td>
+                        <td class="summary-value">$350.00</td>
+                    </tr>
+                </table>
+                
+                <table class="section-spacer">
+                    <tr>
+                        <td></td>
+                    </tr>
+                </table>
+                
+                <span class="description-label">Item Name</span><br/>
+                <span class="description-text">This is a description of the items in the invoice.</span>
+                
+                <table class="section-spacer">
+                    <tr>
+                        <td></td>
+                    </tr>
+                </table>
+                
+                <span class="item-section-title">Item Section</span><br/>
+                <table class="item-items-table">
+                    <tr>
+                        <td>
+                            <span class="item-item-label">Item Label 1</span><br/>
+                            <span class="item-item-value">Item Value 1</span>
+                        </td>
+                        <td>
+                            <span class="item-item-label">Item Label 2</span><br/>
+                            <span class="item-item-value">Item Value 2</span>
+                        </td>
+                        <td>
+                            <span class="item-item-label">Item Label 3</span><br/>
+                            <span class="item-item-value">Item Value 3</span>
+                        </td>
+                        <td>
+                            <span class="item-item-label">Item Label 4</span><br/>
+                            <span class="item-item-value">Item Value 4</span>
+                        </td>
+                        <td>
+                            <span class="item-item-label">Item Label 5</span><br/>
+                            <span class="item-item-value">Item Value 5</span>
+                        </td>
+                    </tr>
+                </table>
+                
+                <table class="footer-section">
+                    <tr>
+                        <td class="footer-info">Footer Info</td>
+                        <td class="footer-name">Company Name</td>
+                        <td class="footer-page">Page: 1 of 1</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

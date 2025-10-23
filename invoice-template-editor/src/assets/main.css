@@ -1,0 +1,296 @@
+@import './base.css';
+@import "tailwindcss";
+
+/* ============================================
+   Global Layout & App Styles
+   ============================================ */
+
+/* 全局禁用横向滚动 */
+html, body {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+}
+
+#app {
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  font-weight: normal;
+  overflow-x: hidden !important;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============================================
+   Enhanced Link Styles
+   ============================================ */
+a,
+.green {
+  text-decoration: none;
+  color: var(--color-text-info);
+  transition: color var(--transition-fast);
+  padding: var(--spacing-0-5);
+  border-radius: var(--radius-sm);
+}
+
+@media (hover: hover) {
+  a:hover {
+    color: var(--color-brand-600);
+    background-color: var(--color-brand-50);
+  }
+}
+
+/* ============================================
+   Responsive Layout Adjustments
+   ============================================ */
+@media (min-width: 1024px) {
+  body {
+    display: flex;
+    place-items: center;
+  }
+}
+
+/* ============================================
+   Enhanced Typography Styles
+   ============================================ */
+.heading-lg {
+  font-family: var(--font-family-primary);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-2xl);
+  line-height: var(--line-height-2xl);
+  color: var(--color-text-primary);
+}
+
+/* ============================================
+   Layout Container Classes
+   ============================================ */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-4);
+}
+
+.container-sm {
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-4);
+}
+
+.container-lg {
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-4);
+}
+
+.container-full {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* ============================================
+   Flexbox Utility Classes
+   ============================================ */
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flex-start {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.flex-end {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.flex-col-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-col-start {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+/* ============================================
+   Grid Utility Classes
+   ============================================ */
+.grid-auto-fit {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-4);
+}
+
+.grid-auto-fill {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: var(--spacing-4);
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-4);
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-4);
+}
+
+.grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-4);
+}
+
+/* ============================================
+   Spacing Utility Classes
+   ============================================ */
+.gap-xs { gap: var(--spacing-1); }
+.gap-sm { gap: var(--spacing-2); }
+.gap-md { gap: var(--spacing-4); }
+.gap-lg { gap: var(--spacing-6); }
+.gap-xl { gap: var(--spacing-8); }
+.gap-2xl { gap: var(--spacing-12); }
+
+.p-xs { padding: var(--spacing-1); }
+.p-sm { padding: var(--spacing-2); }
+.p-md { padding: var(--spacing-4); }
+.p-lg { padding: var(--spacing-6); }
+.p-xl { padding: var(--spacing-8); }
+.p-2xl { padding: var(--spacing-12); }
+
+.m-xs { margin: var(--spacing-1); }
+.m-sm { margin: var(--spacing-2); }
+.m-md { margin: var(--spacing-4); }
+.m-lg { margin: var(--spacing-6); }
+.m-xl { margin: var(--spacing-8); }
+.m-2xl { margin: var(--spacing-12); }
+
+/* ============================================
+   Text Utility Classes
+   ============================================ */
+.text-xs { font-size: var(--font-size-xs); line-height: var(--line-height-xs); }
+.text-sm { font-size: var(--font-size-sm); line-height: var(--line-height-sm); }
+.text-base { font-size: var(--font-size-base); line-height: var(--line-height-base); }
+.text-md { font-size: var(--font-size-md); line-height: var(--line-height-md); }
+.text-lg { font-size: var(--font-size-lg); line-height: var(--line-height-lg); }
+.text-xl { font-size: var(--font-size-xl); line-height: var(--line-height-xl); }
+.text-2xl { font-size: var(--font-size-2xl); line-height: var(--line-height-2xl); }
+.text-3xl { font-size: var(--font-size-3xl); line-height: var(--line-height-3xl); }
+
+.text-primary { color: var(--color-text-primary); }
+.text-secondary { color: var(--color-text-secondary); }
+.text-tertiary { color: var(--color-text-tertiary); }
+.text-disabled { color: var(--color-text-disabled); }
+.text-success { color: var(--color-text-success); }
+.text-warning { color: var(--color-text-warning); }
+.text-error { color: var(--color-text-error); }
+.text-info { color: var(--color-text-info); }
+
+.font-normal { font-weight: var(--font-weight-normal); }
+.font-medium { font-weight: var(--font-weight-medium); }
+.font-semibold { font-weight: var(--font-weight-semibold); }
+.font-bold { font-weight: var(--font-weight-bold); }
+
+/* ============================================
+   Background Utility Classes
+   ============================================ */
+.bg-primary { background-color: var(--color-surface-primary); }
+.bg-secondary { background-color: var(--color-surface-secondary); }
+.bg-tertiary { background-color: var(--color-surface-tertiary); }
+.bg-hover { background-color: var(--color-surface-hover); }
+.bg-disabled { background-color: var(--color-surface-disabled); }
+.bg-brand { background-color: var(--color-surface-brand); }
+.bg-brand-hover { background-color: var(--color-surface-brand-hover); }
+
+/* ============================================
+   Border Utility Classes
+   ============================================ */
+.border-default { border: 1px solid var(--color-border-default); }
+.border-hover { border: 1px solid var(--color-border-hover); }
+.border-focus { border: 1px solid var(--color-border-focus); }
+.border-disabled { border: 1px solid var(--color-border-disabled); }
+.border-brand { border: 1px solid var(--color-border-brand); }
+
+.rounded-sm { border-radius: var(--radius-sm); }
+.rounded { border-radius: var(--radius-base); }
+.rounded-md { border-radius: var(--radius-md); }
+.rounded-lg { border-radius: var(--radius-lg); }
+.rounded-xl { border-radius: var(--radius-xl); }
+.rounded-2xl { border-radius: var(--radius-2xl); }
+.rounded-3xl { border-radius: var(--radius-3xl); }
+.rounded-full { border-radius: var(--radius-full); }
+
+/* ============================================
+   Shadow Utility Classes
+   ============================================ */
+.shadow-sm { box-shadow: var(--shadow-sm); }
+.shadow { box-shadow: var(--shadow-base); }
+.shadow-md { box-shadow: var(--shadow-md); }
+.shadow-lg { box-shadow: var(--shadow-lg); }
+.shadow-xl { box-shadow: var(--shadow-xl); }
+.shadow-2xl { box-shadow: var(--shadow-2xl); }
+.shadow-inner { box-shadow: var(--shadow-inner); }
+.shadow-none { box-shadow: var(--shadow-none); }
+
+/* ============================================
+   Transition Utility Classes
+   ============================================ */
+.transition-fast { transition: all var(--transition-fast); }
+.transition { transition: all var(--transition-base); }
+.transition-slow { transition: all var(--transition-slow); }
+.transition-slower { transition: all var(--transition-slower); }
+
+/* ============================================
+   Responsive Utility Classes
+   ============================================ */
+@media (max-width: 640px) {
+  .container,
+  .container-sm,
+  .container-lg {
+    padding: 0 var(--spacing-2);
+  }
+  
+  .grid-2,
+  .grid-3,
+  .grid-4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .grid-3,
+  .grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1025px) {
+  .grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

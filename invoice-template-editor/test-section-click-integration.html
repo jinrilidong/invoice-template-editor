@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Section Click & Style Panel Integration Test</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background-color: #f5f5f5;
+      }
+      .test-container {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+      }
+      .test-title {
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 10px;
+      }
+      .test-description {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 15px;
+      }
+      .test-steps {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 4px;
+        border-left: 4px solid #007bff;
+      }
+      .test-steps ol {
+        margin: 0;
+        padding-left: 20px;
+      }
+      .test-steps li {
+        margin-bottom: 8px;
+        line-height: 1.4;
+      }
+      .expected-result {
+        background: #d4edda;
+        padding: 10px;
+        border-radius: 4px;
+        border-left: 4px solid #28a745;
+        margin-top: 15px;
+      }
+      .expected-result strong {
+        color: #155724;
+      }
+      .section-mapping {
+        background: #fff3cd;
+        padding: 15px;
+        border-radius: 4px;
+        border-left: 4px solid #ffc107;
+        margin-top: 15px;
+      }
+      .section-mapping table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+      }
+      .section-mapping th,
+      .section-mapping td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+      }
+      .section-mapping th {
+        background-color: #f8f9fa;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="test-container">
+      <div class="test-title">🎯 Section点击与样式面板集成测试</div>
+      <div class="test-description">
+        此测试用于验证点击PDF预览中的section是否能正确切换到PDF Style面板并显示对应的样式调整参数。
+      </div>
+
+      <div class="test-steps">
+        <strong>测试步骤：</strong>
+        <ol>
+          <li>打开应用：<code>http://localhost:5173</code></li>
+          <li>确保右侧面板显示"Configuration Panel"标签页</li>
+          <li>点击"PDF Style"标签页，切换到样式面板</li>
+          <li>在PDF预览中点击不同的section，观察右侧面板变化：</li>
+          <ul>
+            <li><strong>点击Header section</strong> → 应显示Header样式参数</li>
+            <li><strong>点击Info section</strong> → 应显示Info样式参数</li>
+            <li><strong>点击Table section</strong> → 应显示Table样式参数</li>
+            <li><strong>点击Description section</strong> → 应显示Description样式参数</li>
+            <li><strong>点击Item section</strong> → 应显示Item样式参数</li>
+            <li><strong>点击Footer section</strong> → 应显示Footer样式参数</li>
+          </ul>
+          <li>点击PDF预览的空白区域 → 应显示全局样式参数</li>
+          <li>调整样式参数，观察预览是否实时更新</li>
+        </ol>
+      </div>
+
+      <div class="expected-result">
+        <strong>预期结果：</strong><br />
+        ✅ 点击任何section时，鼠标悬停应有蓝色高亮效果<br />
+        ✅ 点击section后，右侧PDF Style面板应切换到对应的样式参数<br />
+        ✅ 每个section的样式参数应正确显示（颜色、字体大小、间距等）<br />
+        ✅ 调整样式参数时，预览应实时更新<br />
+        ✅ 点击空白区域应取消选择，显示全局样式参数<br />
+        ✅ 所有交互应流畅，无卡顿或错误
+      </div>
+    </div>
+
+    <div class="test-container">
+      <div class="test-title">📋 Section映射表</div>
+      <div class="test-description">以下是PDF预览中的section与PDF Style面板的映射关系：</div>
+
+      <div class="section-mapping">
+        <table>
+          <thead>
+            <tr>
+              <th>PDF Section</th>
+              <th>点击事件</th>
+              <th>样式面板显示</th>
+              <th>主要样式参数</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Header Section</td>
+              <td><code>header-section</code></td>
+              <td>Header Settings</td>
+              <td>
+                titleSize, titleColor, titleWeight, descriptionSize, descriptionColor,
+                descriptionWeight
+              </td>
+            </tr>
+            <tr>
+              <td>Info Section</td>
+              <td><code>info-section</code></td>
+              <td>Info Settings</td>
+              <td>
+                sectionTitleColor, sectionTitleWeight, labelColor, labelWeight, valueColor,
+                valueWeight, itemGap, itemsPerRow, itemsSpacing, labelValueGap
+              </td>
+            </tr>
+            <tr>
+              <td>H-Info Section</td>
+              <td><code>h-info-section</code></td>
+              <td>H-Info Settings</td>
+              <td>
+                sectionTitleColor, sectionTitleWeight, labelColor, labelWeight, valueColor,
+                valueWeight, labelWidth, labelValueGap, itemGap, columnsPadding
+              </td>
+            </tr>
+            <tr>
+              <td>Table Section</td>
+              <td><code>table-section-{index}</code></td>
+              <td>Table Settings</td>
+              <td>
+                sectionTitleColor, subsectionTitleColor, headerColor, columnNameWeight,
+                rowTextColor, borderColor, rowHeight, columnsPadding
+              </td>
+            </tr>
+            <tr>
+              <td>Summary Section</td>
+              <td><code>summary-section</code></td>
+              <td>Summary Settings</td>
+              <td>textColor, textSize, textWeight</td>
+            </tr>
+            <tr>
+              <td>Description Section</td>
+              <td><code>description-section</code></td>
+              <td>Description Settings</td>
+              <td>labelColor, labelWeight, textColor, textWeight, textSize, lineHeight</td>
+            </tr>
+            <tr>
+              <td>Item Section</td>
+              <td><code>item-section</code></td>
+              <td>Item Settings</td>
+              <td>
+                sectionTitleColor, sectionTitleWeight, labelColor, labelWeight, valueColor,
+                valueWeight, itemGap, itemsPerRow, itemsSpacing, labelValueGap
+              </td>
+            </tr>
+            <tr>
+              <td>Footer Section</td>
+              <td><code>footer-section</code></td>
+              <td>Footer Settings</td>
+              <td>textColor, textSize, textWeight</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="test-container">
+      <div class="test-title">🔧 技术实现细节</div>
+      <div class="test-description">本次实现的关键技术点：</div>
+
+      <div class="test-steps">
+        <strong>实现内容：</strong>
+        <ol>
+          <li>
+            <strong>事件传递链</strong>:
+            <pre><code>PdfCompatibleRenderer → PdfPaginationPreview → App.vue → PdfStylePanel</code></pre>
+          </li>
+          <li>
+            <strong>点击事件处理</strong>:
+            <pre><code>@click.stop="handleSectionClick('section-name')"</code></pre>
+          </li>
+          <li>
+            <strong>样式高亮</strong>:
+            <pre><code>.section-clickable:hover { background-color: rgba(59, 130, 246, 0.1); }</code></pre>
+          </li>
+          <li>
+            <strong>条件渲染</strong>:
+            <pre><code>const showHeaderSettings = computed(() => props.selectedSection === 'header-section')</code></pre>
+          </li>
+          <li>
+            <strong>状态管理</strong>:
+            <pre><code>const selectedSection = ref&lt;string | null&gt;(null)</code></pre>
+          </li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="test-container">
+      <div class="test-title">🐛 调试信息</div>
+      <div class="test-description">如果功能不正常，请检查以下调试信息：</div>
+
+      <div class="test-steps">
+        <strong>调试步骤：</strong>
+        <ol>
+          <li>打开浏览器开发者工具 (F12)</li>
+          <li>切换到Console标签页</li>
+          <li>点击PDF预览中的section</li>
+          <li>
+            查看是否有以下日志输出：
+            <pre><code>Section clicked: header-section
+App.vue: selectedSection updated: header-section</code></pre>
+          </li>
+          <li>检查Network标签页，确认没有404或500错误</li>
+          <li>检查Vue DevTools，确认selectedSection状态正确更新</li>
+        </ol>
+      </div>
+    </div>
+
+    <script>
+      // 自动跳转到应用
+      setTimeout(() => {
+        if (confirm('是否要跳转到应用进行测试？')) {
+          window.open('http://localhost:5173', '_blank')
+        }
+      }, 2000)
+    </script>
+  </body>
+</html>

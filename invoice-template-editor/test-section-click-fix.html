@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Section Click Fix Test</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background-color: #f5f5f5;
+      }
+      .test-container {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+      }
+      .test-title {
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 10px;
+      }
+      .test-description {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 15px;
+      }
+      .test-steps {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 4px;
+        border-left: 4px solid #007bff;
+      }
+      .test-steps ol {
+        margin: 0;
+        padding-left: 20px;
+      }
+      .test-steps li {
+        margin-bottom: 8px;
+        line-height: 1.4;
+      }
+      .expected-result {
+        background: #d4edda;
+        padding: 10px;
+        border-radius: 4px;
+        border-left: 4px solid #28a745;
+        margin-top: 15px;
+      }
+      .expected-result strong {
+        color: #155724;
+      }
+      .fix-summary {
+        background: #fff3cd;
+        padding: 15px;
+        border-radius: 4px;
+        border-left: 4px solid #ffc107;
+        margin-top: 15px;
+      }
+      .fix-summary strong {
+        color: #856404;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="test-container">
+      <div class="test-title">🔧 Section点击事件修复测试</div>
+      <div class="test-description">
+        此测试用于验证修复后的section点击功能是否能正确传递事件到PDF Style面板。
+      </div>
+
+      <div class="test-steps">
+        <strong>修复内容：</strong>
+        <ol>
+          <li>
+            <strong>事件名称统一</strong>:
+            将PdfPaginationPreview中的事件从<code>sectionSelect</code>改为<code
+              >section-select</code
+            >
+          </li>
+          <li>
+            <strong>事件绑定</strong>:
+            为PdfCompatibleRenderer添加<code>@section-select="handleSectionClick"</code>事件绑定
+          </li>
+          <li><strong>事件处理函数</strong>: 添加<code>handleSectionClick</code>函数来转发事件</li>
+          <li>
+            <strong>类型修复</strong>: 修复TypeScript类型错误，支持<code>string | null</code>类型
+          </li>
+        </ol>
+      </div>
+
+      <div class="fix-summary">
+        <strong>修复的问题：</strong><br />
+        ❌ <strong>问题</strong>:
+        PdfPaginationPreview发出<code>sectionSelect</code>事件，但App.vue监听<code
+          >@section-select</code
+        ><br />
+        ✅ <strong>修复</strong>: 统一事件名称为<code>section-select</code><br /><br />
+
+        ❌ <strong>问题</strong>: PdfCompatibleRenderer的点击事件没有传递到PdfPaginationPreview<br />
+        ✅ <strong>修复</strong>: 添加<code>@section-select="handleSectionClick"</code>事件绑定<br /><br />
+
+        ❌ <strong>问题</strong>: TypeScript类型错误，参数类型不匹配<br />
+        ✅ <strong>修复</strong>: 更新函数签名支持<code>string | null</code>类型
+      </div>
+
+      <div class="test-steps">
+        <strong>测试步骤：</strong>
+        <ol>
+          <li>打开应用：<code>http://localhost:5173</code></li>
+          <li>点击"PDF Style"标签页</li>
+          <li>在PDF预览中点击不同的section：</li>
+          <ul>
+            <li><strong>点击Header section</strong> → 应显示Header样式参数</li>
+            <li><strong>点击Info section</strong> → 应显示Info样式参数</li>
+            <li><strong>点击Table section</strong> → 应显示Table样式参数</li>
+            <li><strong>点击Description section</strong> → 应显示Description样式参数</li>
+            <li><strong>点击Item section</strong> → 应显示Item样式参数</li>
+            <li><strong>点击Footer section</strong> → 应显示Footer样式参数</li>
+          </ul>
+          <li>点击PDF预览的空白区域 → 应显示全局样式参数</li>
+          <li>调整样式参数，观察预览是否实时更新</li>
+        </ol>
+      </div>
+
+      <div class="expected-result">
+        <strong>预期结果：</strong><br />
+        ✅ 点击任何section时，鼠标悬停应有蓝色高亮效果<br />
+        ✅ 点击section后，右侧PDF Style面板应切换到对应的样式参数<br />
+        ✅ 每个section的样式参数应正确显示（颜色、字体大小、间距等）<br />
+        ✅ 调整样式参数时，预览应实时更新<br />
+        ✅ 点击空白区域应取消选择，显示全局样式参数<br />
+        ✅ 所有交互应流畅，无卡顿或错误<br />
+        ✅ 浏览器控制台不应有JavaScript错误
+      </div>
+    </div>
+
+    <div class="test-container">
+      <div class="test-title">🔍 调试信息</div>
+      <div class="test-description">如果功能仍然不正常，请检查以下调试信息：</div>
+
+      <div class="test-steps">
+        <strong>调试步骤：</strong>
+        <ol>
+          <li>打开浏览器开发者工具 (F12)</li>
+          <li>切换到Console标签页</li>
+          <li>点击PDF预览中的section</li>
+          <li>
+            查看是否有以下日志输出：
+            <pre><code>Section clicked: header-section
+App.vue: selectedSection updated: header-section</code></pre>
+          </li>
+          <li>检查Network标签页，确认没有404或500错误</li>
+          <li>检查Vue DevTools，确认selectedSection状态正确更新</li>
+          <li>检查PdfStylePanel的props.selectedSection是否正确接收</li>
+        </ol>
+      </div>
+    </div>
+
+    <script>
+      // 自动跳转到应用
+      setTimeout(() => {
+        if (confirm('是否要跳转到应用进行测试？')) {
+          window.open('http://localhost:5173', '_blank')
+        }
+      }, 2000)
+    </script>
+  </body>
+</html>

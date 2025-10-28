@@ -646,157 +646,53 @@ const formatHtml = (html: string): string => {
   return result.join('\n')
 }
 
-// Export HTML template (DOM-based WYSIWYG using exportMode)
+// Export HTML template (Simplified - Direct DOM export)
 const exportHtmlTemplate = async () => {
   try {
     // 1) Switch to export mode to render OpenHTMLtoPDF-safe DOM
     exportMode.value = true
     await nextTick()
 
-    // 2) Capture the rendered DOM from paginated preview export container and sanitize/inlines
+    // 2) Capture the rendered DOM from paginated preview export container
     const container = document.querySelector(
       '[data-export-root="pagination"]',
     ) as HTMLElement | null
     if (!container) throw new Error('Export container not found')
     const cloned = container.cloneNode(true) as HTMLElement
 
-    // 2.1 remove any contenteditable attributes
+    // 3) Remove any interactive attributes
     cloned
       .querySelectorAll('[contenteditable]')
       .forEach((el) => el.removeAttribute('contenteditable'))
 
-    // 2.2 Extract and inline OpenHTMLtoPDF-compatible styles
-    const extractCompatibleStyles = (element: HTMLElement) => {
-      const computed = window.getComputedStyle(element)
-      const compatibleStyles: Record<string, string> = {}
+    cloned.querySelectorAll('[draggable]').forEach((el) => el.removeAttribute('draggable'))
 
-      // 字体相关 - OpenHTMLtoPDF 完全支持
-      const fontSize = computed.fontSize
-      if (fontSize && fontSize !== 'initial' && fontSize !== 'inherit') {
-        compatibleStyles.fontSize = fontSize
+    // 4) Remove all data-* and aria-* attributes for cleaner HTML
+    const removeAttributes = (element: HTMLElement) => {
+      const attributesToRemove = []
+      for (let i = 0; i < element.attributes.length; i++) {
+        const attr = element.attributes[i]
+        if (
+          attr.name.startsWith('data-') ||
+          attr.name.startsWith('aria-') ||
+          attr.name === 'role'
+        ) {
+          attributesToRemove.push(attr.name)
+        }
       }
+      attributesToRemove.forEach((attrName) => element.removeAttribute(attrName))
 
-      const fontWeight = computed.fontWeight
-      if (fontWeight && fontWeight !== 'initial' && fontWeight !== 'inherit') {
-        compatibleStyles.fontWeight = fontWeight
-      }
-
-      const color = computed.color
-      if (color && color !== 'initial' && color !== 'inherit') {
-        compatibleStyles.color = color
-      }
-
-      const lineHeight = computed.lineHeight
-      if (lineHeight && lineHeight !== 'initial' && lineHeight !== 'inherit') {
-        compatibleStyles.lineHeight = lineHeight
-      }
-
-      // 文本对齐 - OpenHTMLtoPDF 完全支持
-      const textAlign = computed.textAlign
-      if (textAlign && textAlign !== 'initial' && textAlign !== 'inherit') {
-        compatibleStyles.textAlign = textAlign
-      }
-
-      // 边距和内边距 - OpenHTMLtoPDF 完全支持
-      const margin = computed.margin
-      if (margin && margin !== 'initial' && margin !== 'inherit' && margin !== '0px') {
-        compatibleStyles.margin = margin
-      }
-
-      const padding = computed.padding
-      if (padding && padding !== 'initial' && padding !== 'inherit' && padding !== '0px') {
-        compatibleStyles.padding = padding
-      }
-
-      // 边框 - OpenHTMLtoPDF 完全支持
-      const border = computed.border
-      if (border && border !== 'initial' && border !== 'inherit' && border !== 'none') {
-        compatibleStyles.border = border
-      }
-
-      // 背景色 - OpenHTMLtoPDF 完全支持
-      const backgroundColor = computed.backgroundColor
-      if (
-        backgroundColor &&
-        backgroundColor !== 'initial' &&
-        backgroundColor !== 'inherit' &&
-        backgroundColor !== 'rgba(0, 0, 0, 0)'
-      ) {
-        compatibleStyles.backgroundColor = backgroundColor
-      }
-
-      // 表格相关 - OpenHTMLtoPDF 完全支持
-      const verticalAlign = computed.verticalAlign
-      if (verticalAlign && verticalAlign !== 'initial' && verticalAlign !== 'inherit') {
-        compatibleStyles.verticalAlign = verticalAlign
-      }
-
-      // 尺寸 - 过滤掉不兼容的值
-      const width = computed.width
-      if (
-        width &&
-        width !== 'initial' &&
-        width !== 'inherit' &&
-        !width.includes('calc(') &&
-        !width.includes('flex') &&
-        !width.includes('auto') &&
-        width !== '0px'
-      ) {
-        compatibleStyles.width = width
-      }
-
-      const height = computed.height
-      if (
-        height &&
-        height !== 'initial' &&
-        height !== 'inherit' &&
-        !height.includes('calc(') &&
-        !height.includes('auto') &&
-        height !== '0px'
-      ) {
-        compatibleStyles.height = height
-      }
-
-      // 文本处理 - OpenHTMLtoPDF 完全支持
-      const whiteSpace = computed.whiteSpace
-      if (whiteSpace && whiteSpace !== 'initial' && whiteSpace !== 'inherit') {
-        compatibleStyles.whiteSpace = whiteSpace
-      }
-
-      const wordWrap = computed.wordWrap
-      if (wordWrap && wordWrap !== 'initial' && wordWrap !== 'inherit') {
-        compatibleStyles.wordWrap = wordWrap
-      }
-
-      const overflow = computed.overflow
-      if (overflow && overflow !== 'initial' && overflow !== 'inherit') {
-        compatibleStyles.overflow = overflow
-      }
-
-      const textOverflow = computed.textOverflow
-      if (textOverflow && textOverflow !== 'initial' && textOverflow !== 'inherit') {
-        compatibleStyles.textOverflow = textOverflow
-      }
-
-      return compatibleStyles
-    }
-
-    // 递归处理所有元素，内联兼容样式
-    const inlineCompatibleStyles = (element: HTMLElement) => {
-      const styles = extractCompatibleStyles(element)
-      Object.assign(element.style, styles)
-
+      // Process children
       Array.from(element.children).forEach((child) => {
         if (child instanceof HTMLElement) {
-          inlineCompatibleStyles(child)
+          removeAttributes(child)
         }
       })
     }
 
-    // 应用兼容样式
-    inlineCompatibleStyles(cloned)
+    removeAttributes(cloned)
 
-    // 2.3 inline images to data URLs to avoid remote loading issues
+    // 5) Convert images to data URLs to avoid remote loading issues
     const inlineImages = async () => {
       const imgEls = Array.from(cloned.querySelectorAll('img')) as HTMLImageElement[]
       for (const img of imgEls) {
@@ -826,45 +722,32 @@ const exportHtmlTemplate = async () => {
 
     const inner = cloned.innerHTML
 
-    // 3) Restore normal preview mode
+    // 6) Restore normal preview mode
     exportMode.value = false
     await nextTick()
 
-    // 4) Sanitize and wrap as a standalone (X)HTML document for OpenHTMLtoPDF
+    // 7) Clean up HTML and ensure XHTML compliance
     const sanitized = inner
-      .replace(/\scontenteditable="(?:true|false)"/g, '')
-      .replace(/\sdraggable="(?:true|false)"/g, '')
-      // remove all data-* and aria-* and role attributes (XML-safe minimal set)
-      .replace(/\sdata-[a-zA-Z0-9_-]+="[^"]*"/g, '')
-      .replace(/\saria-[a-zA-Z0-9_-]+="[^"]*"/g, '')
-      .replace(/\srole="[^"]*"/g, '')
-      // strip class and id (we inline all needed styles)
-      .replace(/\sclass="[^"]*"/g, '')
-      .replace(/\sid="[^"]*"/g, '')
       // ensure <br> and <img> are self-closed for XHTML
       .replace(/<br(\s*?)>/g, '<br$1 />')
       .replace(/<img([^>]*?)(?<!\/)>/g, '<img$1 />')
 
-    // 5) 格式化 HTML 代码
+    // 8) Format HTML code
     const formattedBody = formatHtml(sanitized)
 
+    // 9) Wrap as XHTML document for OpenHTMLtoPDF
     const doc = `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <style type="text/css">
-    @page { size: 612px 792px; margin: 23px; }
+    @page { size: 612px 792px; margin: 0; }
     html, body { margin: 0; padding: 0; }
-    body { font-family: Arial, Helvetica, sans-serif; font-size: 7px; color: #000; }
-    .text-right { text-align: right; }
-    .text-center { text-align: center; }
-    .text-left { text-align: left; }
+    body { font-family: Arial, sans-serif; font-size: 7px; color: #000; }
     table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-    th, td { vertical-align: top; padding: 0; }
+    td, th { vertical-align: top; padding: 0; }
     p { margin: 0; line-height: 9px; }
-    /* borders */
-    .border-b { border-bottom: 1px solid #d2d2d2; }
   </style>
   <title>Invoice Template</title>
 </head>
@@ -872,6 +755,7 @@ const exportHtmlTemplate = async () => {
 ${formattedBody}
 </body>
 </html>`
+
     const blob = new Blob([doc], { type: 'text/html' })
     const url = URL.createObjectURL(blob)
 

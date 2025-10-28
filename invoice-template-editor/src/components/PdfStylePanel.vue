@@ -1,18 +1,25 @@
 <template>
-  <div class="h-full bg-white rounded-xl shadow-lg border border-[#d3ddde] flex flex-col w-full min-w-0">
+  <div
+    class="h-full bg-white rounded-xl shadow-lg border border-[#d3ddde] flex flex-col w-full min-w-0"
+  >
     <!-- Header -->
     <div class="bg-gray-100 border-b border-[#d3ddde] flex-shrink-0 p-4 min-h-[3rem] w-full">
       <div class="flex items-center justify-between w-full">
         <h2 class="text-lg font-semibold text-[#0e171f]">PDF Style</h2>
         <div class="flex items-center gap-2">
-          <TextButton 
+          <TextButton
             @click="refreshPreview"
-            variant="default" 
+            variant="default"
             size="sm"
             class="text-gray-600 hover:text-gray-800"
           >
             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+              ></path>
             </svg>
             Refresh
           </TextButton>
@@ -28,19 +35,125 @@
         <div class="space-y-3">
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Base Font Size (px)</label>
-            <input type="number" class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model.number="local.baseFontSize" min="6" max="16" />
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.baseFontSize"
+              min="6"
+              max="16"
+            />
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Section Gap (px)</label>
-            <input type="number" class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model.number="local.sectionGap" min="0" max="24" />
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.sectionGap"
+              min="0"
+              max="24"
+            />
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Same Type Section Gap (px)</label>
-            <input type="number" class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model.number="local.sameTypeSectionGap" min="0" max="24" />
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.sameTypeSectionGap"
+              min="0"
+              max="24"
+            />
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Summary Gap (px)</label>
-            <input type="number" class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model.number="local.summaryGap" min="0" max="24" />
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.summaryGap"
+              min="0"
+              max="24"
+            />
+          </div>
+
+          <!-- Footer Info -->
+          <div class="border-t border-[#d3ddde] pt-4 mt-4">
+            <h4 class="text-xs font-semibold text-[#0e171f] mb-3">Footer Info</h4>
+            <div class="space-y-3">
+              <div class="flex items-center gap-3">
+                <label class="w-32 text-sm text-[#0e171f]">Text Color</label>
+                <input
+                  type="color"
+                  class="h-8 w-12 border border-[#d3ddde] rounded"
+                  v-model="local.footerInfo.textColor"
+                />
+                <input
+                  type="text"
+                  class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+                  v-model="local.footerInfo.textColor"
+                />
+              </div>
+              <div class="flex items-center gap-3">
+                <label class="w-32 text-sm text-[#0e171f]">Text Size (px)</label>
+                <input
+                  type="number"
+                  class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+                  v-model.number="local.footerInfo.textSize"
+                  min="4"
+                  max="16"
+                />
+              </div>
+              <div class="flex items-center gap-3">
+                <label class="w-32 text-sm text-[#0e171f]">Text Weight</label>
+                <select
+                  class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+                  v-model="local.footerInfo.textWeight"
+                >
+                  <option value="normal">Normal</option>
+                  <option value="semibold">Semibold</option>
+                  <option value="bold">Bold</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Footer Name -->
+          <div class="border-t border-[#d3ddde] pt-4 mt-4">
+            <h4 class="text-xs font-semibold text-[#0e171f] mb-3">Footer Name</h4>
+            <div class="space-y-3">
+              <div class="flex items-center gap-3">
+                <label class="w-32 text-sm text-[#0e171f]">Text Color</label>
+                <input
+                  type="color"
+                  class="h-8 w-12 border border-[#d3ddde] rounded"
+                  v-model="local.footerName.textColor"
+                />
+                <input
+                  type="text"
+                  class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+                  v-model="local.footerName.textColor"
+                />
+              </div>
+              <div class="flex items-center gap-3">
+                <label class="w-32 text-sm text-[#0e171f]">Text Size (px)</label>
+                <input
+                  type="number"
+                  class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+                  v-model.number="local.footerName.textSize"
+                  min="4"
+                  max="16"
+                />
+              </div>
+              <div class="flex items-center gap-3">
+                <label class="w-32 text-sm text-[#0e171f]">Text Weight</label>
+                <select
+                  class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+                  v-model="local.footerName.textWeight"
+                >
+                  <option value="normal">Normal</option>
+                  <option value="semibold">Semibold</option>
+                  <option value="bold">Bold</option>
+                </select>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -51,21 +164,71 @@
         <div class="space-y-3">
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Title Color</label>
-            <input type="color" class="h-8 w-12 border border-[#d3ddde] rounded" v-model="local.header.titleColor" />
-            <input type="text" class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model="local.header.titleColor" />
+            <input
+              type="color"
+              class="h-8 w-12 border border-[#d3ddde] rounded"
+              v-model="local.header.titleColor"
+            />
+            <input
+              type="text"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model="local.header.titleColor"
+            />
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Title Size (px)</label>
-            <input type="number" class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model.number="local.header.titleSize" min="8" max="48" />
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.header.titleSize"
+              min="8"
+              max="48"
+            />
+          </div>
+          <div class="flex items-center gap-3">
+            <label class="w-32 text-sm text-[#0e171f]">Title Weight</label>
+            <select
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model="local.header.titleWeight"
+            >
+              <option value="normal">Normal</option>
+              <option value="semibold">Semibold</option>
+              <option value="bold">Bold</option>
+            </select>
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Description Color</label>
-            <input type="color" class="h-8 w-12 border border-[#d3ddde] rounded" v-model="local.header.descriptionColor" />
-            <input type="text" class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model="local.header.descriptionColor" />
+            <input
+              type="color"
+              class="h-8 w-12 border border-[#d3ddde] rounded"
+              v-model="local.header.descriptionColor"
+            />
+            <input
+              type="text"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model="local.header.descriptionColor"
+            />
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Description Size (px)</label>
-            <input type="number" class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model.number="local.header.descriptionSize" min="6" max="16" />
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.header.descriptionSize"
+              min="6"
+              max="16"
+            />
+          </div>
+          <div class="flex items-center gap-3">
+            <label class="w-32 text-sm text-[#0e171f]">Description Weight</label>
+            <select
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model="local.header.descriptionWeight"
+            >
+              <option value="normal">Normal</option>
+              <option value="semibold">Semibold</option>
+              <option value="bold">Bold</option>
+            </select>
           </div>
         </div>
       </section>
@@ -76,12 +239,23 @@
         <div class="space-y-3">
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Section Title Color</label>
-            <input type="color" class="h-8 w-12 border border-[#d3ddde] rounded" v-model="local.info.sectionTitleColor" />
-            <input type="text" class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model="local.info.sectionTitleColor" />
+            <input
+              type="color"
+              class="h-8 w-12 border border-[#d3ddde] rounded"
+              v-model="local.info.sectionTitleColor"
+            />
+            <input
+              type="text"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model="local.info.sectionTitleColor"
+            />
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Section Title Weight</label>
-            <select class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model="local.info.sectionTitleWeight">
+            <select
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model="local.info.sectionTitleWeight"
+            >
               <option value="normal">Normal</option>
               <option value="semibold">Semibold</option>
               <option value="bold">Bold</option>
@@ -89,12 +263,23 @@
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Label Color</label>
-            <input type="color" class="h-8 w-12 border border-[#d3ddde] rounded" v-model="local.info.labelColor" />
-            <input type="text" class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model="local.info.labelColor" />
+            <input
+              type="color"
+              class="h-8 w-12 border border-[#d3ddde] rounded"
+              v-model="local.info.labelColor"
+            />
+            <input
+              type="text"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model="local.info.labelColor"
+            />
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Label Weight</label>
-            <select class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model="local.info.labelWeight">
+            <select
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model="local.info.labelWeight"
+            >
               <option value="normal">Normal</option>
               <option value="semibold">Semibold</option>
               <option value="bold">Bold</option>
@@ -102,12 +287,23 @@
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Value Color</label>
-            <input type="color" class="h-8 w-12 border border-[#d3ddde] rounded" v-model="local.info.valueColor" />
-            <input type="text" class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model="local.info.valueColor" />
+            <input
+              type="color"
+              class="h-8 w-12 border border-[#d3ddde] rounded"
+              v-model="local.info.valueColor"
+            />
+            <input
+              type="text"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model="local.info.valueColor"
+            />
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Value Weight</label>
-            <select class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model="local.info.valueWeight">
+            <select
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model="local.info.valueWeight"
+            >
               <option value="normal">Normal</option>
               <option value="semibold">Semibold</option>
               <option value="bold">Bold</option>
@@ -115,11 +311,20 @@
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Item Gap (px)</label>
-            <input type="number" class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model.number="local.info.itemGap" min="0" max="16" />
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.info.itemGap"
+              min="0"
+              max="16"
+            />
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Items Per Row</label>
-            <select class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model.number="local.info.itemsPerRow">
+            <select
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.info.itemsPerRow"
+            >
               <option :value="5">1/5</option>
               <option :value="4">1/4</option>
               <option :value="3">1/3</option>
@@ -128,7 +333,23 @@
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Items Spacing (px)</label>
-            <input type="number" class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model.number="local.info.itemsSpacing" min="0" max="16" />
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.info.itemsSpacing"
+              min="0"
+              max="16"
+            />
+          </div>
+          <div class="flex items-center gap-3">
+            <label class="w-32 text-sm text-[#0e171f]">Label-Value Gap (px)</label>
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.info.labelValueGap"
+              min="0"
+              max="16"
+            />
           </div>
         </div>
       </section>
@@ -139,36 +360,99 @@
         <div class="space-y-3">
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Section Title Color</label>
-            <input type="color" class="h-8 w-12 border border-[#d3ddde] rounded" v-model="local.table.sectionTitleColor" />
-            <input type="text" class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model="local.table.sectionTitleColor" />
+            <input
+              type="color"
+              class="h-8 w-12 border border-[#d3ddde] rounded"
+              v-model="local.table.sectionTitleColor"
+            />
+            <input
+              type="text"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model="local.table.sectionTitleColor"
+            />
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Subsection Title Color</label>
-            <input type="color" class="h-8 w-12 border border-[#d3ddde] rounded" v-model="local.table.subsectionTitleColor" />
-            <input type="text" class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model="local.table.subsectionTitleColor" />
+            <input
+              type="color"
+              class="h-8 w-12 border border-[#d3ddde] rounded"
+              v-model="local.table.subsectionTitleColor"
+            />
+            <input
+              type="text"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model="local.table.subsectionTitleColor"
+            />
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Header Color</label>
-            <input type="color" class="h-8 w-12 border border-[#d3ddde] rounded" v-model="local.table.headerColor" />
-            <input type="text" class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model="local.table.headerColor" />
+            <input
+              type="color"
+              class="h-8 w-12 border border-[#d3ddde] rounded"
+              v-model="local.table.headerColor"
+            />
+            <input
+              type="text"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model="local.table.headerColor"
+            />
+          </div>
+          <div class="flex items-center gap-3">
+            <label class="w-32 text-sm text-[#0e171f]">Column Name Weight</label>
+            <select
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model="local.table.columnNameWeight"
+            >
+              <option value="normal">Normal</option>
+              <option value="semibold">Semibold</option>
+              <option value="bold">Bold</option>
+            </select>
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Row Text Color</label>
-            <input type="color" class="h-8 w-12 border border-[#d3ddde] rounded" v-model="local.table.rowTextColor" />
-            <input type="text" class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model="local.table.rowTextColor" />
+            <input
+              type="color"
+              class="h-8 w-12 border border-[#d3ddde] rounded"
+              v-model="local.table.rowTextColor"
+            />
+            <input
+              type="text"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model="local.table.rowTextColor"
+            />
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Border Color</label>
-            <input type="color" class="h-8 w-12 border border-[#d3ddde] rounded" v-model="local.table.borderColor" />
-            <input type="text" class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model="local.table.borderColor" />
+            <input
+              type="color"
+              class="h-8 w-12 border border-[#d3ddde] rounded"
+              v-model="local.table.borderColor"
+            />
+            <input
+              type="text"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model="local.table.borderColor"
+            />
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Row Height (px)</label>
-            <input type="number" class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model.number="local.table.rowHeight" min="8" max="24" />
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.table.rowHeight"
+              min="8"
+              max="24"
+            />
           </div>
           <div class="flex items-center gap-3">
-            <label class="w-32 text-sm text-[#0e171f]">Columns Spacing (px)</label>
-            <input type="number" class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model.number="local.table.columnsSpacing" min="0" max="16" />
+            <label class="w-32 text-sm text-[#0e171f]">Columns Padding (px)</label>
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.table.columnsPadding"
+              min="0"
+              max="16"
+            />
           </div>
         </div>
       </section>
@@ -179,12 +463,23 @@
         <div class="space-y-3">
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Label Color</label>
-            <input type="color" class="h-8 w-12 border border-[#d3ddde] rounded" v-model="local.description.labelColor" />
-            <input type="text" class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model="local.description.labelColor" />
+            <input
+              type="color"
+              class="h-8 w-12 border border-[#d3ddde] rounded"
+              v-model="local.description.labelColor"
+            />
+            <input
+              type="text"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model="local.description.labelColor"
+            />
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Label Weight</label>
-            <select class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model="local.description.labelWeight">
+            <select
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model="local.description.labelWeight"
+            >
               <option value="normal">Normal</option>
               <option value="semibold">Semibold</option>
               <option value="bold">Bold</option>
@@ -192,12 +487,23 @@
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Text Color</label>
-            <input type="color" class="h-8 w-12 border border-[#d3ddde] rounded" v-model="local.description.textColor" />
-            <input type="text" class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model="local.description.textColor" />
+            <input
+              type="color"
+              class="h-8 w-12 border border-[#d3ddde] rounded"
+              v-model="local.description.textColor"
+            />
+            <input
+              type="text"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model="local.description.textColor"
+            />
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Text Weight</label>
-            <select class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model="local.description.textWeight">
+            <select
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model="local.description.textWeight"
+            >
               <option value="normal">Normal</option>
               <option value="semibold">Semibold</option>
               <option value="bold">Bold</option>
@@ -205,11 +511,24 @@
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Text Size (px)</label>
-            <input type="number" class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model.number="local.description.textSize" min="6" max="16" />
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.description.textSize"
+              min="6"
+              max="16"
+            />
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Line Height</label>
-            <input type="number" class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model.number="local.description.lineHeight" min="1" max="2" step="0.1" />
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.description.lineHeight"
+              min="1"
+              max="2"
+              step="0.1"
+            />
           </div>
         </div>
       </section>
@@ -220,12 +539,23 @@
         <div class="space-y-3">
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Section Title Color</label>
-            <input type="color" class="h-8 w-12 border border-[#d3ddde] rounded" v-model="local.item.sectionTitleColor" />
-            <input type="text" class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model="local.item.sectionTitleColor" />
+            <input
+              type="color"
+              class="h-8 w-12 border border-[#d3ddde] rounded"
+              v-model="local.item.sectionTitleColor"
+            />
+            <input
+              type="text"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model="local.item.sectionTitleColor"
+            />
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Section Title Weight</label>
-            <select class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model="local.item.sectionTitleWeight">
+            <select
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model="local.item.sectionTitleWeight"
+            >
               <option value="normal">Normal</option>
               <option value="semibold">Semibold</option>
               <option value="bold">Bold</option>
@@ -233,12 +563,23 @@
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Label Color</label>
-            <input type="color" class="h-8 w-12 border border-[#d3ddde] rounded" v-model="local.item.labelColor" />
-            <input type="text" class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model="local.item.labelColor" />
+            <input
+              type="color"
+              class="h-8 w-12 border border-[#d3ddde] rounded"
+              v-model="local.item.labelColor"
+            />
+            <input
+              type="text"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model="local.item.labelColor"
+            />
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Label Weight</label>
-            <select class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model="local.item.labelWeight">
+            <select
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model="local.item.labelWeight"
+            >
               <option value="normal">Normal</option>
               <option value="semibold">Semibold</option>
               <option value="bold">Bold</option>
@@ -246,12 +587,23 @@
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Value Color</label>
-            <input type="color" class="h-8 w-12 border border-[#d3ddde] rounded" v-model="local.item.valueColor" />
-            <input type="text" class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model="local.item.valueColor" />
+            <input
+              type="color"
+              class="h-8 w-12 border border-[#d3ddde] rounded"
+              v-model="local.item.valueColor"
+            />
+            <input
+              type="text"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model="local.item.valueColor"
+            />
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Value Weight</label>
-            <select class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model="local.item.valueWeight">
+            <select
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model="local.item.valueWeight"
+            >
               <option value="normal">Normal</option>
               <option value="semibold">Semibold</option>
               <option value="bold">Bold</option>
@@ -259,11 +611,20 @@
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Item Gap (px)</label>
-            <input type="number" class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model.number="local.item.itemGap" min="0" max="16" />
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.item.itemGap"
+              min="0"
+              max="16"
+            />
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Items Per Row</label>
-            <select class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model.number="local.item.itemsPerRow">
+            <select
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.item.itemsPerRow"
+            >
               <option :value="5">1/5</option>
               <option :value="4">1/4</option>
               <option :value="3">1/3</option>
@@ -272,7 +633,23 @@
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Items Spacing (px)</label>
-            <input type="number" class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model.number="local.item.itemsSpacing" min="0" max="16" />
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.item.itemsSpacing"
+              min="0"
+              max="16"
+            />
+          </div>
+          <div class="flex items-center gap-3">
+            <label class="w-32 text-sm text-[#0e171f]">Label-Value Gap (px)</label>
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.item.labelValueGap"
+              min="0"
+              max="16"
+            />
           </div>
         </div>
       </section>
@@ -283,12 +660,23 @@
         <div class="space-y-3">
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Section Title Color</label>
-            <input type="color" class="h-8 w-12 border border-[#d3ddde] rounded" v-model="local.hInfo.sectionTitleColor" />
-            <input type="text" class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model="local.hInfo.sectionTitleColor" />
+            <input
+              type="color"
+              class="h-8 w-12 border border-[#d3ddde] rounded"
+              v-model="local.hInfo.sectionTitleColor"
+            />
+            <input
+              type="text"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model="local.hInfo.sectionTitleColor"
+            />
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Section Title Weight</label>
-            <select class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model="local.hInfo.sectionTitleWeight">
+            <select
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model="local.hInfo.sectionTitleWeight"
+            >
               <option value="normal">Normal</option>
               <option value="semibold">Semibold</option>
               <option value="bold">Bold</option>
@@ -296,12 +684,23 @@
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Label Color</label>
-            <input type="color" class="h-8 w-12 border border-[#d3ddde] rounded" v-model="local.hInfo.labelColor" />
-            <input type="text" class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model="local.hInfo.labelColor" />
+            <input
+              type="color"
+              class="h-8 w-12 border border-[#d3ddde] rounded"
+              v-model="local.hInfo.labelColor"
+            />
+            <input
+              type="text"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model="local.hInfo.labelColor"
+            />
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Label Weight</label>
-            <select class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model="local.hInfo.labelWeight">
+            <select
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model="local.hInfo.labelWeight"
+            >
               <option value="normal">Normal</option>
               <option value="semibold">Semibold</option>
               <option value="bold">Bold</option>
@@ -309,12 +708,23 @@
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Value Color</label>
-            <input type="color" class="h-8 w-12 border border-[#d3ddde] rounded" v-model="local.hInfo.valueColor" />
-            <input type="text" class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model="local.hInfo.valueColor" />
+            <input
+              type="color"
+              class="h-8 w-12 border border-[#d3ddde] rounded"
+              v-model="local.hInfo.valueColor"
+            />
+            <input
+              type="text"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model="local.hInfo.valueColor"
+            />
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Value Weight</label>
-            <select class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model="local.hInfo.valueWeight">
+            <select
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model="local.hInfo.valueWeight"
+            >
               <option value="normal">Normal</option>
               <option value="semibold">Semibold</option>
               <option value="bold">Bold</option>
@@ -322,23 +732,43 @@
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Label Width (px)</label>
-            <input type="number" class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model.number="local.hInfo.labelWidth" min="40" max="200" />
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.hInfo.labelWidth"
+              min="40"
+              max="200"
+            />
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Label-Value Gap (px)</label>
-            <input type="number" class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model.number="local.hInfo.labelValueGap" min="4" max="32" />
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.hInfo.labelValueGap"
+              min="4"
+              max="32"
+            />
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Item Gap (px)</label>
-            <input type="number" class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model.number="local.hInfo.itemGap" min="0" max="16" />
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.hInfo.itemGap"
+              min="0"
+              max="16"
+            />
           </div>
           <div class="flex items-center gap-3">
-            <label class="w-32 text-sm text-[#0e171f]">Column Gap (px)</label>
-            <input type="number" class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model.number="local.hInfo.columnGap" min="4" max="32" />
-          </div>
-          <div class="flex items-center gap-3">
-            <label class="w-32 text-sm text-[#0e171f]">Columns Spacing (px)</label>
-            <input type="number" class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model.number="local.hInfo.columnsSpacing" min="0" max="32" />
+            <label class="w-32 text-sm text-[#0e171f]">Columns Padding (px)</label>
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.hInfo.columnsPadding"
+              min="0"
+              max="32"
+            />
           </div>
         </div>
       </section>
@@ -349,12 +779,26 @@
         <div class="space-y-3">
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Text Color</label>
-            <input type="color" class="h-8 w-12 border border-[#d3ddde] rounded" v-model="local.footer.textColor" />
-            <input type="text" class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model="local.footer.textColor" />
+            <input
+              type="color"
+              class="h-8 w-12 border border-[#d3ddde] rounded"
+              v-model="local.footer.textColor"
+            />
+            <input
+              type="text"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model="local.footer.textColor"
+            />
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Text Size (px)</label>
-            <input type="number" class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm" v-model.number="local.footer.textSize" min="6" max="16" />
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.footer.textSize"
+              min="6"
+              max="16"
+            />
           </div>
         </div>
       </section>
@@ -387,16 +831,18 @@ interface SectionStyle {
     itemGap: number
     itemsPerRow?: 2 | 3 | 4 | 5
     itemsSpacing: number
+    labelValueGap: number
   }
   // Table Section
   table: {
     sectionTitleColor: string
     subsectionTitleColor: string
     headerColor: string
+    columnNameWeight?: 'normal' | 'semibold' | 'bold'
     rowTextColor: string
     borderColor: string
     rowHeight: number
-    columnsSpacing: number
+    columnsPadding: number
   }
   // Description Section
   description: {
@@ -418,6 +864,7 @@ interface SectionStyle {
     itemGap: number
     itemsPerRow?: 2 | 3 | 4 | 5
     itemsSpacing: number
+    labelValueGap: number
   }
   // H-Info Section
   hInfo: {
@@ -430,8 +877,7 @@ interface SectionStyle {
     labelWidth: number
     labelValueGap: number
     itemGap: number
-    columnGap: number
-    columnsSpacing: number
+    columnsPadding: number
   }
   // Footer Section
   footer: {
@@ -446,6 +892,16 @@ interface StyleConfig extends SectionStyle {
   sectionGap: number
   sameTypeSectionGap: number
   summaryGap: number
+  footerInfo: {
+    textColor: string
+    textSize: number
+    textWeight?: 'normal' | 'semibold' | 'bold'
+  }
+  footerName: {
+    textColor: string
+    textSize: number
+    textWeight?: 'normal' | 'semibold' | 'bold'
+  }
 }
 
 const props = defineProps<{
@@ -502,7 +958,7 @@ const local = reactive<StyleConfig>({
     titleWeight: props.modelValue.header?.titleWeight || 'semibold',
     descriptionColor: props.modelValue.header?.descriptionColor || '#919191',
     descriptionSize: props.modelValue.header?.descriptionSize || 7,
-    descriptionWeight: props.modelValue.header?.descriptionWeight || 'normal'
+    descriptionWeight: props.modelValue.header?.descriptionWeight || 'normal',
   },
   info: {
     sectionTitleColor: props.modelValue.info?.sectionTitleColor || '#6b7280',
@@ -513,16 +969,18 @@ const local = reactive<StyleConfig>({
     valueWeight: props.modelValue.info?.valueWeight || 'normal',
     itemGap: props.modelValue.info?.itemGap ?? 2,
     itemsPerRow: props.modelValue.info?.itemsPerRow || 5,
-    itemsSpacing: props.modelValue.info?.itemsSpacing ?? 4
+    itemsSpacing: props.modelValue.info?.itemsSpacing ?? 4,
+    labelValueGap: props.modelValue.info?.labelValueGap ?? 2,
   },
   table: {
     sectionTitleColor: props.modelValue.table?.sectionTitleColor || '#6b7280',
     subsectionTitleColor: props.modelValue.table?.subsectionTitleColor || '#000000',
     headerColor: props.modelValue.table?.headerColor || '#919191',
+    columnNameWeight: props.modelValue.table?.columnNameWeight || 'semibold',
     rowTextColor: props.modelValue.table?.rowTextColor || '#000000',
     borderColor: props.modelValue.table?.borderColor || '#d2d2d2',
     rowHeight: props.modelValue.table?.rowHeight || 13,
-    columnsSpacing: props.modelValue.table?.columnsSpacing ?? 4
+    columnsPadding: props.modelValue.table?.columnsPadding ?? 4,
   },
   description: {
     labelColor: props.modelValue.description?.labelColor || '#000000',
@@ -530,7 +988,7 @@ const local = reactive<StyleConfig>({
     textColor: props.modelValue.description?.textColor || '#919191',
     textWeight: props.modelValue.description?.textWeight || 'normal',
     textSize: props.modelValue.description?.textSize || 7,
-    lineHeight: props.modelValue.description?.lineHeight || 1.2
+    lineHeight: props.modelValue.description?.lineHeight || 1.2,
   },
   item: {
     sectionTitleColor: props.modelValue.item?.sectionTitleColor || '#6b7280',
@@ -541,7 +999,8 @@ const local = reactive<StyleConfig>({
     valueWeight: props.modelValue.item?.valueWeight || 'normal',
     itemGap: props.modelValue.item?.itemGap ?? 2,
     itemsPerRow: props.modelValue.item?.itemsPerRow || 5,
-    itemsSpacing: props.modelValue.item?.itemsSpacing ?? 4
+    itemsSpacing: props.modelValue.item?.itemsSpacing ?? 4,
+    labelValueGap: props.modelValue.item?.labelValueGap ?? 2,
   },
   hInfo: {
     sectionTitleColor: props.modelValue.hInfo?.sectionTitleColor || '#6b7280',
@@ -553,23 +1012,34 @@ const local = reactive<StyleConfig>({
     labelWidth: props.modelValue.hInfo?.labelWidth ?? 80,
     labelValueGap: props.modelValue.hInfo?.labelValueGap ?? 8,
     itemGap: props.modelValue.hInfo?.itemGap ?? 4,
-    columnGap: props.modelValue.hInfo?.columnGap ?? 8,
-    columnsSpacing: props.modelValue.hInfo?.columnsSpacing ?? 8
+    columnsPadding: props.modelValue.hInfo?.columnsPadding ?? 8,
   },
   footer: {
     textColor: props.modelValue.footer?.textColor || '#000000',
     textSize: props.modelValue.footer?.textSize || 7,
-    textWeight: props.modelValue.footer?.textWeight || 'normal'
-  }
+    textWeight: props.modelValue.footer?.textWeight || 'normal',
+  },
+  footerInfo: {
+    textColor: props.modelValue.footerInfo?.textColor || '#000000',
+    textSize: props.modelValue.footerInfo?.textSize || 7,
+    textWeight: props.modelValue.footerInfo?.textWeight || 'normal',
+  },
+  footerName: {
+    textColor: props.modelValue.footerName?.textColor || '#000000',
+    textSize: props.modelValue.footerName?.textSize || 7,
+    textWeight: props.modelValue.footerName?.textWeight || 'normal',
+  },
 })
 
-watch(local, () => {
-  emit('update:modelValue', { ...local })
-}, { deep: true })
+watch(
+  local,
+  () => {
+    emit('update:modelValue', { ...local })
+  },
+  { deep: true },
+)
 
 const refreshPreview = () => {
   emit('refresh-preview')
 }
 </script>
-
-

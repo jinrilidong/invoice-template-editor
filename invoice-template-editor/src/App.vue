@@ -43,73 +43,84 @@ const styleConfig = reactive({
   header: {
     titleColor: '#0e171f',
     titleSize: 20,
-    titleWeight: 'semibold' as 'semibold',
+    titleWeight: 'semibold' as const,
     descriptionColor: '#919191',
     descriptionSize: 7,
-    descriptionWeight: 'normal' as 'normal'
+    descriptionWeight: 'normal' as const,
   },
   info: {
     sectionTitleColor: '#6b7280',
-    sectionTitleWeight: 'semibold' as 'semibold',
+    sectionTitleWeight: 'semibold' as const,
     labelColor: '#000000',
-    labelWeight: 'semibold' as 'semibold',
+    labelWeight: 'semibold' as const,
     valueColor: '#919191',
-    valueWeight: 'normal' as 'normal',
+    valueWeight: 'normal' as const,
     itemGap: 2,
-    itemsPerRow: 5 as 5,
-    itemsSpacing: 4
+    itemsPerRow: 5 as const,
+    itemsSpacing: 4,
+    labelValueGap: 2,
   },
   table: {
     sectionTitleColor: '#6b7280',
     subsectionTitleColor: '#000000',
     headerColor: '#919191',
+    columnNameWeight: 'semibold' as const,
     rowTextColor: '#000000',
     borderColor: '#d2d2d2',
     rowHeight: 13,
-    columnsSpacing: 4
+    columnsPadding: 4,
   },
   description: {
     labelColor: '#000000',
-    labelWeight: 'semibold' as 'semibold',
+    labelWeight: 'semibold' as const,
     textColor: '#919191',
-    textWeight: 'normal' as 'normal',
+    textWeight: 'normal' as const,
     textSize: 7,
-    lineHeight: 1.2
+    lineHeight: 1.2,
   },
   item: {
     sectionTitleColor: '#6b7280',
-    sectionTitleWeight: 'semibold' as 'semibold',
+    sectionTitleWeight: 'semibold' as const,
     labelColor: '#000000',
-    labelWeight: 'semibold' as 'semibold',
+    labelWeight: 'semibold' as const,
     valueColor: '#919191',
-    valueWeight: 'normal' as 'normal',
+    valueWeight: 'normal' as const,
     itemGap: 2,
-    itemsPerRow: 5 as 5,
-    itemsSpacing: 4
+    itemsPerRow: 5 as const,
+    itemsSpacing: 4,
+    labelValueGap: 2,
   },
   footer: {
     textColor: '#000000',
     textSize: 7,
-    textWeight: 'normal' as 'normal'
+    textWeight: 'normal' as const,
+  },
+  footerInfo: {
+    textColor: '#000000',
+    textSize: 7,
+    textWeight: 'normal' as const,
+  },
+  footerName: {
+    textColor: '#000000',
+    textSize: 7,
+    textWeight: 'normal' as const,
   },
   hInfo: {
     sectionTitleColor: '#6b7280',
-    sectionTitleWeight: 'semibold' as 'semibold',
+    sectionTitleWeight: 'semibold' as const,
     labelColor: '#000000',
-    labelWeight: 'semibold' as 'semibold',
+    labelWeight: 'semibold' as const,
     valueColor: '#919191',
-    valueWeight: 'normal' as 'normal',
+    valueWeight: 'normal' as const,
     labelWidth: 80,
     labelValueGap: 8,
     itemGap: 4,
-    columnGap: 8,
-    columnsSpacing: 8
-  }
+    columnsPadding: 8,
+  },
 })
 
 // Import file input ref
 const importFileInputRef = ref<HTMLInputElement | null>(null)
-
 
 // Active sections count
 const activeSectionsCount = computed(() => {
@@ -130,7 +141,6 @@ const handleResize = () => {
   windowWidth.value = window.innerWidth
 }
 
-
 // Cleanup event listeners
 const cleanup = () => {
   window.removeEventListener('resize', handleResize)
@@ -144,7 +154,7 @@ const sectionStates = ref({
   table: true,
   description: true,
   item: true,
-  footer: true
+  footer: true,
 })
 
 // Template data
@@ -155,192 +165,262 @@ const templateData = reactive<TemplateData>({
     logo: '',
     companyName: '',
     logoSize: 'default', // 'default' | 'large'
-    logoDescription: ''
+    logoDescription: '',
   },
   info: [
     {
       id: '1',
       sectionTitle: 'Section title 1',
-    items: [
-      { id: '1', label: 'Invoice #', value: 'INV-001' },
-      { id: '2', label: 'Date', value: '2024-01-01' },
-      { id: '3', label: 'Due Date', value: '2024-01-31' },
-      { id: '4', label: 'Client', value: 'Client Name' },
-      { id: '5', label: 'Address', value: '123 Main St' }
-    ]
-  },
+      items: [
+        { id: '1', label: 'Invoice #', value: 'INV-001' },
+        { id: '2', label: 'Date', value: '2024-01-01' },
+        { id: '3', label: 'Due Date', value: '2024-01-31' },
+        { id: '4', label: 'Client', value: 'Client Name' },
+        { id: '5', label: 'Address', value: '123 Main St' },
+      ],
+    },
     {
       id: '2',
       sectionTitle: 'Section title 2',
       items: [
         { id: '6', label: 'Label', value: 'Value' },
-        { id: '7', label: 'Label', value: 'Value' }
-      ]
-    }
+        { id: '7', label: 'Label', value: 'Value' },
+      ],
+    },
   ],
-  tables: [{
-    id: '1',
-    sectionTitle: 'Section title',
-    subsectionTitle: 'Subsection title',
-    columns: [
-      { id: '1', name: 'Column Name', type: 'text', alignment: 'left' as 'left' | 'right', width: 100 },
-      { id: '2', name: 'Column Name', type: 'text', alignment: 'left' as 'left' | 'right', width: 100 },
-      { id: '3', name: 'Column Name', type: 'text', alignment: 'left' as 'left' | 'right', width: 100 },
-      { id: '4', name: 'Column Name', type: 'text', alignment: 'right' as 'left' | 'right', width: 100 },
-      { id: '5', name: 'Total', type: 'currency', alignment: 'right' as 'left' | 'right', width: 100 }
-    ],
-    rows: [
-      {
-        id: '1',
-        data: {
-          '1': 'Line 1',
-          '2': 'Line 1',
-          '3': 'Line 1',
-          '4': 'Line 1',
-          '5': '100'
+  tables: [
+    {
+      id: '1',
+      sectionTitle: 'Section title',
+      subsectionTitle: 'Subsection title',
+      columns: [
+        {
+          id: '1',
+          name: 'Column Name',
+          type: 'text',
+          alignment: 'left' as 'left' | 'right',
+          width: 100,
         },
-        total: 100
-      },
-      {
-        id: '2',
-        data: {
-          '1': 'Line 2',
-          '2': 'Line 2',
-          '3': 'Line 2',
-          '4': 'Line 2',
-          '5': '200'
+        {
+          id: '2',
+          name: 'Column Name',
+          type: 'text',
+          alignment: 'left' as 'left' | 'right',
+          width: 100,
         },
-        total: 200
-      },
-      {
-        id: '3',
-        data: {
-          '1': 'Line 3',
-          '2': 'Line 3',
-          '3': 'Line 3',
-          '4': 'Line 3',
-          '5': '300'
+        {
+          id: '3',
+          name: 'Column Name',
+          type: 'text',
+          alignment: 'left' as 'left' | 'right',
+          width: 100,
         },
-        total: 300
-      },
-      {
-        id: '4',
-        data: {
-          '1': 'Line 4',
-          '2': 'Line 4',
-          '3': 'Line 4',
-          '4': 'Line 4',
-          '5': '400'
+        {
+          id: '4',
+          name: 'Column Name',
+          type: 'text',
+          alignment: 'right' as 'left' | 'right',
+          width: 100,
         },
-        total: 400
-      },
-      {
-        id: '5',
-        data: {
-          '1': 'Line 5',
-          '2': 'Line 5',
-          '3': 'Line 5',
-          '4': 'Line 5',
-          '5': '500'
+        {
+          id: '5',
+          name: 'Total',
+          type: 'currency',
+          alignment: 'right' as 'left' | 'right',
+          width: 100,
         },
-        total: 500
-      }
-    ],
-    total: 0,
-    rowsNumber: 2
-  },
-  {
-    id: '2',
-    sectionTitle: 'Section title 2',
-    subsectionTitle: 'Subsection title 2',
-    columns: [
-      { id: '1', name: 'Column Name', type: 'text', alignment: 'left' as 'left' | 'right', width: 100 },
-      { id: '2', name: 'Column Name', type: 'text', alignment: 'left' as 'left' | 'right', width: 100 },
-      { id: '3', name: 'Column Name', type: 'text', alignment: 'left' as 'left' | 'right', width: 100 },
-      { id: '4', name: 'Column Name', type: 'text', alignment: 'right' as 'left' | 'right', width: 100 },
-      { id: '5', name: 'Total', type: 'currency', alignment: 'right' as 'left' | 'right', width: 100 }
-    ],
-    rows: [
-      {
-        id: '1',
-        data: {
-          '1': 'Line 1',
-          '2': 'Line 1',
-          '3': 'Line 1',
-          '4': 'Line 1',
-          '5': '100'
+      ],
+      rows: [
+        {
+          id: '1',
+          data: {
+            '1': 'Line 1',
+            '2': 'Line 1',
+            '3': 'Line 1',
+            '4': 'Line 1',
+            '5': '100',
+          },
+          total: 100,
         },
-        total: 100
-      },
-      {
-        id: '2',
-        data: {
-          '1': 'Line 2',
-          '2': 'Line 2',
-          '3': 'Line 2',
-          '4': 'Line 2',
-          '5': '200'
+        {
+          id: '2',
+          data: {
+            '1': 'Line 2',
+            '2': 'Line 2',
+            '3': 'Line 2',
+            '4': 'Line 2',
+            '5': '200',
+          },
+          total: 200,
         },
-        total: 200
-      }
-    ],
-    total: 0,
-    rowsNumber: 2
-  }],
+        {
+          id: '3',
+          data: {
+            '1': 'Line 3',
+            '2': 'Line 3',
+            '3': 'Line 3',
+            '4': 'Line 3',
+            '5': '300',
+          },
+          total: 300,
+        },
+        {
+          id: '4',
+          data: {
+            '1': 'Line 4',
+            '2': 'Line 4',
+            '3': 'Line 4',
+            '4': 'Line 4',
+            '5': '400',
+          },
+          total: 400,
+        },
+        {
+          id: '5',
+          data: {
+            '1': 'Line 5',
+            '2': 'Line 5',
+            '3': 'Line 5',
+            '4': 'Line 5',
+            '5': '500',
+          },
+          total: 500,
+        },
+      ],
+      total: 0,
+      rowsNumber: 2,
+      showSubtotal: true,
+    },
+    {
+      id: '2',
+      sectionTitle: 'Section title 2',
+      subsectionTitle: 'Subsection title 2',
+      columns: [
+        {
+          id: '1',
+          name: 'Column Name',
+          type: 'text',
+          alignment: 'left' as 'left' | 'right',
+          width: 100,
+        },
+        {
+          id: '2',
+          name: 'Column Name',
+          type: 'text',
+          alignment: 'left' as 'left' | 'right',
+          width: 100,
+        },
+        {
+          id: '3',
+          name: 'Column Name',
+          type: 'text',
+          alignment: 'left' as 'left' | 'right',
+          width: 100,
+        },
+        {
+          id: '4',
+          name: 'Column Name',
+          type: 'text',
+          alignment: 'right' as 'left' | 'right',
+          width: 100,
+        },
+        {
+          id: '5',
+          name: 'Total',
+          type: 'currency',
+          alignment: 'right' as 'left' | 'right',
+          width: 100,
+        },
+      ],
+      rows: [
+        {
+          id: '1',
+          data: {
+            '1': 'Line 1',
+            '2': 'Line 1',
+            '3': 'Line 1',
+            '4': 'Line 1',
+            '5': '100',
+          },
+          total: 100,
+        },
+        {
+          id: '2',
+          data: {
+            '1': 'Line 2',
+            '2': 'Line 2',
+            '3': 'Line 2',
+            '4': 'Line 2',
+            '5': '200',
+          },
+          total: 200,
+        },
+      ],
+      total: 0,
+      rowsNumber: 2,
+      showSubtotal: true,
+    },
+  ],
   description: [
     {
       id: '1',
-    content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-  },
+      sectionTitle: 'Description Section 1',
+      content:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+    },
     {
       id: '2',
-      content: 'Second description section content. This is another description section to test same type section gap functionality.'
-    }
+      sectionTitle: 'Description Section 2',
+      content:
+        'Second description section content. This is another description section to test same type section gap functionality.',
+    },
   ],
   item: [
     {
       id: '1',
       sectionTitle: 'Section title 1',
-    items: [
-      { id: '1', label: 'Label', value: 'Value' },
-      { id: '2', label: 'Label', value: 'Value' }
-    ]
-  },
+      items: [
+        { id: '1', label: 'Label', value: 'Value' },
+        { id: '2', label: 'Label', value: 'Value' },
+      ],
+    },
     {
       id: '2',
       sectionTitle: 'Section title 2',
       items: [
         { id: '3', label: 'Label', value: 'Value' },
-        { id: '4', label: 'Label', value: 'Value' }
-      ]
-    }
+        { id: '4', label: 'Label', value: 'Value' },
+      ],
+    },
   ],
-  hInfo: [{
-    id: '1',
-    sectionTitle: 'H-Info Section',
-    columns: [
-      {
-        id: '1',
-        items: [
-          { id: '1', label: 'Label', value: 'Value' },
-          { id: '2', label: 'Label', value: 'Value' }
-        ]
-      },
-      {
-        id: '2',
-        items: [
-          { id: '3', label: 'Label', value: 'Value' },
-          { id: '4', label: 'Label', value: 'Value' }
-        ]
-      }
-    ]
-  }],
+  hInfo: [
+    {
+      id: '1',
+      sectionTitle: 'H-Info Section',
+      labelValueLayout: 'horizontal' as 'horizontal' | 'vertical',
+      columns: [
+        {
+          id: '1',
+          items: [
+            { id: '1', label: 'Label', value: 'Value' },
+            { id: '2', label: 'Label', value: 'Value' },
+          ],
+        },
+        {
+          id: '2',
+          items: [
+            { id: '3', label: 'Label', value: 'Value' },
+            { id: '4', label: 'Label', value: 'Value' },
+          ],
+        },
+      ],
+    },
+  ],
   footer: {
     info: '',
-    name: ''
-  }
+    name: '',
+  },
 })
-
 
 // Local storage functionality
 const saveToLocalStorage = () => {
@@ -350,7 +430,7 @@ const saveToLocalStorage = () => {
       sections: sectionStates.value,
       data: templateData,
       styleConfig: styleConfig,
-      lastSaved: new Date().toISOString()
+      lastSaved: new Date().toISOString(),
     }
     localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave))
     console.log('Data saved to local storage')
@@ -431,14 +511,14 @@ const loadFromLocalStorage = () => {
     const savedData = localStorage.getItem(STORAGE_KEY)
     if (savedData) {
       const parsedData = JSON.parse(savedData)
-      
+
       // 检查版本兼容性并处理数据迁移
       if (parsedData.version === STORAGE_VERSION) {
         // 当前版本 - 正常恢复
         if (parsedData.sections) {
-          sectionStates.value = { 
+          sectionStates.value = {
             ...sectionStates.value, // 保留默认值（包含新的 hInfo）
-            ...parsedData.sections  // 覆盖已保存的值
+            ...parsedData.sections, // 覆盖已保存的值
           }
         }
       } else if (parsedData.version === '1.0.0') {
@@ -446,11 +526,11 @@ const loadFromLocalStorage = () => {
         if (parsedData.sections) {
           const migratedSections = {
             ...parsedData.sections,
-            hInfo: true // 添加新的 hInfo section
+            hInfo: true, // 添加新的 hInfo section
           }
-          sectionStates.value = { 
+          sectionStates.value = {
             ...sectionStates.value, // 保留默认值
-            ...migratedSections     // 使用迁移后的数据
+            ...migratedSections, // 使用迁移后的数据
           }
         }
         console.log('Migrated data from version 1.0.0 to 1.1.0')
@@ -459,24 +539,24 @@ const loadFromLocalStorage = () => {
         console.warn('Storage data version mismatch, using default data')
         showNotification('Data version updated, using default configuration', 'info')
       }
-      
+
       // Restore template data (适用于所有版本)
-        if (parsedData.data) {
-          // 确保 header.logoDescription 有默认值（向后兼容）
-          if (parsedData.data.header && !parsedData.data.header.logoDescription) {
-            parsedData.data.header.logoDescription = ''
-          }
-          Object.assign(templateData, parsedData.data)
+      if (parsedData.data) {
+        // 确保 header.logoDescription 有默认值（向后兼容）
+        if (parsedData.data.header && !parsedData.data.header.logoDescription) {
+          parsedData.data.header.logoDescription = ''
         }
-      
+        Object.assign(templateData, parsedData.data)
+      }
+
       // Restore style config (适用于所有版本)
       if (parsedData.styleConfig) {
         Object.assign(styleConfig, parsedData.styleConfig)
-        }
-        
-        console.log('Data loaded from local storage')
-        showNotification('Restored previous editing data', 'success')
-        return true
+      }
+
+      console.log('Data loaded from local storage')
+      showNotification('Restored previous editing data', 'success')
+      return true
     }
   } catch (error) {
     console.error('Failed to load from local storage:', error)
@@ -484,7 +564,6 @@ const loadFromLocalStorage = () => {
   }
   return false
 }
-
 
 // Export JSON template
 const exportJsonTemplate = () => {
@@ -496,18 +575,18 @@ const exportJsonTemplate = () => {
         createdAt: new Date().toISOString(),
         version: '1.0.0',
         description: 'Invoice Template Configuration',
-        totalSections: Object.values(sectionStates.value).filter(Boolean).length
-      }
+        totalSections: Object.values(sectionStates.value).filter(Boolean).length,
+      },
     }
-    
+
     const dataStr = JSON.stringify(exportData, null, 2)
     const dataBlob = new Blob([dataStr], { type: 'application/json' })
     const url = URL.createObjectURL(dataBlob)
-    
+
     // Generate filename (with timestamp)
     const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-')
     const filename = `invoice-template-${timestamp}.json`
-    
+
     const link = document.createElement('a')
     link.href = url
     link.download = filename
@@ -516,7 +595,7 @@ const exportJsonTemplate = () => {
     link.click()
     document.body.removeChild(link)
     URL.revokeObjectURL(url)
-    
+
     // Show success message
     showNotification('JSON template exported successfully!', 'success')
   } catch (error) {
@@ -530,18 +609,18 @@ const formatHtml = (html: string): string => {
   let formatted = html
   let indent = 0
   const indentStr = '  '
-  
+
   // 处理自闭合标签
   formatted = formatted.replace(/<([^>]+)\/>/g, '<$1 />')
-  
+
   // 分割标签和内容
   const parts = formatted.split(/(<[^>]*>)/g)
   const result: string[] = []
-  
+
   for (let i = 0; i < parts.length; i++) {
     const part = parts[i]
     if (!part) continue
-    
+
     if (part.startsWith('<')) {
       // 这是标签
       if (part.startsWith('</')) {
@@ -563,7 +642,7 @@ const formatHtml = (html: string): string => {
       result.push(indentStr.repeat(indent) + part)
     }
   }
-  
+
   return result.join('\n')
 }
 
@@ -575,110 +654,130 @@ const exportHtmlTemplate = async () => {
     await nextTick()
 
     // 2) Capture the rendered DOM from paginated preview export container and sanitize/inlines
-    const container = document.querySelector('[data-export-root="pagination"]') as HTMLElement | null
+    const container = document.querySelector(
+      '[data-export-root="pagination"]',
+    ) as HTMLElement | null
     if (!container) throw new Error('Export container not found')
     const cloned = container.cloneNode(true) as HTMLElement
 
     // 2.1 remove any contenteditable attributes
-    cloned.querySelectorAll('[contenteditable]')
-      .forEach(el => el.removeAttribute('contenteditable'))
+    cloned
+      .querySelectorAll('[contenteditable]')
+      .forEach((el) => el.removeAttribute('contenteditable'))
 
     // 2.2 Extract and inline OpenHTMLtoPDF-compatible styles
     const extractCompatibleStyles = (element: HTMLElement) => {
       const computed = window.getComputedStyle(element)
       const compatibleStyles: Record<string, string> = {}
-      
+
       // 字体相关 - OpenHTMLtoPDF 完全支持
       const fontSize = computed.fontSize
       if (fontSize && fontSize !== 'initial' && fontSize !== 'inherit') {
         compatibleStyles.fontSize = fontSize
       }
-      
+
       const fontWeight = computed.fontWeight
       if (fontWeight && fontWeight !== 'initial' && fontWeight !== 'inherit') {
         compatibleStyles.fontWeight = fontWeight
       }
-      
+
       const color = computed.color
       if (color && color !== 'initial' && color !== 'inherit') {
         compatibleStyles.color = color
       }
-      
+
       const lineHeight = computed.lineHeight
       if (lineHeight && lineHeight !== 'initial' && lineHeight !== 'inherit') {
         compatibleStyles.lineHeight = lineHeight
       }
-      
+
       // 文本对齐 - OpenHTMLtoPDF 完全支持
       const textAlign = computed.textAlign
       if (textAlign && textAlign !== 'initial' && textAlign !== 'inherit') {
         compatibleStyles.textAlign = textAlign
       }
-      
+
       // 边距和内边距 - OpenHTMLtoPDF 完全支持
       const margin = computed.margin
       if (margin && margin !== 'initial' && margin !== 'inherit' && margin !== '0px') {
         compatibleStyles.margin = margin
       }
-      
+
       const padding = computed.padding
       if (padding && padding !== 'initial' && padding !== 'inherit' && padding !== '0px') {
         compatibleStyles.padding = padding
       }
-      
+
       // 边框 - OpenHTMLtoPDF 完全支持
       const border = computed.border
       if (border && border !== 'initial' && border !== 'inherit' && border !== 'none') {
         compatibleStyles.border = border
       }
-      
+
       // 背景色 - OpenHTMLtoPDF 完全支持
       const backgroundColor = computed.backgroundColor
-      if (backgroundColor && backgroundColor !== 'initial' && backgroundColor !== 'inherit' && backgroundColor !== 'rgba(0, 0, 0, 0)') {
+      if (
+        backgroundColor &&
+        backgroundColor !== 'initial' &&
+        backgroundColor !== 'inherit' &&
+        backgroundColor !== 'rgba(0, 0, 0, 0)'
+      ) {
         compatibleStyles.backgroundColor = backgroundColor
       }
-      
+
       // 表格相关 - OpenHTMLtoPDF 完全支持
       const verticalAlign = computed.verticalAlign
       if (verticalAlign && verticalAlign !== 'initial' && verticalAlign !== 'inherit') {
         compatibleStyles.verticalAlign = verticalAlign
       }
-      
+
       // 尺寸 - 过滤掉不兼容的值
       const width = computed.width
-      if (width && width !== 'initial' && width !== 'inherit' && 
-          !width.includes('calc(') && !width.includes('flex') && 
-          !width.includes('auto') && width !== '0px') {
+      if (
+        width &&
+        width !== 'initial' &&
+        width !== 'inherit' &&
+        !width.includes('calc(') &&
+        !width.includes('flex') &&
+        !width.includes('auto') &&
+        width !== '0px'
+      ) {
         compatibleStyles.width = width
       }
-      
+
       const height = computed.height
-      if (height && height !== 'initial' && height !== 'inherit' && 
-          !height.includes('calc(') && !height.includes('auto') && height !== '0px') {
+      if (
+        height &&
+        height !== 'initial' &&
+        height !== 'inherit' &&
+        !height.includes('calc(') &&
+        !height.includes('auto') &&
+        height !== '0px'
+      ) {
         compatibleStyles.height = height
       }
-      
+
       // 文本处理 - OpenHTMLtoPDF 完全支持
       const whiteSpace = computed.whiteSpace
       if (whiteSpace && whiteSpace !== 'initial' && whiteSpace !== 'inherit') {
         compatibleStyles.whiteSpace = whiteSpace
       }
-      
+
       const wordWrap = computed.wordWrap
       if (wordWrap && wordWrap !== 'initial' && wordWrap !== 'inherit') {
         compatibleStyles.wordWrap = wordWrap
       }
-      
+
       const overflow = computed.overflow
       if (overflow && overflow !== 'initial' && overflow !== 'inherit') {
         compatibleStyles.overflow = overflow
       }
-      
+
       const textOverflow = computed.textOverflow
       if (textOverflow && textOverflow !== 'initial' && textOverflow !== 'inherit') {
         compatibleStyles.textOverflow = textOverflow
       }
-      
+
       return compatibleStyles
     }
 
@@ -686,8 +785,8 @@ const exportHtmlTemplate = async () => {
     const inlineCompatibleStyles = (element: HTMLElement) => {
       const styles = extractCompatibleStyles(element)
       Object.assign(element.style, styles)
-      
-      Array.from(element.children).forEach(child => {
+
+      Array.from(element.children).forEach((child) => {
         if (child instanceof HTMLElement) {
           inlineCompatibleStyles(child)
         }
@@ -702,7 +801,10 @@ const exportHtmlTemplate = async () => {
       const imgEls = Array.from(cloned.querySelectorAll('img')) as HTMLImageElement[]
       for (const img of imgEls) {
         const src = img.getAttribute('src') || ''
-        if (!src) { img.remove(); continue }
+        if (!src) {
+          img.remove()
+          continue
+        }
         if (src.startsWith('data:')) continue
         try {
           const resp = await fetch(src, { mode: 'cors' })
@@ -729,7 +831,7 @@ const exportHtmlTemplate = async () => {
     await nextTick()
 
     // 4) Sanitize and wrap as a standalone (X)HTML document for OpenHTMLtoPDF
-    let sanitized = inner
+    const sanitized = inner
       .replace(/\scontenteditable="(?:true|false)"/g, '')
       .replace(/\sdraggable="(?:true|false)"/g, '')
       // remove all data-* and aria-* and role attributes (XML-safe minimal set)
@@ -775,7 +877,7 @@ ${formattedBody}
 
     const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-')
     const filename = `invoice-template-${timestamp}.html`
-    
+
     const a = document.createElement('a')
     a.href = url
     a.download = filename
@@ -784,7 +886,7 @@ ${formattedBody}
     a.click()
     document.body.removeChild(a)
     URL.revokeObjectURL(url)
-    
+
     showNotification('HTML template exported successfully!', 'success')
   } catch (error) {
     console.error('Export failed:', error)
@@ -799,102 +901,106 @@ const generatePagesWithPagination = (data: any, sections: any) => {
   const PAGE_PADDING = 24
   const CONTENT_HEIGHT = 727 // 固定高度727px
   const SECTION_GAP = 8 // 8px section间距
-  
+
   const pages: any[] = []
   let currentPageSections: any[] = []
   let currentPageHeight = 0
   let pageNumber = 1
-  
+
   // 获取可见的sections
   const visibleSections = []
   if (sections.header && data.header) {
     visibleSections.push({
       type: 'header',
       content: data.header,
-      height: 48
+      height: 48,
     })
   }
-  
+
   if (sections.info && data.info) {
     const infoHeight = 9 + (data.info.items ? Math.ceil(data.info.items.length / 5) * 18 : 0)
     visibleSections.push({
       type: 'info',
       content: data.info,
-      height: infoHeight
+      height: infoHeight,
     })
   }
-  
+
   if (sections.table && data.tables && data.tables.length > 0) {
     data.tables.forEach((table: any) => {
-      const tableHeight = 9 + (table.subsectionTitle ? 9 : 0) + 13 + (table.rowsNumber || 2) * 13 + 13 + 1
+      const tableHeight =
+        9 + (table.subsectionTitle ? 9 : 0) + 13 + (table.rowsNumber || 2) * 13 + 13 + 1
       visibleSections.push({
         type: 'table',
         content: table,
-        height: tableHeight
+        height: tableHeight,
       })
     })
   }
-  
+
   if (sections.description && data.description) {
     const descHeight = 9 + Math.ceil((data.description.content || '').length / 60) * 9
     visibleSections.push({
       type: 'description',
       content: data.description,
-      height: descHeight
+      height: descHeight,
     })
   }
-  
+
   if (sections.item && data.item) {
     const itemHeight = 9 + (data.item.items ? Math.ceil(data.item.items.length / 5) * 18 : 0)
     visibleSections.push({
       type: 'item',
       content: data.item,
-      height: itemHeight
+      height: itemHeight,
     })
   }
-  
+
   // 添加Summary section - 在table和description之间
   if (sections.table && data.tables && data.tables.length > 0) {
     // 找到table section的索引
-    const tableIndex = visibleSections.findIndex(s => s.type === 'table')
+    const tableIndex = visibleSections.findIndex((s) => s.type === 'table')
     if (tableIndex !== -1) {
       // 在table section之后插入summary section
       visibleSections.splice(tableIndex + 1, 0, {
         type: 'summary',
         content: {
-          total: data.tables.reduce((sum: number, table: any) => sum + (table.total || 0), 0)
+          total: data.tables.reduce((sum: number, table: any) => sum + (table.total || 0), 0),
         },
-        height: 18
+        height: 18,
       })
     }
   }
-  
-  const footerSection = sections.footer && data.footer ? {
-    type: 'footer',
-    content: data.footer,
-    height: 9
-  } : null
-  
+
+  const footerSection =
+    sections.footer && data.footer
+      ? {
+          type: 'footer',
+          content: data.footer,
+          height: 9,
+        }
+      : null
+
   // 分页逻辑
   for (let i = 0; i < visibleSections.length; i++) {
     const section = visibleSections[i]
     if (!section) continue
-    
+
     const gap = currentPageSections.length > 0 ? SECTION_GAP : 0
     const sectionHeightWithGap = section.height + gap
-    
+
     // 检查是否需要新页面
     if (currentPageHeight + sectionHeightWithGap > CONTENT_HEIGHT) {
       // 如果是table section，尝试拆分
       if (section.type === 'table') {
         const splitResult = splitTableSectionForHtml(section, currentPageHeight, CONTENT_HEIGHT)
-        
+
         if (splitResult.firstPart) {
           // 添加第一部分到当前页面
           currentPageSections.push(splitResult.firstPart)
           currentPageHeight += splitResult.firstPartHeight + gap
         }
-        
+
         // 保存当前页面
         const pageSections = [...currentPageSections]
         if (footerSection) {
@@ -904,20 +1010,20 @@ const generatePagesWithPagination = (data: any, sections: any) => {
           id: `page-${pageNumber}`,
           sections: pageSections,
           totalHeight: currentPageHeight,
-          pageNumber: pageNumber
+          pageNumber: pageNumber,
         })
-        
+
         // 开始新页面
         pageNumber++
         currentPageSections = []
         currentPageHeight = 0
-        
+
         // 添加第二部分到新页面
         if (splitResult.secondPart) {
           currentPageSections.push(splitResult.secondPart)
           currentPageHeight += splitResult.secondPartHeight
         }
-        
+
         // 为新页面添加footer
         if (footerSection) {
           currentPageSections.push(footerSection)
@@ -934,18 +1040,18 @@ const generatePagesWithPagination = (data: any, sections: any) => {
           id: `page-${pageNumber}`,
           sections: pageSections,
           totalHeight: currentPageHeight,
-          pageNumber: pageNumber
+          pageNumber: pageNumber,
         })
-        
+
         // 开始新页面
         pageNumber++
         currentPageSections = []
         currentPageHeight = 0
-        
+
         // 添加section到新页面
         currentPageSections.push(section)
         currentPageHeight += sectionHeightWithGap
-        
+
         // 为新页面添加footer
         if (footerSection) {
           currentPageSections.push(footerSection)
@@ -958,7 +1064,7 @@ const generatePagesWithPagination = (data: any, sections: any) => {
       currentPageHeight += sectionHeightWithGap
     }
   }
-  
+
   // 添加最后一页
   if (currentPageSections.length > 0) {
     const pageSections = [...currentPageSections]
@@ -969,33 +1075,37 @@ const generatePagesWithPagination = (data: any, sections: any) => {
       id: `page-${pageNumber}`,
       sections: pageSections,
       totalHeight: currentPageHeight,
-      pageNumber: pageNumber
+      pageNumber: pageNumber,
     })
   }
-  
+
   return pages
 }
 
 // Split table section for HTML export
-const splitTableSectionForHtml = (section: any, currentPageHeight: number, contentHeight: number) => {
+const splitTableSectionForHtml = (
+  section: any,
+  currentPageHeight: number,
+  contentHeight: number,
+) => {
   const table = section.content
   const availableHeight = contentHeight - currentPageHeight
-  
+
   // 计算table各部分的高度
   let titleHeight = 0
   let subtitleHeight = 0
-  let headerHeight = 13
-  let rowHeight = 13
-  let subtotalHeight = 13
-  let borderHeight = 1
-  
+  const headerHeight = 13
+  const rowHeight = 13
+  const subtotalHeight = 13
+  const borderHeight = 1
+
   if (table.sectionTitle) titleHeight = 9
   if (table.subsectionTitle) subtitleHeight = 9
-  
+
   // 计算第一部分可以包含多少行
   let firstPartRows = 0
   let firstPartHeight = titleHeight + subtitleHeight + headerHeight
-  
+
   const rowsNumber = table.rowsNumber || 2
   for (let i = 0; i < rowsNumber; i++) {
     if (firstPartHeight + rowHeight <= availableHeight) {
@@ -1005,17 +1115,17 @@ const splitTableSectionForHtml = (section: any, currentPageHeight: number, conte
       break
     }
   }
-  
+
   // 如果第一部分可以包含所有行，则不需要拆分
   if (firstPartRows >= rowsNumber) {
     return {
       firstPart: section,
       firstPartHeight: section.height,
       secondPart: null,
-      secondPartHeight: 0
+      secondPartHeight: 0,
     }
   }
-  
+
   // 创建第一部分（包含标题、子标题、表头、部分数据行）
   const firstPart = {
     ...section,
@@ -1026,15 +1136,15 @@ const splitTableSectionForHtml = (section: any, currentPageHeight: number, conte
       isFirstPart: true,
       showHeader: true, // 显示标题、副标题、表头
       showSubtotal: false, // 不显示小计和边框
-      showBorder: false
+      showBorder: false,
     },
-    height: firstPartHeight
+    height: firstPartHeight,
   }
-  
+
   // 创建第二部分（只包含剩余数据行、小计、边框）
   const secondPartRows = rowsNumber - firstPartRows
   const secondPartHeight = secondPartRows * rowHeight + subtotalHeight + borderHeight
-  
+
   const secondPart = {
     ...section,
     id: `${section.id}-part2`,
@@ -1045,26 +1155,26 @@ const splitTableSectionForHtml = (section: any, currentPageHeight: number, conte
       isSecondPart: true,
       showHeader: false, // 不显示标题、副标题、表头
       showSubtotal: true, // 显示小计和边框
-      showBorder: true
+      showBorder: true,
     },
-    height: secondPartHeight
+    height: secondPartHeight,
   }
-  
+
   return {
     firstPart,
     firstPartHeight,
     secondPart,
-    secondPartHeight
+    secondPartHeight,
   }
 }
 
 // Generate HTML template content with pagination support
 const generateHtmlTemplate = () => {
   const { sections, data } = { sections: sectionStates.value, data: templateData }
-  
+
   // 使用PDF分页逻辑生成页面
   const pages = generatePagesWithPagination(data, sections)
-  
+
   let htmlContent = `
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
@@ -1104,7 +1214,7 @@ const generateHtmlTemplate = () => {
         .section-spacer {
             height: 6px;
         }
-        
+
         .section-spacer td {
             height: 6px;
         }
@@ -1479,7 +1589,7 @@ const generateHtmlTemplate = () => {
     if (pageIndex > 0) {
       htmlContent += `<div class="page-break"></div>`
     }
-    
+
     htmlContent += `
     <table class="invoice-container">
         <tr>
@@ -1524,27 +1634,32 @@ const generateHtmlTemplate = () => {
 const generateHeaderSection = (header: any) => {
   const hasTitleOrDescription = header.title || header.description
   const logoAlign = hasTitleOrDescription ? 'right' : 'left'
-  
+
   return `
         <table class="header-table">
             <tr>
-                ${hasTitleOrDescription ? `
+                ${
+                  hasTitleOrDescription
+                    ? `
                 <td>
                     ${header.title ? `<span class="header-title">${header.title}</span>` : ''}
                     ${header.description ? `<span class="header-description">${header.description}</span>` : ''}
                 </td>
-                ` : ''}
+                `
+                    : ''
+                }
                 <td class="logo-container ${header.logoSize === 'large' ? 'large' : 'default'}" ${!hasTitleOrDescription ? 'colspan="2"' : ''}>
-                    ${header.logo ? 
-                        `<img src="${header.logo}" alt="Logo" style="object-position: ${logoAlign};" />` : 
-                        `<table class="logo-placeholder"><tr><td>Logo Placeholder</td></tr></table>`
+                    ${
+                      header.logo
+                        ? `<img src="${header.logo}" alt="Logo" style="object-position: ${logoAlign};" />`
+                        : `<table class="logo-placeholder"><tr><td>Logo Placeholder</td></tr></table>`
                     }
                     ${header.logoDescription ? `<div class="logo-description" style="font-size: 7px; color: #919191; text-align: ${logoAlign}; margin-top: 4px;">${header.logoDescription}</div>` : ''}
                 </td>
             </tr>
         </table>
     `
-  }
+}
 
 // Generate info section HTML
 const generateInfoSection = (info: any) => {
@@ -1555,29 +1670,29 @@ const generateInfoSection = (info: any) => {
     `
   if (info.items && info.items.length > 0) {
     info.items.forEach((item: any, index: number) => {
-        if (index > 0 && index % 5 === 0) {
+      if (index > 0 && index % 5 === 0) {
         html += `
             </tr>
             <tr>
           `
-        }
+      }
       html += `
                 <td style="width: 20%;">
                     <span class="info-item-label">${item.label || ''}</span>
                     <span class="info-item-value">${item.value || ''}</span>
                 </td>
         `
-      })
-      // 填充剩余的空单元格
+    })
+    // 填充剩余的空单元格
     const remainingCells = 5 - (info.items.length % 5)
-      if (remainingCells < 5) {
-        for (let i = 0; i < remainingCells; i++) {
+    if (remainingCells < 5) {
+      for (let i = 0; i < remainingCells; i++) {
         html += `
                 <td style="width: 20%;"></td>
           `
-        }
       }
     }
+  }
   html += `
             </tr>
         </table>
@@ -1588,7 +1703,7 @@ const generateInfoSection = (info: any) => {
 // Generate table section HTML with pagination support
 const generateTableSection = (table: any) => {
   let html = ''
-  
+
   // 根据分页状态决定是否显示标题和副标题
   if (table.showHeader !== false) {
     html += `
@@ -1596,28 +1711,28 @@ const generateTableSection = (table: any) => {
         ${table.subsectionTitle ? `<span class="table-subsection-title">${table.subsectionTitle}</span>` : ''}
     `
   }
-  
+
   html += `
         <table class="data-table">
     `
-  
+
   // 根据分页状态决定是否显示表头
   if (table.showHeader !== false) {
     html += `
             <thead>
                 <tr>
-      `
-      if (table.columns && table.columns.length > 0) {
+        `
+    if (table.columns && table.columns.length > 0) {
       {
         const weights = table.columns.map((c: any) => (typeof c.width === 'number' ? c.width : 100))
         const total = weights.reduce((a: number, b: number) => a + b, 0) || 1
         table.columns.forEach((column: any, columnIndex: number) => {
-          const w = (typeof column.width === 'number' ? column.width : 100)
+          const w = typeof column.width === 'number' ? column.width : 100
           const width = (w / total) * 100
-        html += `
+          html += `
                         <th class="${column.alignment === 'right' ? 'text-right' : ''}" style="width: ${width}%;">${column.name || 'Column Name'}</th>
             `
-      })
+        })
       }
     }
     html += `
@@ -1625,69 +1740,71 @@ const generateTableSection = (table: any) => {
             </thead>
         `
   }
-  
+
   html += `
             <tbody>
       `
-  
-      if (table.rows && table.rows.length > 0) {
+
+  if (table.rows && table.rows.length > 0) {
     // 获取要显示的行数据
     const rowsToShow = getTableRowsForPage(table)
-    
-        rowsToShow.forEach((row: any) => {
+
+    rowsToShow.forEach((row: any) => {
       html += `
                 <tr>
           `
-          if (table.columns && table.columns.length > 0) {
+      if (table.columns && table.columns.length > 0) {
         {
-          const weights = table.columns.map((c: any) => (typeof c.width === 'number' ? c.width : 100))
+          const weights = table.columns.map((c: any) =>
+            typeof c.width === 'number' ? c.width : 100,
+          )
           const total = weights.reduce((a: number, b: number) => a + b, 0) || 1
-            table.columns.forEach((column: any, columnIndex: number) => {
-              const value = row.data[column.id] || ''
-            const w = (typeof column.width === 'number' ? column.width : 100)
+          table.columns.forEach((column: any, columnIndex: number) => {
+            const value = row.data[column.id] || ''
+            const w = typeof column.width === 'number' ? column.width : 100
             const width = (w / total) * 100
-          html += `
+            html += `
                     <td class="${column.alignment === 'right' ? 'text-right' : ''}" style="width: ${width}%;">${value}</td>
               `
-        })
+          })
         }
       }
       html += `
                 </tr>
           `
-        })
-      }
-  
+    })
+  }
+
   html += `
             </tbody>
         </table>
     `
-  
+
   // 根据分页状态决定是否显示小计
-  if (table.showSubtotal !== false) {
+  if (table.showSubtotal !== false && table.total !== null && table.total !== undefined) {
     html += `
         <table class="subtotal-table">
             <tr>
-      `
-      if (table.columns && table.columns.length > 0) {
-        table.columns.forEach((column: any, columnIndex: number) => {
-          if (columnIndex === table.columns.length - 1) {
+        `
+    if (table.columns && table.columns.length > 0) {
+      table.columns.forEach((column: any, columnIndex: number) => {
+        if (columnIndex === table.columns.length - 1) {
           html += `
-                    <td class="subtotal-value">Subtotal $${table.total || '0.00'}</td>
-            `
-          } else {
+                        <td class="subtotal-value">Subtotal $${(table.total || 0).toFixed(2)}</td>
+                `
+        } else {
           html += `
-                    <td></td>
-            `
-          }
-        })
-      }
+                        <td></td>
+                `
+        }
+      })
+    }
     html += `
             </tr>
         </table>
-      `
+    `
   }
-  
+
   return html
 }
 
@@ -1696,7 +1813,7 @@ const getTableRowsForPage = (table: any) => {
   const baseRows = table.rows || []
   const rowsNumber = table.rowsNumber || 2
   const startRowIndex = table.startRowIndex || 0
-  
+
   // 如果需要的行数大于现有行数，动态生成更多行
   if (rowsNumber + startRowIndex > baseRows.length) {
     const additionalRows = []
@@ -1704,9 +1821,9 @@ const getTableRowsForPage = (table: any) => {
       const newRow = {
         id: `generated-${i + 1}`,
         data: {} as Record<string, string>,
-        total: 0
+        total: 0,
       }
-      
+
       // 为每个列生成数据
       if (table.columns) {
         table.columns.forEach((column: any) => {
@@ -1715,12 +1832,12 @@ const getTableRowsForPage = (table: any) => {
           newRow.data[column.id] = templateValue.replace(/\d+/, i + 1)
         })
       }
-      
+
       additionalRows.push(newRow)
     }
     baseRows.push(...additionalRows)
   }
-  
+
   // 返回当前页面应该显示的行
   return baseRows.slice(startRowIndex, startRowIndex + rowsNumber)
 }
@@ -1737,12 +1854,12 @@ const generateSummarySection = (summary: any) => {
             </tr>
         </table>
     `
-  }
+}
 
 // Generate description section HTML
 const generateDescriptionSection = (description: any) => {
   return `
-        <span class="description-label">Item Name</span>
+        ${description.sectionTitle ? `<span class="description-label">${description.sectionTitle}</span>` : ''}
         <span class="description-text">${description.content || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'}</span>
     `
 }
@@ -1756,29 +1873,29 @@ const generateItemSection = (item: any) => {
     `
   if (item.items && item.items.length > 0) {
     item.items.forEach((itemData: any, index: number) => {
-        if (index > 0 && index % 5 === 0) {
+      if (index > 0 && index % 5 === 0) {
         html += `
             </tr>
             <tr>
           `
-        }
+      }
       html += `
                 <td style="width: 20%;">
                     <span class="item-item-label">${itemData.label || ''}</span>
                     <span class="item-item-value">${itemData.value || ''}</span>
                 </td>
         `
-      })
-      // 填充剩余的空单元格
+    })
+    // 填充剩余的空单元格
     const remainingCells = 5 - (item.items.length % 5)
-      if (remainingCells < 5) {
-        for (let i = 0; i < remainingCells; i++) {
+    if (remainingCells < 5) {
+      for (let i = 0; i < remainingCells; i++) {
         html += `
                 <td style="width: 20%;"></td>
           `
-        }
       }
     }
+  }
   html += `
             </tr>
         </table>
@@ -1788,16 +1905,37 @@ const generateItemSection = (item: any) => {
 
 // Generate footer section HTML
 const generateFooterSection = (footer: any, currentPage: number, totalPages: number) => {
+  const footerInfoStyle = {
+    fontSize: styleConfig.footerInfo.textSize + 'px',
+    color: styleConfig.footerInfo.textColor,
+    fontWeight:
+      (styleConfig.footerInfo.textWeight as string) === 'semibold'
+        ? '600'
+        : (styleConfig.footerInfo.textWeight as string) === 'bold'
+          ? '700'
+          : '400',
+  }
+  const footerNameStyle = {
+    fontSize: styleConfig.footerName.textSize + 'px',
+    color: styleConfig.footerName.textColor,
+    fontWeight:
+      (styleConfig.footerName.textWeight as string) === 'semibold'
+        ? '600'
+        : (styleConfig.footerName.textWeight as string) === 'bold'
+          ? '700'
+          : '400',
+  }
+
   return `
         <table class="footer-section">
             <tr>
-                <td class="footer-info">${footer.info || ''}</td>
-                <td class="footer-name">${footer.name || ''}</td>
+                <td class="footer-info" style="font-size: ${footerInfoStyle.fontSize}; color: ${footerInfoStyle.color}; font-weight: ${footerInfoStyle.fontWeight};">${footer.info || ''}</td>
+                <td class="footer-name" style="font-size: ${footerNameStyle.fontSize}; color: ${footerNameStyle.color}; font-weight: ${footerNameStyle.fontWeight};">${footer.name || ''}</td>
                 <td class="footer-page">Page: ${currentPage} of ${totalPages}</td>
             </tr>
         </table>
     `
-  }
+}
 
 // Show notification message
 const showNotification = (message: string, type: 'success' | 'error' | 'info' = 'success') => {
@@ -1818,13 +1956,17 @@ const autoSave = () => {
 }
 
 // Listen for data changes, auto save and save to history
-watch([sectionStates, templateData, styleConfig], () => {
-  autoSave()
-  // 保存到历史记录（延迟保存，避免频繁操作）
-  setTimeout(() => {
-    undoSystem.saveState(sectionStates.value, templateData, styleConfig)
-  }, 100)
-}, { deep: true })
+watch(
+  [sectionStates, templateData, styleConfig],
+  () => {
+    autoSave()
+    // 保存到历史记录（延迟保存，避免频繁操作）
+    setTimeout(() => {
+      undoSystem.saveState(sectionStates.value, templateData, styleConfig)
+    }, 100)
+  },
+  { deep: true },
+)
 
 // Restore data when page loads
 onMounted(() => {
@@ -1894,7 +2036,10 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="h-full w-full bg-[#f8f9fa] overflow-hidden flex flex-col" style="width: 100% !important; height: 100% !important; overflow-x: hidden !important;">
+  <div
+    class="h-full w-full bg-white overflow-hidden flex flex-col"
+    style="width: 100% !important; height: 100% !important; overflow-x: hidden !important"
+  >
     <!-- Header Title -->
     <header class="bg-white shadow-sm border-b border-[#d3ddde] flex-shrink-0 min-h-[72px]">
       <div class="w-full h-full px-4 py-4">
@@ -1909,7 +2054,7 @@ onUnmounted(() => {
               <p class="text-[9px] text-[#919191]">@Matthew Li</p>
             </div>
           </div>
-          
+
           <!-- Status Indicators and Export Buttons -->
           <div class="flex items-center gap-4">
             <div class="flex items-center gap-2">
@@ -1928,7 +2073,12 @@ onUnmounted(() => {
                 class="!px-2"
               >
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path>
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"
+                  ></path>
                 </svg>
               </TextButton>
               <!-- Redo Button -->
@@ -1940,7 +2090,12 @@ onUnmounted(() => {
                 class="!px-2"
               >
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 10H11a8 8 0 00-8 8v2M21 10l-6 6m6-6l-6-6"></path>
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M21 10H11a8 8 0 00-8 8v2M21 10l-6 6m6-6l-6-6"
+                  ></path>
                 </svg>
               </TextButton>
             </div>
@@ -1953,49 +2108,57 @@ onUnmounted(() => {
               class="bg-[#FF761F] text-white hover:bg-[#e66a1a]"
             >
               <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"
+                />
               </svg>
               Save
             </TextButton>
             <div class="h-6 w-px bg-[#d3ddde]"></div>
             <!-- Export Buttons -->
             <div class="flex items-center gap-2">
-              <TextButton
-                @click="importJsonTemplate"
-                variant="default"
-                size="sm"
-              >
+              <TextButton @click="importJsonTemplate" variant="default" size="sm">
                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14V8m0 0l-3 3m3-3l3 3M5 20h14a2 2 0 002-2V7.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0014.586 1H7a2 2 0 00-2 2v15a2 2 0 002 2z"/>
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 14V8m0 0l-3 3m3-3l3 3M5 20h14a2 2 0 002-2V7.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0014.586 1H7a2 2 0 00-2 2v15a2 2 0 002 2z"
+                  />
                 </svg>
                 Import JSON
               </TextButton>
-              <TextButton
-                @click="exportJsonTemplate"
-                variant="default"
-                size="sm"
-              >
+              <TextButton @click="exportJsonTemplate" variant="default" size="sm">
                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  ></path>
                 </svg>
                 Export JSON
               </TextButton>
-              <TextButton
-                @click="exportHtmlTemplate"
-                variant="primary"
-                size="sm"
-              >
+              <TextButton @click="exportHtmlTemplate" variant="primary" size="sm">
                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  ></path>
                 </svg>
                 Export HTML
               </TextButton>
               <!-- Hidden file input for JSON import -->
-              <input 
-                ref="importFileInputRef" 
-                type="file" 
-                accept="application/json" 
-                class="hidden" 
+              <input
+                ref="importFileInputRef"
+                type="file"
+                accept="application/json"
+                class="hidden"
                 @change="handleImportFileChange"
               />
             </div>
@@ -2005,15 +2168,21 @@ onUnmounted(() => {
     </header>
 
     <!-- Main Content Area -->
-    <main class="w-full flex-1 overflow-hidden bg-[#f8f9fa]" style="overflow-x: hidden !important; padding: 20px 40px 0 40px;">
+    <main
+      class="w-full flex-1 overflow-hidden bg-white"
+      style="overflow-x: hidden !important; padding: 20px 40px 0 40px"
+    >
       <div class="flex flex-col xl:flex-row h-full w-full gap-5">
         <!-- Left PDF Preview Area (70%) -->
-        <div class="flex-1 xl:flex-none" :style="isMobile ? 'height: 50vh;' : 'flex: 0 0 calc(70% - 10px); height: 100%;'">
+        <div
+          class="flex-1 xl:flex-none"
+          :style="isMobile ? 'height: 50vh;' : 'flex: 0 0 calc(70% - 10px); height: 100%;'"
+        >
           <div class="h-full bg-white rounded-xl shadow-lg border border-[#d3ddde] overflow-hidden">
-            <PdfPaginationPreview 
+            <PdfPaginationPreview
               :key="previewKey"
-              :section-states="sectionStates" 
-              :template-data="templateData" 
+              :section-states="sectionStates"
+              :template-data="templateData"
               :style-config="styleConfig"
               :export-mode="exportMode"
               :selected-section="selectedSection"
@@ -2023,10 +2192,17 @@ onUnmounted(() => {
         </div>
 
         <!-- Right Configuration Area (30%) -->
-        <div class="flex-1 xl:flex-none" :style="isMobile ? 'height: 50vh;' : 'flex: 0 0 calc(30% - 10px); height: 100%; min-width: 0;'">
+        <div
+          class="flex-1 xl:flex-none"
+          :style="
+            isMobile ? 'height: 50vh;' : 'flex: 0 0 calc(30% - 10px); height: 100%; min-width: 0;'
+          "
+        >
           <div class="h-full flex flex-col">
             <!-- Tabs Header -->
-            <div class="flex items-center gap-3 w-full border-b border-[#d3ddde] bg-white/60 backdrop-blur-sm p-5">
+            <div
+              class="flex items-center gap-3 w-full border-b border-[#d3ddde] bg-white/60 backdrop-blur-sm p-5"
+            >
               <TextButton
                 :variant="activeRightTab === 'config' ? 'secondary' : 'default'"
                 size="md"
@@ -2046,22 +2222,23 @@ onUnmounted(() => {
             <!-- Right Panel Body -->
             <div class="flex-1 overflow-y-auto overflow-x-hidden">
               <template v-if="activeRightTab === 'config'">
-              <PdfConfigPanel 
-                v-model:sectionStates="sectionStates"
-                :templateData="templateData"
-                @update:templateData="updateTemplateData"
-              />
+                <PdfConfigPanel
+                  v-model:sectionStates="sectionStates"
+                  :templateData="templateData"
+                  @update:templateData="updateTemplateData"
+                />
               </template>
               <template v-else>
-            <PdfStylePanel 
-              :model-value="styleConfig"
-              @update:model-value="(newStyleConfig: any) => Object.assign(styleConfig, newStyleConfig)"
-              :selected-section="selectedSection"
-              @refresh-preview="handleRefreshPreview"
-            />
+                <PdfStylePanel
+                  :model-value="styleConfig"
+                  @update:model-value="
+                    (newStyleConfig: any) => Object.assign(styleConfig, newStyleConfig)
+                  "
+                  :selected-section="selectedSection"
+                  @refresh-preview="handleRefreshPreview"
+                />
               </template>
             </div>
-
           </div>
         </div>
       </div>
@@ -2074,7 +2251,7 @@ onUnmounted(() => {
       @confirm="confirmDialog.handleConfirm"
       @cancel="confirmDialog.handleCancel"
     />
-    
+
     <!-- Notification Manager -->
     <NotificationManager ref="notificationManager" />
   </div>
@@ -2158,4 +2335,3 @@ nav a:first-of-type {
   }
 }
 </style>
-

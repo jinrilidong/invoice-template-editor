@@ -17,10 +17,13 @@ export class StyleCalculator {
    */
   static calculateHInfoColumnWidth(columnWidth) {
     switch (columnWidth) {
-      case '1/3': return '33.33%'
-      case '1/4': return '25%'
-      case '1/2': 
-      default: return '50%'
+      case '1/3':
+        return '33.33%'
+      case '1/4':
+        return '25%'
+      case '1/2':
+      default:
+        return '50%'
     }
   }
 
@@ -37,20 +40,20 @@ export class StyleCalculator {
   static generateInfoSectionStyles(styleConfig) {
     const itemsPerRow = styleConfig?.info?.itemsPerRow || 5
     const gap = styleConfig?.info?.itemGap ?? 2
-    
+
     return {
       container: {
         display: 'table',
         width: '100%',
         borderCollapse: 'collapse',
-        tableLayout: 'fixed'
+        tableLayout: 'fixed',
       },
       item: {
         display: 'table-cell',
         width: this.calculateItemWidth(itemsPerRow, gap),
         paddingRight: `${gap}px`,
-        verticalAlign: 'top'
-      }
+        verticalAlign: 'top',
+      },
     }
   }
 
@@ -60,20 +63,20 @@ export class StyleCalculator {
   static generateItemSectionStyles(styleConfig) {
     const itemsPerRow = styleConfig?.item?.itemsPerRow || 5
     const gap = styleConfig?.item?.itemGap ?? 2
-    
+
     return {
       container: {
         display: 'table',
         width: '100%',
         borderCollapse: 'collapse',
-        tableLayout: 'fixed'
+        tableLayout: 'fixed',
       },
       item: {
         display: 'table-cell',
         width: this.calculateItemWidth(itemsPerRow, gap),
         paddingRight: `${gap}px`,
-        verticalAlign: 'top'
-      }
+        verticalAlign: 'top',
+      },
     }
   }
 
@@ -81,45 +84,82 @@ export class StyleCalculator {
    * 生成兼容的H-Info Section样式
    */
   static generateHInfoSectionStyles(styleConfig, hInfoConfig) {
-    const columnGap = styleConfig?.hInfo?.columnGap || 8
+    const columnsPadding = styleConfig?.hInfo?.columnsPadding || 8
     const itemGap = styleConfig?.hInfo?.itemGap || 4
     const labelValueGap = styleConfig?.hInfo?.labelValueGap || 8
     const labelWidth = styleConfig?.hInfo?.labelWidth || 80
-    
+    const layoutDirection = hInfoConfig?.labelValueLayout || 'horizontal'
+
+    // 水平布局（label 和 value 在同一行）
+    if (layoutDirection === 'horizontal') {
+      return {
+        container: {
+          display: 'table',
+          width: '100%',
+          borderCollapse: 'collapse',
+          tableLayout: 'fixed',
+        },
+        column: {
+          display: 'table-cell',
+          width: this.calculateHInfoColumnWidth(hInfoConfig.columnWidth),
+          paddingRight: `${columnsPadding}px`,
+          verticalAlign: 'top',
+        },
+        item: {
+          display: 'block',
+          marginBottom: `${itemGap}px`,
+        },
+        itemContent: {
+          display: 'table',
+          width: '100%',
+          borderCollapse: 'collapse',
+          tableLayout: 'fixed',
+        },
+        label: {
+          display: 'table-cell',
+          width: `${labelWidth}px`,
+          paddingRight: `${labelValueGap}px`,
+          verticalAlign: 'top',
+        },
+        value: {
+          display: 'table-cell',
+          width: 'auto',
+          verticalAlign: 'top',
+        },
+      }
+    }
+
+    // 垂直布局（label 和 value 在不同行）
     return {
       container: {
         display: 'table',
         width: '100%',
         borderCollapse: 'collapse',
-        tableLayout: 'fixed'
+        tableLayout: 'fixed',
       },
       column: {
         display: 'table-cell',
         width: this.calculateHInfoColumnWidth(hInfoConfig.columnWidth),
-        paddingRight: `${columnGap}px`,
-        verticalAlign: 'top'
+        paddingRight: `${columnsPadding}px`,
+        verticalAlign: 'top',
       },
       item: {
         display: 'block',
-        marginBottom: `${itemGap}px`
+        marginBottom: `${itemGap}px`,
       },
       itemContent: {
-        display: 'table',
+        display: 'block',
         width: '100%',
-        borderCollapse: 'collapse',
-        tableLayout: 'fixed'
       },
       label: {
-        display: 'table-cell',
-        width: `${labelWidth}px`,
-        paddingRight: `${labelValueGap}px`,
-        verticalAlign: 'top'
+        display: 'block',
+        width: '100%',
+        paddingBottom: `${itemGap}px`,
       },
       value: {
-        display: 'table-cell',
-        width: 'auto',
-        verticalAlign: 'top'
-      }
+        display: 'block',
+        width: '100%',
+      },
     }
   }
 }

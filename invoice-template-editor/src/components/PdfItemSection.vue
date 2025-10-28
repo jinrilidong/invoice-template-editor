@@ -1,53 +1,65 @@
 <template>
   <div class="w-full mb-0">
     <!-- Multiple Item Sections -->
-    <div v-for="(itemSection, itemIndex) in itemSectionsData" :key="itemSection.id" :id="`config-item-${itemIndex}-section`" class="mb-8">
+    <div
+      v-for="(itemSection, itemIndex) in itemSectionsData"
+      :key="itemSection.id"
+      :id="`config-item-${itemIndex}-section`"
+      class="mb-8"
+    >
       <!-- Divider between sections (except for the first one) - 已移除，由Configuration Panel统一管理 -->
-      
+
       <!-- Section Header with Title and Actions -->
-      <div class="flex items-center justify-between mb-4" :style="{ marginTop: itemIndex > 0 ? '20px' : '20px' }">
+      <div
+        class="flex items-center justify-between mb-4"
+        :style="{ marginTop: itemIndex > 0 ? '20px' : '20px' }"
+      >
         <div class="flex items-center gap-2">
           <!-- Expand/Collapse Button -->
-          <button 
+          <button
             @click="toggleItemExpanded(itemIndex)"
             class="flex items-center justify-center w-6 h-6 rounded hover:bg-gray-100 transition-colors"
             :title="isItemExpanded(itemIndex) ? 'Collapse section' : 'Expand section'"
           >
-            <svg 
-              class="w-4 h-4 text-gray-600 transition-transform" 
+            <svg
+              class="w-4 h-4 text-gray-600 transition-transform"
               :class="{ 'rotate-180': isItemExpanded(itemIndex) }"
-              fill="none" 
-              stroke="currentColor" 
+              fill="none"
+              stroke="currentColor"
               viewBox="0 0 24 24"
             >
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+              ></path>
             </svg>
           </button>
-          
+
           <!-- Section Title -->
-          <h3 class="text-base font-semibold text-[#0e171f]">
-            Item Section {{ itemIndex + 1 }}
-          </h3>
+          <h3 class="text-base font-semibold text-[#0e171f]">Item Section {{ itemIndex + 1 }}</h3>
         </div>
-        
+
         <div class="flex items-center gap-2">
-          <TextButton 
-            @click="addItemSection" 
-            variant="default" 
-            size="sm"
-          >
+          <TextButton @click="addItemSection" variant="default" size="sm">
             Add Item Section
           </TextButton>
-          <TextButton 
+          <TextButton
             v-if="itemSectionsData.length > 1"
-            @click="removeItemSection(itemIndex)" 
-            variant="default" 
+            @click="removeItemSection(itemIndex)"
+            variant="default"
             size="sm"
             class="text-red-600 hover:text-red-800"
             title="Delete item section"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              ></path>
             </svg>
           </TextButton>
         </div>
@@ -59,16 +71,18 @@
         <div :id="`config-item-${itemIndex}-section-title`">
           <UnifiedLInput
             :model-value="itemSection.sectionTitle"
-            @update:model-value="(value: string) => updateItemField(itemIndex, 'sectionTitle', value)"
+            @update:model-value="
+              (value: string) => updateItemField(itemIndex, 'sectionTitle', value)
+            "
             label="Section Title"
           />
         </div>
-        
+
         <!-- Item List -->
         <div class="w-full space-y-1">
-          <div 
-            v-for="(item, itemItemIndex) in itemSection.items" 
-            :key="item.id" 
+          <div
+            v-for="(item, itemItemIndex) in itemSection.items"
+            :key="item.id"
             :id="`config-item-${itemIndex}-item-${item.id}`"
             class="item-group-container"
             draggable="true"
@@ -85,7 +99,12 @@
                   <!-- Drag Handle -->
                   <div class="cursor-move text-gray-400 hover:text-gray-600">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"></path>
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M4 8h16M4 16h16"
+                      ></path>
                     </svg>
                   </div>
                   <h4 class="text-sm font-semibold text-[#0e171f]">Item {{ itemItemIndex + 1 }}</h4>
@@ -97,25 +116,35 @@
                   title="Delete item"
                 >
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    ></path>
                   </svg>
                 </TextButton>
               </div>
-              
+
               <!-- Input Fields -->
               <div class="space-y-3">
                 <!-- Label Input -->
                 <UnifiedLInput
                   :model-value="item.label"
-                  @update:model-value="(value: string) => updateItemItemField(itemIndex, itemItemIndex, 'label', value)"
+                  @update:model-value="
+                    (value: string) => updateItemItemField(itemIndex, itemItemIndex, 'label', value)
+                  "
                   label="Label"
                 />
-                
-                <!-- Value Input -->
+
+                <!-- Value Input (Multiline) -->
                 <UnifiedLInput
                   :model-value="item.value"
-                  @update:model-value="(value: string) => updateItemItemField(itemIndex, itemItemIndex, 'value', value)"
+                  @update:model-value="
+                    (value: string) => updateItemItemField(itemIndex, itemItemIndex, 'value', value)
+                  "
                   label="Value"
+                  multiline
                 />
               </div>
             </div>
@@ -124,12 +153,7 @@
 
         <!-- Add Item Button -->
         <div class="mt-6">
-          <TextButton 
-            @click="addItemHandler(itemIndex)" 
-            variant="default" 
-            size="sm"
-            class="w-full"
-          >
+          <TextButton @click="addItemHandler(itemIndex)" variant="default" size="sm" class="w-full">
             Add Item
           </TextButton>
         </div>
@@ -165,7 +189,7 @@ const confirmDialog = inject('confirmDialog') as any
 const expandedItemSections = ref<Set<number>>(new Set([0])) // 默认第一个 item section 展开
 
 // 拖拽状态管理
-const draggedItem = ref<{itemIndex: number, itemItemIndex: number} | null>(null)
+const draggedItem = ref<{ itemIndex: number; itemItemIndex: number } | null>(null)
 
 // 检查 item section 是否展开
 const isItemExpanded = (itemIndex: number) => {
@@ -204,14 +228,14 @@ const defaultItemData: ItemData = {
   sectionTitle: 'Section title',
   items: [
     { id: '1', label: 'Label', value: 'Value' },
-    { id: '2', label: 'Label', value: 'Value' }
-  ]
+    { id: '2', label: 'Label', value: 'Value' },
+  ],
 }
 
 // 使用computed管理数据，避免循环更新
 const itemSectionsData = computed({
   get: () => props.modelValue || [defaultItemData],
-  set: (value) => emit('update:modelValue', value)
+  set: (value) => emit('update:modelValue', value),
 })
 
 // 更新 item section 字段
@@ -226,7 +250,12 @@ const updateItemField = (itemIndex: number, field: keyof ItemData, value: any) =
 }
 
 // 更新 item item 字段
-const updateItemItemField = (itemIndex: number, itemItemIndex: number, field: keyof BaseItem, value: any) => {
+const updateItemItemField = (
+  itemIndex: number,
+  itemItemIndex: number,
+  field: keyof BaseItem,
+  value: any,
+) => {
   const newItemSections = [...itemSectionsData.value]
   if (newItemSections[itemIndex] && newItemSections[itemIndex].items) {
     const newItems = [...newItemSections[itemIndex].items]
@@ -245,16 +274,16 @@ const addItemSection = () => {
     sectionTitle: 'Section title',
     items: [
       { id: generateId(), label: 'Label', value: 'Value' },
-      { id: generateId(), label: 'Label', value: 'Value' }
-    ]
+      { id: generateId(), label: 'Label', value: 'Value' },
+    ],
   }
-  
+
   const newItemSections = [...itemSectionsData.value, newItemSection]
   const newItemIndex = newItemSections.length - 1
-  
+
   // 新添加的 item section 默认展开
   expandedItemSections.value.add(newItemIndex)
-  
+
   emit('update:modelValue', newItemSections)
 }
 
@@ -264,10 +293,10 @@ const removeItemSection = (itemIndex: number) => {
     message: `Are you sure you want to delete Item Section ${itemIndex + 1}? This action cannot be undone.`,
     onConfirm: () => {
       const newItemSections = itemSectionsData.value.filter((_, index) => index !== itemIndex)
-      
+
       // 更新展开状态，移除被删除的 item section 索引，并调整其他索引
       const newExpandedItemSections = new Set<number>()
-      expandedItemSections.value.forEach(index => {
+      expandedItemSections.value.forEach((index) => {
         if (index < itemIndex) {
           newExpandedItemSections.add(index)
         } else if (index > itemIndex) {
@@ -275,9 +304,9 @@ const removeItemSection = (itemIndex: number) => {
         }
       })
       expandedItemSections.value = newExpandedItemSections
-      
+
       emit('update:modelValue', newItemSections)
-    }
+    },
   })
 }
 
@@ -286,9 +315,9 @@ const addItemHandler = (itemIndex: number) => {
   const newItem: BaseItem = {
     id: generateId(),
     label: 'Label',
-    value: 'Value'
+    value: 'Value',
   }
-  
+
   const newItemSections = [...itemSectionsData.value]
   if (newItemSections[itemIndex]) {
     const currentItems = newItemSections[itemIndex].items || []
@@ -310,7 +339,7 @@ const removeItemHandler = (itemIndex: number, itemItemIndex: number) => {
         newItemSections[itemIndex] = { ...newItemSections[itemIndex], items: newItems }
         emit('update:modelValue', newItemSections)
       }
-    }
+    },
   })
 }
 
@@ -331,29 +360,31 @@ const handleItemDragOver = (event: DragEvent) => {
 
 const handleItemDrop = (event: DragEvent, dropItemIndex: number, dropItemItemIndex: number) => {
   event.preventDefault()
-  
-  if (draggedItem.value === null || 
-      draggedItem.value.itemIndex !== dropItemIndex || 
-      draggedItem.value.itemItemIndex === dropItemItemIndex) {
+
+  if (
+    draggedItem.value === null ||
+    draggedItem.value.itemIndex !== dropItemIndex ||
+    draggedItem.value.itemItemIndex === dropItemItemIndex
+  ) {
     return
   }
-  
+
   const newItemSections = [...itemSectionsData.value]
   const itemSection = newItemSections[dropItemIndex]
   if (itemSection && itemSection.items) {
     const newItems = [...itemSection.items]
     const draggedItemData = newItems[draggedItem.value.itemItemIndex]
-    
+
     if (!draggedItemData) {
       return
     }
-    
+
     // 移除被拖拽的项目
     newItems.splice(draggedItem.value.itemItemIndex, 1)
-    
+
     // 在目标位置插入项目
     newItems.splice(dropItemItemIndex, 0, draggedItemData)
-    
+
     newItemSections[dropItemIndex] = { ...itemSection, items: newItems }
     emit('update:modelValue', newItemSections)
   }

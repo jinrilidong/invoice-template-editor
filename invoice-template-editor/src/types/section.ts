@@ -51,11 +51,13 @@ export interface TableData {
   rows: TableRow[]
   total: number
   rowsNumber?: number
+  showSubtotal?: boolean // 控制是否显示 Subtotal 的开关
 }
 
 // Description Section 数据
 export interface DescriptionData {
   id?: string
+  sectionTitle?: string
   content: string
 }
 
@@ -72,6 +74,7 @@ export interface HInfoData {
   sectionTitle?: string
   columns: HInfoColumn[]
   columnWidth?: string
+  labelValueLayout?: 'horizontal' | 'vertical' // Label 和 Value 的排列方向
 }
 
 // H-Info Column 数据

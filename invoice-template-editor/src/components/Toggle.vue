@@ -9,10 +9,13 @@
     :class="[
       modelValue ? 'toggle-switch--active' : 'toggle-switch--inactive',
       disabled ? 'toggle-switch--disabled' : '',
-      size === 'sm' ? 'toggle-switch--sm' : 'toggle-switch--md'
+      size === 'sm' ? 'toggle-switch--sm' : 'toggle-switch--md',
     ]"
   >
-    <span class="toggle-switch__thumb" :class="modelValue ? 'toggle-switch__thumb--active' : 'toggle-switch__thumb--inactive'"></span>
+    <span
+      class="toggle-switch__thumb"
+      :class="modelValue ? 'toggle-switch__thumb--active' : 'toggle-switch__thumb--inactive'"
+    ></span>
   </button>
 </template>
 
@@ -34,7 +37,7 @@ interface Emits {
 const props = withDefaults(defineProps<Props>(), {
   disabled: false,
   size: 'md',
-  ariaLabel: 'Toggle switch'
+  ariaLabel: 'Toggle switch',
 })
 
 const emit = defineEmits<Emits>()
@@ -57,13 +60,13 @@ const toggle = () => {
   cursor: pointer;
   transition: all 200ms ease-in-out;
   border-radius: 12px;
-  
+
   /* Focus styles */
   &:focus-visible {
     outline: 2px solid #ff5b05;
     outline-offset: 2px;
   }
-  
+
   /* Disabled styles */
   :is(&--disabled) {
     cursor: not-allowed;
@@ -103,7 +106,9 @@ const toggle = () => {
   border-radius: 50%;
   background-color: #ffffff;
   transition: transform 200ms ease-in-out;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 1px 3px 0 rgba(0, 0, 0, 0.1),
+    0 1px 2px 0 rgba(0, 0, 0, 0.06);
 }
 
 /* Medium thumb */
@@ -137,7 +142,7 @@ const toggle = () => {
     background-color: #9ca8aa; /* cloudy.400 */
     border-color: #9ca8aa; /* 悬停时描边颜色 */
   }
-  
+
   &.toggle-switch--active {
     background-color: #138a55; /* darker green for hover */
     border-color: #138a55; /* 悬停时描边颜色 */

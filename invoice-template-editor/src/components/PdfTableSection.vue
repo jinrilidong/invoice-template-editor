@@ -150,73 +150,17 @@
                     label="Column Name"
                   />
                 </div>
-                <!-- Column Width Inputs & Unit Toggle -->
-                <div
-                  :id="`config-table-${tableIndex}-column-width-${column.id}`"
-                  class="flex items-center gap-2"
-                >
+                <!-- Column Width Input -->
+                <div :id="`config-table-${tableIndex}-column-width-${column.id}`">
                   <UnifiedLInput
-                    :model-value="(column as any).widthValue ?? column.width ?? 100"
+                    :model-value="(column.width ?? 100) as any"
                     @update:model-value="
-                      (value: string) => {
-                        const num = Number(value)
-                        // 保存为 width（百分比）或 widthValue（像素），由下方 unit 切换决定
-                        if (((column as any).widthUnit || '%') === 'px') {
-                          updateColumnField(
-                            tableIndex,
-                            index,
-                            'width' as keyof TableColumn,
-                            Number.isFinite(num) ? Math.max(1000, num) : 1200,
-                          )
-                          ;(column as any).widthValue = Number.isFinite(num) ? num : 120
-                        } else {
-                          updateColumnField(
-                            tableIndex,
-                            index,
-                            'width' as keyof TableColumn,
-                            Number.isFinite(num) ? num : 100,
-                          )
-                        }
-                      }
+                      (value: string) =>
+                        updateColumnField(tableIndex, index, 'width', Number(value) || 100)
                     "
-                    label="Column Width"
+                    label="Column Width (%)"
                     type="number"
                   />
-                  <select
-                    class="border border-[#d3ddde] rounded px-2 py-1 text-sm"
-                    :value="(column as any).widthUnit || '%'"
-                    @change="
-                      (e: Event) => {
-                        const unit = (e.target as HTMLSelectElement).value === 'px' ? 'px' : '%'
-                        ;(column as any).widthUnit = unit
-                        if (unit === 'px') {
-                          // 将当前百分比宽度映射到像素标记：存入 width>=1000 以触发 px 渲染，同时保留 widthValue
-                          const val = Number((column as any).widthValue) || 120
-                          updateColumnField(
-                            tableIndex,
-                            index,
-                            'width' as keyof TableColumn,
-                            Math.max(1000, val),
-                          )
-                        } else {
-                          const percent =
-                            typeof column.width === 'number' && column.width < 1000
-                              ? column.width
-                              : 100
-                          updateColumnField(
-                            tableIndex,
-                            index,
-                            'width' as keyof TableColumn,
-                            percent,
-                          )
-                        }
-                      }
-                    "
-                    aria-label="Width Unit"
-                  >
-                    <option value="%">%</option>
-                    <option value="px">px</option>
-                  </select>
                 </div>
 
                 <!-- Alignment Toggle -->

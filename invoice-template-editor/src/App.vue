@@ -673,9 +673,8 @@ const exportHtmlTemplate = async () => {
       for (let i = 0; i < element.attributes.length; i++) {
         const attr = element.attributes[i]
         if (
-          attr.name.startsWith('data-') ||
-          attr.name.startsWith('aria-') ||
-          attr.name === 'role'
+          attr &&
+          (attr.name.startsWith('data-') || attr.name.startsWith('aria-') || attr.name === 'role')
         ) {
           attributesToRemove.push(attr.name)
         }
@@ -690,9 +689,28 @@ const exportHtmlTemplate = async () => {
       })
     }
 
-    removeAttributes(cloned)
+    // 5) Remove transform and transform-origin CSS properties
+    const removeTransformProperties = (element: HTMLElement) => {
+      const style = element.style
+      if (style.transform) {
+        style.removeProperty('transform')
+      }
+      if (style.transformOrigin) {
+        style.removeProperty('transform-origin')
+      }
 
-    // 5) Convert images to data URLs to avoid remote loading issues
+      // Process children
+      Array.from(element.children).forEach((child) => {
+        if (child instanceof HTMLElement) {
+          removeTransformProperties(child)
+        }
+      })
+    }
+
+    removeAttributes(cloned)
+    removeTransformProperties(cloned)
+
+    // 6) Convert images to data URLs to avoid remote loading issues
     const inlineImages = async () => {
       const imgEls = Array.from(cloned.querySelectorAll('img')) as HTMLImageElement[]
       for (const img of imgEls) {
@@ -722,20 +740,20 @@ const exportHtmlTemplate = async () => {
 
     const inner = cloned.innerHTML
 
-    // 6) Restore normal preview mode
+    // 7) Restore normal preview mode
     exportMode.value = false
     await nextTick()
 
-    // 7) Clean up HTML and ensure XHTML compliance
+    // 8) Clean up HTML and ensure XHTML compliance
     const sanitized = inner
       // ensure <br> and <img> are self-closed for XHTML
       .replace(/<br(\s*?)>/g, '<br$1 />')
       .replace(/<img([^>]*?)(?<!\/)>/g, '<img$1 />')
 
-    // 8) Format HTML code
+    // 9) Format HTML code
     const formattedBody = formatHtml(sanitized)
 
-    // 9) Wrap as XHTML document for OpenHTMLtoPDF
+    // 10) Wrap as XHTML document for OpenHTMLtoPDF
     const doc = `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">

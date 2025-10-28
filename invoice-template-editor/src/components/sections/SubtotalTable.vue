@@ -5,44 +5,25 @@
     cellspacing="0"
   >
     <tr>
-      <!-- 使用单个单元格合并列，避免受列宽限制，且不换行 -->
       <td
-        :colspan="table.columns.length"
+        v-for="(column, columnIndex) in table.columns"
+        :key="'subtotal-' + columnIndex"
         :style="{
-          width: '100%',
+          width: getColumnWidth(column) + '%',
           fontSize: '7px',
           fontWeight: '600',
           color: styleConfig?.table?.rowTextColor || '#000000',
-          textAlign: 'right',
-          padding: '2px 0 0 0',
+          textAlign: columnIndex === table.columns.length - 1 ? 'right' : 'left',
+          padding: '2px 8px',
+          borderTop: '1px solid ' + (styleConfig?.table?.borderColor || '#d2d2d2'),
           lineHeight: '9px',
           verticalAlign: 'top',
-          whiteSpace: 'nowrap',
         }"
       >
-        <span>
-          <span
-            :style="{
-              fontSize: (styleConfig?.table?.subtotalLabel?.textSize ?? 10) + 'px',
-              fontWeight: styleConfig?.table?.subtotalLabel?.textWeight ?? '600',
-              color: styleConfig?.table?.subtotalLabel?.textColor || '#000000',
-              lineHeight: '17px',
-            }"
-          >
-            Subtotal
-          </span>
-          &nbsp;&nbsp;
-          <span
-            :style="{
-              fontSize: (styleConfig?.table?.subtotalValue?.textSize ?? 10) + 'px',
-              fontWeight: styleConfig?.table?.subtotalValue?.textWeight ?? '600',
-              color: styleConfig?.table?.subtotalValue?.textColor || '#000000',
-              lineHeight: '17px',
-            }"
-          >
-            ${{ (table.total || 0).toFixed(2) }}
-          </span>
+        <span v-if="columnIndex === table.columns.length - 1">
+          Subtotal ${{ (table.total || 0).toFixed(2) }}
         </span>
+        <span v-else>&nbsp;</span>
       </td>
     </tr>
   </table>
@@ -55,8 +36,6 @@ interface TableColumn {
   type: string
   alignment: 'left' | 'right'
   width?: number
-  widthUnit?: '%' | 'px'
-  widthValue?: number
 }
 
 interface TableRow {
@@ -84,20 +63,25 @@ interface StyleConfig {
     columnNameWeight: string
     rowTextColor: string
     borderColor: string
-    borderWidth?: number
     rowHeight: number
     columnsPadding: number
-    subtotalLabel?: { textColor: string; textSize: number; textWeight: string }
-    subtotalValue?: { textColor: string; textSize: number; textWeight: string }
   }
 }
 
-defineProps<{
+const props = defineProps<{
   table: Table
   styleConfig: StyleConfig
 }>()
 
-// 保留：Subotal 使用 colspan 占整行，不需要计算每列宽度
+// 计算列宽度
+const getColumnWidth = (column: TableColumn): number => {
+  if (column.width && typeof column.width === 'number') {
+    return column.width
+  }
+
+  // 默认平均分配
+  return Math.floor(100 / props.table.columns.length)
+}
 </script>
 
 <style scoped>

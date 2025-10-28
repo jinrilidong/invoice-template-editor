@@ -435,17 +435,6 @@
             />
           </div>
           <div class="flex items-center gap-3">
-            <label class="w-32 text-sm text-[#0e171f]">Border Width (px)</label>
-            <input
-              type="number"
-              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.table.borderWidth"
-              min="0"
-              max="4"
-              step="0.5"
-            />
-          </div>
-          <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Row Height (px)</label>
             <input
               type="number"
@@ -456,162 +445,13 @@
             />
           </div>
           <div class="flex items-center gap-3">
-            <label class="w-32 text-sm text-[#0e171f]">Columns Gap (px)</label>
+            <label class="w-32 text-sm text-[#0e171f]">Columns Padding (px)</label>
             <input
               type="number"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
               v-model.number="local.table.columnsPadding"
               min="0"
               max="16"
-            />
-          </div>
-
-          <!-- Subtotal Styles -->
-          <div class="border-t border-[#d3ddde] pt-3 mt-3"></div>
-          <h4 class="text-xs font-semibold text-[#0e171f]">Subtotal Styles</h4>
-          <div class="space-y-2">
-            <div class="flex items-center gap-3">
-              <label class="w-32 text-sm text-[#0e171f]">Label Size</label>
-              <input
-                type="number"
-                class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-                v-model.number="local.table.subtotalLabel!.textSize"
-                min="6"
-                max="24"
-              />
-            </div>
-            <div class="flex items-center gap-3">
-              <label class="w-32 text-sm text-[#0e171f]">Label Weight</label>
-              <select
-                class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-                v-model="local.table.subtotalLabel!.textWeight"
-              >
-                <option value="normal">Normal</option>
-                <option value="semibold">Semibold</option>
-                <option value="bold">Bold</option>
-              </select>
-            </div>
-            <div class="flex items-center gap-3">
-              <label class="w-32 text-sm text-[#0e171f]">Label Color</label>
-              <input
-                type="color"
-                class="h-8 w-12 border border-[#d3ddde] rounded"
-                v-model="local.table.subtotalLabel!.textColor"
-              />
-              <input
-                type="text"
-                class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-                v-model="local.table.subtotalLabel!.textColor"
-              />
-            </div>
-            <div class="flex items-center gap-3">
-              <label class="w-32 text-sm text-[#0e171f]">Value Size</label>
-              <input
-                type="number"
-                class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-                v-model.number="local.table.subtotalValue!.textSize"
-                min="6"
-                max="24"
-              />
-            </div>
-            <div class="flex items-center gap-3">
-              <label class="w-32 text-sm text-[#0e171f]">Value Weight</label>
-              <select
-                class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-                v-model="local.table.subtotalValue!.textWeight"
-              >
-                <option value="normal">Normal</option>
-                <option value="semibold">Semibold</option>
-                <option value="bold">Bold</option>
-              </select>
-            </div>
-            <div class="flex items-center gap-3">
-              <label class="w-32 text-sm text-[#0e171f]">Value Color</label>
-              <input
-                type="color"
-                class="h-8 w-12 border border-[#d3ddde] rounded"
-                v-model="local.table.subtotalValue!.textColor"
-              />
-              <input
-                type="text"
-                class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-                v-model="local.table.subtotalValue!.textColor"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Summary Section Styles -->
-      <section v-if="showSummarySettings">
-        <h3 class="text-sm font-semibold text-[#0e171f] mb-3">Summary Section</h3>
-        <div class="space-y-2">
-          <div class="flex items-center gap-3">
-            <label class="w-32 text-sm text-[#0e171f]">Label Size</label>
-            <input
-              type="number"
-              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.summary!.labelSize"
-              min="6"
-              max="24"
-            />
-          </div>
-          <div class="flex items-center gap-3">
-            <label class="w-32 text-sm text-[#0e171f]">Label Weight</label>
-            <select
-              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model="local.summary!.labelWeight"
-            >
-              <option value="normal">Normal</option>
-              <option value="semibold">Semibold</option>
-              <option value="bold">Bold</option>
-            </select>
-          </div>
-          <div class="flex items-center gap-3">
-            <label class="w-32 text-sm text-[#0e171f]">Label Color</label>
-            <input
-              type="color"
-              class="h-8 w-12 border border-[#d3ddde] rounded"
-              v-model="local.summary!.labelColor"
-            />
-            <input
-              type="text"
-              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model="local.summary!.labelColor"
-            />
-          </div>
-          <div class="flex items-center gap-3">
-            <label class="w-32 text-sm text-[#0e171f]">Value Size</label>
-            <input
-              type="number"
-              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.summary!.contentSize"
-              min="6"
-              max="32"
-            />
-          </div>
-          <div class="flex items-center gap-3">
-            <label class="w-32 text-sm text-[#0e171f]">Value Weight</label>
-            <select
-              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model="local.summary!.contentWeight"
-            >
-              <option value="normal">Normal</option>
-              <option value="semibold">Semibold</option>
-              <option value="bold">Bold</option>
-            </select>
-          </div>
-          <div class="flex items-center gap-3">
-            <label class="w-32 text-sm text-[#0e171f]">Value Color</label>
-            <input
-              type="color"
-              class="h-8 w-12 border border-[#d3ddde] rounded"
-              v-model="local.summary!.contentColor"
-            />
-            <input
-              type="text"
-              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model="local.summary!.contentColor"
             />
           </div>
         </div>
@@ -921,7 +761,7 @@
             />
           </div>
           <div class="flex items-center gap-3">
-            <label class="w-32 text-sm text-[#0e171f]">Columns Gap (px)</label>
+            <label class="w-32 text-sm text-[#0e171f]">Columns Padding (px)</label>
             <input
               type="number"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
@@ -1001,28 +841,8 @@ interface SectionStyle {
     columnNameWeight?: 'normal' | 'semibold' | 'bold'
     rowTextColor: string
     borderColor: string
-    borderWidth?: number
     rowHeight: number
     columnsPadding: number
-    subtotalLabel?: {
-      textColor: string
-      textSize: number
-      textWeight?: 'normal' | 'semibold' | 'bold'
-    }
-    subtotalValue?: {
-      textColor: string
-      textSize: number
-      textWeight?: 'normal' | 'semibold' | 'bold'
-    }
-  }
-  // Summary Section
-  summary?: {
-    labelColor: string
-    labelWeight?: 'normal' | 'semibold' | 'bold'
-    contentColor: string
-    contentWeight?: 'normal' | 'semibold' | 'bold'
-    labelSize: number
-    contentSize: number
   }
   // Description Section
   description: {
@@ -1115,10 +935,6 @@ const showTableSettings = computed(() => {
   return props.selectedSection?.startsWith('table-section-')
 })
 
-const showSummarySettings = computed(() => {
-  return props.selectedSection === 'summary-section'
-})
-
 const showDescriptionSettings = computed(() => {
   return props.selectedSection === 'description-section'
 })
@@ -1163,33 +979,8 @@ const local = reactive<StyleConfig>({
     columnNameWeight: props.modelValue.table?.columnNameWeight || 'semibold',
     rowTextColor: props.modelValue.table?.rowTextColor || '#000000',
     borderColor: props.modelValue.table?.borderColor || '#d2d2d2',
-    borderWidth: props.modelValue.table?.borderWidth ?? 1,
     rowHeight: props.modelValue.table?.rowHeight || 13,
     columnsPadding: props.modelValue.table?.columnsPadding ?? 4,
-    subtotalLabel: {
-      textColor: props.modelValue.table?.subtotalLabel?.textColor || '#000000',
-      textSize: props.modelValue.table?.subtotalLabel?.textSize || 10,
-      textWeight: props.modelValue.table?.subtotalLabel?.textWeight || 'semibold',
-    },
-    subtotalValue: {
-      textColor: props.modelValue.table?.subtotalValue?.textColor || '#000000',
-      textSize: props.modelValue.table?.subtotalValue?.textSize || 10,
-      textWeight: props.modelValue.table?.subtotalValue?.textWeight || 'semibold',
-    },
-  },
-  summary: {
-    labelColor: props.modelValue.summary?.labelColor || '#000000',
-    labelWeight: (props.modelValue.summary?.labelWeight || 'semibold') as
-      | 'normal'
-      | 'semibold'
-      | 'bold',
-    contentColor: props.modelValue.summary?.contentColor || '#000000',
-    contentWeight: (props.modelValue.summary?.contentWeight || 'semibold') as
-      | 'normal'
-      | 'semibold'
-      | 'bold',
-    labelSize: props.modelValue.summary?.labelSize || 10,
-    contentSize: props.modelValue.summary?.contentSize || 14,
   },
   description: {
     labelColor: props.modelValue.description?.labelColor || '#000000',

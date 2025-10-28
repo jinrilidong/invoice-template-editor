@@ -41,21 +41,8 @@
       </td>
     </tr>
 
-    <!-- Bottom Divider under data table (always show regardless of subtotal) -->
-    <tr v-if="table.columns && table.columns.length > 0">
-      <td
-        :style="{
-          padding: '0',
-          borderTop:
-            (styleConfig?.table?.borderWidth ?? 1) +
-            'px solid ' +
-            (styleConfig?.table?.borderColor || '#d2d2d2'),
-        }"
-      ></td>
-    </tr>
-
     <!-- Subtotal -->
-    <tr v-if="table.showSubtotal !== false">
+    <tr v-if="table.showSubtotal && table.total !== null && table.total !== undefined">
       <td style="padding: 0">
         <SubtotalTable :table="table" :style-config="styleConfig" />
       </td>
@@ -102,7 +89,6 @@ interface StyleConfig {
     columnNameWeight: string
     rowTextColor: string
     borderColor: string
-    borderWidth?: number
     rowHeight: number
     columnsPadding: number
   }

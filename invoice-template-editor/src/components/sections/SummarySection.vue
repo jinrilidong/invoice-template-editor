@@ -8,28 +8,31 @@
       <td style="width: 100%; text-align: right; padding: 0; vertical-align: top">
         <table style="width: 100%; border-collapse: collapse" cellpadding="0" cellspacing="0">
           <tr>
-            <td style="padding: 0; text-align: right">
-              <span
-                :style="{
-                  fontSize: (styleConfig?.summary?.labelSize ?? 10) + 'px',
-                  fontWeight: styleConfig?.summary?.labelWeight || '600',
-                  color: styleConfig?.summary?.labelColor || '#000000',
-                  lineHeight: '17px',
-                }"
-              >
-                Total USD
-              </span>
-              &nbsp;&nbsp;
-              <span
-                :style="{
-                  fontSize: (styleConfig?.summary?.contentSize ?? 14) + 'px',
-                  fontWeight: styleConfig?.summary?.contentWeight || '600',
-                  color: styleConfig?.summary?.contentColor || '#000000',
-                  lineHeight: '17px',
-                }"
-              >
-                ${{ totalAmount.toFixed(2) }}
-              </span>
+            <td
+              style="
+                font-size: 10px;
+                font-weight: 600;
+                color: #000000;
+                line-height: 9px;
+                padding: 0;
+                text-align: right;
+              "
+            >
+              Total USD
+            </td>
+          </tr>
+          <tr>
+            <td
+              style="
+                font-size: 14px;
+                font-weight: 600;
+                color: #000000;
+                line-height: 17px;
+                padding: 2px 0 0 0;
+                text-align: right;
+              "
+            >
+              ${{ totalAmount.toFixed(2) }}
             </td>
           </tr>
         </table>

@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Transform Properties Removal Test</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background-color: #f5f5f5;
+      }
+      .test-container {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+      }
+      .test-title {
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 10px;
+      }
+      .test-description {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 15px;
+      }
+      .test-steps {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 4px;
+        border-left: 4px solid #007bff;
+      }
+      .test-steps ol {
+        margin: 0;
+        padding-left: 20px;
+      }
+      .test-steps li {
+        margin-bottom: 8px;
+        line-height: 1.4;
+      }
+      .expected-result {
+        background: #d4edda;
+        padding: 10px;
+        border-radius: 4px;
+        border-left: 4px solid #28a745;
+        margin-top: 15px;
+      }
+      .expected-result strong {
+        color: #155724;
+      }
+      .fix-summary {
+        background: #fff3cd;
+        padding: 15px;
+        border-radius: 4px;
+        border-left: 4px solid #ffc107;
+        margin-top: 15px;
+      }
+      .fix-summary strong {
+        color: #856404;
+      }
+      .code-block {
+        background: #f8f9fa;
+        padding: 10px;
+        border-radius: 4px;
+        font-family: 'Courier New', monospace;
+        font-size: 12px;
+        margin: 10px 0;
+        border: 1px solid #dee2e6;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="test-container">
+      <div class="test-title">🔧 Transform属性移除测试</div>
+      <div class="test-description">
+        此测试用于验证导出HTML时是否正确移除了transform和transform-origin属性。
+      </div>
+
+      <div class="fix-summary">
+        <strong>修复内容：</strong><br />
+        ✅ <strong>移除transform属性</strong>: 导出HTML时自动移除所有元素的transform CSS属性<br />
+        ✅ <strong>移除transform-origin属性</strong>: 导出HTML时自动移除所有元素的transform-origin
+        CSS属性<br />
+        ✅ <strong>保持其他样式</strong>: 其他CSS属性保持不变<br />
+        ✅ <strong>递归处理</strong>: 处理所有子元素
+      </div>
+
+      <div class="test-steps">
+        <strong>测试步骤：</strong>
+        <ol>
+          <li>打开应用：<code>http://localhost:5173</code></li>
+          <li>在预览中观察任何带有transform的元素（如果有的话）</li>
+          <li>点击"Export HTML"按钮导出HTML</li>
+          <li>打开导出的HTML文件</li>
+          <li>搜索"transform"关键字，确认没有找到</li>
+          <li>搜索"transform-origin"关键字，确认没有找到</li>
+          <li>检查其他CSS属性是否保持完整</li>
+        </ol>
+      </div>
+
+      <div class="expected-result">
+        <strong>预期结果：</strong><br />
+        ✅ <strong>transform属性</strong>: 导出的HTML中不应该包含任何transform CSS属性<br />
+        ✅ <strong>transform-origin属性</strong>: 导出的HTML中不应该包含任何transform-origin
+        CSS属性<br />
+        ✅ <strong>其他属性</strong>: fontSize、color、padding、margin等属性应该保持完整<br />
+        ✅ <strong>OpenHTMLtoPDF兼容</strong>: 导出的HTML应该完全兼容OpenHTMLtoPDF渲染
+      </div>
+    </div>
+
+    <div class="test-container">
+      <div class="test-title">🔍 技术实现细节</div>
+      <div class="test-description">修复的核心技术要点：</div>
+
+      <div class="test-steps">
+        <strong>实现方案：</strong>
+        <ol>
+          <li>
+            <strong>新增removeTransformProperties函数</strong>:
+            <div class="code-block">
+              const removeTransformProperties = (element: HTMLElement) => { const style =
+              element.style if (style.transform) { style.removeProperty('transform') } if
+              (style.transformOrigin) { style.removeProperty('transform-origin') } // Process
+              children Array.from(element.children).forEach((child) => { if (child instanceof
+              HTMLElement) { removeTransformProperties(child) } }) }
+            </div>
+          </li>
+          <li>
+            <strong>在导出流程中调用</strong>:
+            <div class="code-block">
+              removeAttributes(cloned) removeTransformProperties(cloned) // ← 新增调用
+            </div>
+          </li>
+          <li><strong>递归处理所有元素</strong>: 确保所有子元素都被处理</li>
+          <li><strong>保持其他样式不变</strong>: 只移除指定的两个属性</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="test-container">
+      <div class="test-title">🐛 调试信息</div>
+      <div class="test-description">如果功能不正常，请检查以下调试信息：</div>
+
+      <div class="test-steps">
+        <strong>调试步骤：</strong>
+        <ol>
+          <li>打开浏览器开发者工具 (F12)</li>
+          <li>切换到Elements标签页</li>
+          <li>在预览中查找带有transform的元素</li>
+          <li>导出HTML后，在导出的文件中搜索"transform"</li>
+          <li>检查Console标签页，确认没有JavaScript错误</li>
+          <li>检查Network标签页，确认导出请求成功</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="test-container">
+      <div class="test-title">📋 验证清单</div>
+      <div class="test-description">完成测试后，请确认以下项目：</div>
+
+      <div class="test-steps">
+        <strong>验证项目：</strong>
+        <ol>
+          <li>✅ 导出的HTML文件中没有transform属性</li>
+          <li>✅ 导出的HTML文件中没有transform-origin属性</li>
+          <li>✅ 其他CSS属性（fontSize、color、padding等）保持完整</li>
+          <li>✅ HTML结构没有损坏</li>
+          <li>✅ 导出过程没有报错</li>
+          <li>✅ 导出的HTML可以正常在浏览器中打开</li>
+        </ol>
+      </div>
+    </div>
+
+    <script>
+      // 自动跳转到应用
+      setTimeout(() => {
+        if (confirm('是否要跳转到应用进行测试？')) {
+          window.open('http://localhost:5173', '_blank')
+        }
+      }, 2000)
+    </script>
+  </body>
+</html>

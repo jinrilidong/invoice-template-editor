@@ -11,25 +11,15 @@
           v-for="(column, columnIndex) in table.columns"
           :key="'header-' + columnIndex"
           :style="{
-            width: getColumnWidthStyle(column),
+            width: getColumnWidth(column) + '%',
             fontSize: '7px',
             fontWeight: getFontWeight(styleConfig?.table?.columnNameWeight || 'medium'),
             color: styleConfig?.table?.headerColor || '#919191',
             textAlign: column.alignment === 'right' ? 'right' : 'left',
-            padding:
-              (styleConfig?.table?.rowHeight || 13) / 2 +
-              'px ' +
-              (columnIndex === table.columns.length - 1
-                ? 0
-                : (styleConfig?.table?.columnsPadding ?? 8)) +
-              'px 0 0',
-            borderBottom:
-              (styleConfig?.table?.borderWidth ?? 1) +
-              'px solid ' +
-              (styleConfig?.table?.borderColor || '#d2d2d2'),
+            padding: '2px 8px',
+            borderBottom: '1px solid ' + (styleConfig?.table?.borderColor || '#d2d2d2'),
             lineHeight: '9px',
-            verticalAlign: 'bottom',
-            height: (styleConfig?.table?.rowHeight || 13) + 'px',
+            verticalAlign: 'top',
           }"
         >
           {{ column.name }}
@@ -44,17 +34,12 @@
           v-for="(column, columnIndex) in table.columns"
           :key="'cell-' + rowIndex + '-' + columnIndex"
           :style="{
-            width: getColumnWidthStyle(column),
+            width: getColumnWidth(column) + '%',
             fontSize: '7px',
             fontWeight: '400',
             color: styleConfig?.table?.rowTextColor || '#000000',
             textAlign: column.alignment === 'right' ? 'right' : 'left',
-            padding:
-              '2px ' +
-              (columnIndex === table.columns.length - 1
-                ? 0
-                : (styleConfig?.table?.columnsPadding ?? 8)) +
-              'px 2px 0',
+            padding: '2px 8px',
             lineHeight: '9px',
             verticalAlign: 'top',
             height: (styleConfig?.table?.rowHeight || 13) + 'px',
@@ -103,7 +88,6 @@ interface StyleConfig {
     columnNameWeight: string
     rowTextColor: string
     borderColor: string
-    borderWidth?: number
     rowHeight: number
     columnsPadding: number
   }
@@ -146,21 +130,14 @@ const displayRows = computed(() => {
   return baseRows.slice(0, rowsNumber)
 })
 
-// 列宽渲染：支持百分比%或绝对值px
-const getColumnWidthStyle = (column: TableColumn): string => {
-  const raw = column.width
-  if (raw === undefined || raw === null || Number.isNaN(Number(raw))) {
-    // 默认平均分配（百分比）
-    return Math.floor(100 / props.table.columns.length) + '%'
+// 计算列宽度
+const getColumnWidth = (column: TableColumn): number => {
+  if (column.width && typeof column.width === 'number') {
+    return column.width
   }
-  // 若是负值或0，回退到平均
-  if (typeof raw === 'number') {
-    // 约定：>= 1e3 视为 px，其他视为 %（也可在配置面板提供切换）
-    if (raw >= 1000) return raw + 'px'
-    return raw + '%'
-  }
-  // 非数值，回退平均
-  return Math.floor(100 / props.table.columns.length) + '%'
+
+  // 默认平均分配
+  return Math.floor(100 / props.table.columns.length)
 }
 
 // 字体权重转换函数

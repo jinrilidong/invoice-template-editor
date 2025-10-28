@@ -65,7 +65,7 @@ const toggle = () => {
   }
   
   /* Disabled styles */
-  &--disabled {
+  :is(&--disabled) {
     cursor: not-allowed;
     opacity: 0.5;
   }

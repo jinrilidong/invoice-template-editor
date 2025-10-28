@@ -445,7 +445,7 @@
                   <!-- Table Bottom Border (只在最后一部分显示) -->
                   <div
                     v-if="section.content.showBorder !== false"
-                    class="border-b border-[#d2d2d2] w-full"
+                    class="border-b border-color-d2d2d2 w-full"
                   ></div>
 
                   <!-- Subtotal Row (只在最后一部分显示) -->
@@ -1548,6 +1548,7 @@ interface StyleConfig {
     valueWeight?: 'normal' | 'semibold' | 'bold'
     itemGap: number
     itemsPerRow?: 2 | 3 | 4 | 5
+    labelValueGap?: number
   }
   table: {
     sectionTitleColor: string
@@ -1579,6 +1580,7 @@ interface StyleConfig {
     valueWeight?: 'normal' | 'semibold' | 'bold'
     itemGap: number
     itemsPerRow?: 2 | 3 | 4 | 5
+    labelValueGap?: number
   }
   footer: {
     textColor: string
@@ -2320,15 +2322,15 @@ onUnmounted(() => {
 }
 
 /* ===== COLOR UTILITIES ===== */
-.text-\[#5b7282\] {
+.text-color-5b7282 {
   color: #5b7282;
 }
 
-.text-\[#919191\] {
+.text-color-919191 {
   color: #919191;
 }
 
-.border-\[#d2d2d2\] {
+.border-color-d2d2d2 {
   border-color: #d2d2d2;
 }
 

@@ -107,9 +107,9 @@
               :style-config="styleConfig"
               @section-select="handleSectionClick"
             />
-          </div>
-        </div>
-      </div>
+                      </div>
+                  </div>
+                </div>
 
       <!-- Export Mode - 用于HTML导出 -->
       <div
@@ -120,7 +120,7 @@
       >
         <div
           class="pdf-pages-container"
-          :style="{
+                          :style="{
             transform: 'scale(' + zoomLevel + ')',
             'transform-origin': 'top center',
           }"
@@ -128,13 +128,13 @@
           <!-- Export PDF Page -->
           <div
             class="pdf-container shadow-xl border border-[#d3ddde] rounded-lg"
-            :style="{
+                        :style="{
               width: PAGE_WIDTH + 'px',
               height: PAGE_HEIGHT + 'px',
               marginBottom: (zoomLevel - 1) * PAGE_HEIGHT + 'px',
               padding: '0',
               position: 'relative',
-              overflow: 'hidden',
+                                  overflow: 'hidden',
             }"
           >
             <!-- 使用新的兼容渲染器 -->
@@ -144,10 +144,10 @@
               :style-config="styleConfig"
               @section-select="handleSectionClick"
             />
-          </div>
-        </div>
-      </div>
-    </div>
+                      </div>
+                    </div>
+                      </div>
+                    </div>
   </div>
 </template>
 

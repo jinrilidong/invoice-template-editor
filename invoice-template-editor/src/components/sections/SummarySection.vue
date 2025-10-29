@@ -6,36 +6,41 @@
   >
     <tr>
       <td style="width: 100%; text-align: right; padding: 0; vertical-align: top">
-        <table style="width: 100%; border-collapse: collapse" cellpadding="0" cellspacing="0">
-          <tr>
-            <td
-              style="
-                font-size: 10px;
-                font-weight: 600;
-                color: #000000;
-                line-height: 9px;
-                padding: 0;
-                text-align: right;
-              "
-            >
-              Total USD
-            </td>
-          </tr>
-          <tr>
-            <td
-              style="
-                font-size: 14px;
-                font-weight: 600;
-                color: #000000;
-                line-height: 17px;
-                padding: 2px 0 0 0;
-                text-align: right;
-              "
-            >
-              ${{ totalAmount.toFixed(2) }}
-            </td>
-          </tr>
-        </table>
+        <span
+          :style="{
+            fontSize: (styleConfig?.summary?.labelSize ?? 10) + 'px',
+            fontWeight:
+              (styleConfig?.summary?.labelWeight || 'semibold') === 'bold'
+                ? '700'
+                : (styleConfig?.summary?.labelWeight || 'semibold') === 'semibold'
+                  ? '600'
+                  : (styleConfig?.summary?.labelWeight || 'semibold') === 'medium'
+                    ? '500'
+                    : '400',
+            color: styleConfig?.summary?.labelColor || '#000000',
+            lineHeight: '9px',
+          }"
+        >
+          {{ styleConfig?.summary?.labelText || 'Total USD' }}
+        </span>
+        <span
+          :style="{
+            fontSize: (styleConfig?.summary?.contentSize ?? 14) + 'px',
+            fontWeight:
+              (styleConfig?.summary?.contentWeight || 'semibold') === 'bold'
+                ? '700'
+                : (styleConfig?.summary?.contentWeight || 'semibold') === 'semibold'
+                  ? '600'
+                  : (styleConfig?.summary?.contentWeight || 'semibold') === 'medium'
+                    ? '500'
+                    : '400',
+            color: styleConfig?.summary?.contentColor || '#000000',
+            lineHeight: '17px',
+            paddingLeft: '12px',
+          }"
+        >
+          ${{ totalAmount.toFixed(2) }}
+        </span>
       </td>
     </tr>
   </table>
@@ -71,6 +76,7 @@ interface Table {
 
 interface StyleConfig {
   summary?: {
+    labelText?: string
     labelColor: string
     labelWeight: string
     contentColor: string

@@ -669,16 +669,14 @@ const exportHtmlTemplate = async () => {
 
     // 4) Remove all data-* and aria-* attributes for cleaner HTML
     const removeAttributes = (element: HTMLElement) => {
-      const attributesToRemove = []
-      for (let i = 0; i < element.attributes.length; i++) {
-        const attr = element.attributes[i]
-        if (
-          attr &&
-          (attr.name.startsWith('data-') || attr.name.startsWith('aria-') || attr.name === 'role')
-        ) {
-          attributesToRemove.push(attr.name)
+      const attributesToRemove: string[] = []
+      Array.from(element.attributes).forEach((attr) => {
+        if (!attr) return
+        const name = attr.name
+        if (name.startsWith('data-') || name.startsWith('aria-') || name === 'role') {
+          attributesToRemove.push(name)
         }
-      }
+      })
       attributesToRemove.forEach((attrName) => element.removeAttribute(attrName))
 
       // Process children
@@ -689,26 +687,32 @@ const exportHtmlTemplate = async () => {
       })
     }
 
-    // 5) Remove transform and transform-origin CSS properties
-    const removeTransformProperties = (element: HTMLElement) => {
-      const style = element.style
-      if (style.transform) {
-        style.removeProperty('transform')
-      }
-      if (style.transformOrigin) {
-        style.removeProperty('transform-origin')
-      }
+    removeAttributes(cloned)
 
-      // Process children
-      Array.from(element.children).forEach((child) => {
-        if (child instanceof HTMLElement) {
-          removeTransformProperties(child)
+    // 5) Normalize transforms in inline styles for export compatibility
+    const normalizeTransforms = (root: HTMLElement) => {
+      const walker = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT)
+      // 处理根元素本身
+      if (root instanceof HTMLElement) {
+        const style = (root as HTMLElement).style
+        if (style && style.transform && style.transform.length > 0) {
+          style.transform = 'scale(1)'
+          style.transformOrigin = 'left top 0px'
         }
-      })
+      }
+      // 遍历所有子元素
+      let node = walker.nextNode() as HTMLElement | null
+      while (node) {
+        const style = node.style
+        if (style && style.transform && style.transform.length > 0) {
+          style.transform = 'scale(1)'
+          style.transformOrigin = 'left top 0px'
+        }
+        node = walker.nextNode() as HTMLElement | null
+      }
     }
 
-    removeAttributes(cloned)
-    removeTransformProperties(cloned)
+    normalizeTransforms(cloned)
 
     // 6) Convert images to data URLs to avoid remote loading issues
     const inlineImages = async () => {

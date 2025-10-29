@@ -6,24 +6,49 @@
   >
     <tr>
       <td
-        v-for="(column, columnIndex) in table.columns"
-        :key="'subtotal-' + columnIndex"
+        :colspan="table.columns.length"
         :style="{
-          width: getColumnWidth(column) + '%',
-          fontSize: '7px',
-          fontWeight: '600',
-          color: styleConfig?.table?.rowTextColor || '#000000',
-          textAlign: columnIndex === table.columns.length - 1 ? 'right' : 'left',
-          padding: '2px 8px',
+          width: '100%',
+          textAlign: 'right',
+          padding: '2px 0',
           borderTop: '1px solid ' + (styleConfig?.table?.borderColor || '#d2d2d2'),
           lineHeight: '9px',
           verticalAlign: 'top',
         }"
       >
-        <span v-if="columnIndex === table.columns.length - 1">
-          Subtotal ${{ (table.total || 0).toFixed(2) }}
+        <span
+          :style="{
+            fontSize: (styleConfig?.table?.subtotalLabelSize ?? 7) + 'px',
+            fontWeight:
+              (styleConfig?.table?.subtotalLabelWeight || 'semibold') === 'bold'
+                ? '700'
+                : (styleConfig?.table?.subtotalLabelWeight || 'semibold') === 'semibold'
+                  ? '600'
+                  : (styleConfig?.table?.subtotalLabelWeight || 'semibold') === 'medium'
+                    ? '500'
+                    : '400',
+            color: styleConfig?.table?.subtotalLabelColor || '#919191',
+          }"
+        >
+          {{ styleConfig?.table?.subtotalLabelText || 'Subtotal' }}
         </span>
-        <span v-else>&nbsp;</span>
+        <span
+          :style="{
+            fontSize: (styleConfig?.table?.subtotalAmountSize ?? 7) + 'px',
+            fontWeight:
+              (styleConfig?.table?.subtotalAmountWeight || 'semibold') === 'bold'
+                ? '700'
+                : (styleConfig?.table?.subtotalAmountWeight || 'semibold') === 'semibold'
+                  ? '600'
+                  : (styleConfig?.table?.subtotalAmountWeight || 'semibold') === 'medium'
+                    ? '500'
+                    : '400',
+            color: styleConfig?.table?.subtotalAmountColor || '#000000',
+            paddingLeft: '6px',
+          }"
+        >
+          ${{ (table.total || 0).toFixed(2) }}
+        </span>
       </td>
     </tr>
   </table>
@@ -65,6 +90,14 @@ interface StyleConfig {
     borderColor: string
     rowHeight: number
     columnsPadding: number
+    // 新增：小计标签与金额的自定义样式
+    subtotalLabelText?: string
+    subtotalLabelColor?: string
+    subtotalLabelWeight?: string
+    subtotalLabelSize?: number
+    subtotalAmountColor?: string
+    subtotalAmountWeight?: string
+    subtotalAmountSize?: number
   }
 }
 

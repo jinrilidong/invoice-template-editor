@@ -34,13 +34,6 @@
             <version>1.0.10</version>
         </dependency>
 
-        <!-- 字体支持 -->
-        <dependency>
-            <groupId>com.openhtmltopdf</groupId>
-            <artifactId>openhtmltopdf-fontbox</artifactId>
-            <version>1.0.10</version>
-        </dependency>
-
         <!-- 图像支持 -->
         <dependency>
             <groupId>com.openhtmltopdf</groupId>

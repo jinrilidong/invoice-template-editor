@@ -5,12 +5,18 @@
     cellspacing="0"
   >
     <!-- 将items按行分组 -->
-    <tr v-for="(rowItems, rowIndex) in itemRows" :key="'row-' + rowIndex">
-      <template v-for="(item, itemIndex) in rowItems" :key="item.id">
-        <!-- Item单元格 -->
+    <template v-for="(rowItems, rowIndex) in itemRows" :key="'row-' + rowIndex">
+      <tr>
         <td
+          v-for="(item, colIndex) in rowItems"
+          :key="item.id"
           :style="{
             width: 100 / (styleConfig?.item?.itemsPerRow || 5) + '%',
+            paddingLeft: colIndex === 0 ? '0' : (styleConfig?.item?.itemsSpacing ?? 8) / 2 + 'px',
+            paddingRight:
+              colIndex === rowItems.length - 1
+                ? '0'
+                : (styleConfig?.item?.itemsSpacing ?? 8) / 2 + 'px',
             verticalAlign: 'top',
           }"
         >
@@ -43,50 +49,29 @@
             </tr>
           </table>
         </td>
-
-        <!-- Items Spacing: 在item之间添加间距列（除了最后一个） -->
+        <!-- 填充空单元格，保持网格结构；无边缘额外间距 -->
         <td
-          v-if="itemIndex < rowItems.length - 1"
-          :style="{
-            width: (styleConfig?.item?.itemsSpacing ?? 8) + 'px',
-            padding: 0,
-          }"
-        ></td>
-      </template>
-
-      <!-- 填充空单元格 -->
-      <template
-        v-for="n in (styleConfig?.item?.itemsPerRow || 5) - rowItems.length"
-        :key="'empty-' + n"
-      >
-        <td
+          v-for="n in (styleConfig?.item?.itemsPerRow || 5) - rowItems.length"
+          :key="'empty-' + n"
           :style="{
             width: 100 / (styleConfig?.item?.itemsPerRow || 5) + '%',
+            padding: '0',
           }"
         >
           &nbsp;
         </td>
-        <!-- 空单元格之间也需要间距 -->
+      </tr>
+      <!-- 行间距：紧跟在每一行后（除最后一行） -->
+      <tr
+        v-if="itemRows.length > 1 && rowIndex < itemRows.length - 1"
+        :key="'row-gap-after-' + rowIndex"
+      >
         <td
-          v-if="n < (styleConfig?.item?.itemsPerRow || 5) - rowItems.length"
-          :style="{
-            width: (styleConfig?.item?.itemsSpacing ?? 8) + 'px',
-            padding: 0,
-          }"
+          :colspan="styleConfig?.item?.itemsPerRow || 5"
+          :style="{ height: (styleConfig?.item?.itemGap ?? 4) + 'px', padding: 0 }"
         ></td>
-      </template>
-    </tr>
-
-    <!-- Item Gap: 每行后添加spacer -->
-    <tr v-for="(rowItems, rowIndex) in itemRows" :key="'row-gap-' + rowIndex">
-      <td
-        :colspan="getTotalColumns()"
-        :style="{
-          height: (styleConfig?.item?.itemGap ?? 4) + 'px',
-          padding: 0,
-        }"
-      ></td>
-    </tr>
+      </tr>
+    </template>
   </table>
 </template>
 
@@ -119,7 +104,7 @@ const props = defineProps<{
   styleConfig: StyleConfig
 }>()
 
-// 将items按行分组
+// 将items按行分组，每行5个
 const itemRows = computed(() => {
   const rows: ItemItem[][] = []
   const itemsPerRow = props.styleConfig?.item?.itemsPerRow || 5
@@ -130,12 +115,6 @@ const itemRows = computed(() => {
 
   return rows
 })
-
-// 计算总列数（包括间距列）
-const getTotalColumns = () => {
-  const itemsPerRow = props.styleConfig?.item?.itemsPerRow || 5
-  return itemsPerRow + (itemsPerRow - 1) // items + spacers
-}
 
 // 字体权重转换函数
 const getFontWeight = (weight: string): string => {

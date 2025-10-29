@@ -16,10 +16,17 @@
             fontWeight: getFontWeight(styleConfig?.table?.columnNameWeight || 'medium'),
             color: styleConfig?.table?.headerColor || '#919191',
             textAlign: column.alignment === 'right' ? 'right' : 'left',
-            padding: '2px 8px',
+            paddingLeft:
+              columnIndex === 0 ? '0' : (styleConfig?.table?.columnsPadding ?? 8) / 2 + 'px',
+            paddingRight:
+              columnIndex === table.columns.length - 1
+                ? '0'
+                : (styleConfig?.table?.columnsPadding ?? 8) / 2 + 'px',
+            paddingTop: '2px',
+            paddingBottom: '2px',
             borderBottom: '1px solid ' + (styleConfig?.table?.borderColor || '#d2d2d2'),
             lineHeight: '9px',
-            verticalAlign: 'top',
+            verticalAlign: 'bottom',
           }"
         >
           {{ column.name }}
@@ -39,10 +46,21 @@
             fontWeight: '400',
             color: styleConfig?.table?.rowTextColor || '#000000',
             textAlign: column.alignment === 'right' ? 'right' : 'left',
-            padding: '2px 8px',
+            paddingLeft:
+              columnIndex === 0 ? '0' : (styleConfig?.table?.columnsPadding ?? 8) / 2 + 'px',
+            paddingRight:
+              columnIndex === table.columns.length - 1
+                ? '0'
+                : (styleConfig?.table?.columnsPadding ?? 8) / 2 + 'px',
+            paddingTop: '2px',
+            paddingBottom: '2px',
             lineHeight: '9px',
             verticalAlign: 'top',
             height: (styleConfig?.table?.rowHeight || 13) + 'px',
+            borderBottom:
+              rowIndex === displayRows.length - 1
+                ? '1px solid ' + (styleConfig?.table?.borderColor || '#d2d2d2')
+                : 'none',
           }"
         >
           {{ row.data[column.id] || '' }}

@@ -33,14 +33,19 @@
               :key="'column-' + columnIndex"
               :style="{
                 width: columnWidth + '%',
-                padding: '0 ' + (styleConfig?.hInfo?.columnsPadding ?? 8) + 'px',
+                paddingLeft:
+                  columnIndex === 0 ? '0' : (styleConfig?.hInfo?.columnsPadding ?? 8) / 2 + 'px',
+                paddingRight:
+                  columnIndex === hInfo.columns.length - 1
+                    ? '0'
+                    : (styleConfig?.hInfo?.columnsPadding ?? 8) / 2 + 'px',
                 verticalAlign: 'top',
               }"
             >
               <HInfoColumn
                 :column="column"
                 :style-config="styleConfig"
-                :label-value-layout="hInfo.labelValueLayout"
+                :label-value-layout="hInfo.labelValueLayout || 'vertical'"
               />
             </td>
           </tr>

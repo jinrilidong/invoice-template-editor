@@ -5,7 +5,14 @@
     cellspacing="0"
   >
     <tr v-for="(item, itemIndex) in column.items" :key="'item-' + itemIndex">
-      <td :style="{ padding: '0 0 ' + (styleConfig?.hInfo?.itemGap ?? 4) + 'px 0' }">
+      <td
+        :style="{
+          padding:
+            '0 0 ' +
+            (itemIndex < column.items.length - 1 ? (styleConfig?.hInfo?.itemGap ?? 4) : 0) +
+            'px 0',
+        }"
+      >
         <!-- Horizontal Layout -->
         <table
           v-if="labelValueLayout === 'horizontal'"

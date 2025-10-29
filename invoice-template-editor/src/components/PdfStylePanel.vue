@@ -454,6 +454,16 @@
               max="16"
             />
           </div>
+          <div class="flex items-center gap-3">
+            <label class="w-32 text-sm text-[#0e171f]">Columns Spacing (px)</label>
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.table.columnsSpacing"
+              min="0"
+              max="16"
+            />
+          </div>
         </div>
       </section>
 
@@ -761,11 +771,31 @@
             />
           </div>
           <div class="flex items-center gap-3">
+            <label class="w-32 text-sm text-[#0e171f]">Column Gap (px)</label>
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.hInfo.columnGap"
+              min="4"
+              max="32"
+            />
+          </div>
+          <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Columns Padding (px)</label>
             <input
               type="number"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
               v-model.number="local.hInfo.columnsPadding"
+              min="0"
+              max="32"
+            />
+          </div>
+          <div class="flex items-center gap-3">
+            <label class="w-32 text-sm text-[#0e171f]">Columns Spacing (px)</label>
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.hInfo.columnsSpacing"
               min="0"
               max="32"
             />
@@ -843,6 +873,7 @@ interface SectionStyle {
     borderColor: string
     rowHeight: number
     columnsPadding: number
+    columnsSpacing?: number
   }
   // Description Section
   description: {
@@ -877,7 +908,9 @@ interface SectionStyle {
     labelWidth: number
     labelValueGap: number
     itemGap: number
+    columnGap?: number
     columnsPadding: number
+    columnsSpacing?: number
   }
   // Footer Section
   footer: {
@@ -981,6 +1014,7 @@ const local = reactive<StyleConfig>({
     borderColor: props.modelValue.table?.borderColor || '#d2d2d2',
     rowHeight: props.modelValue.table?.rowHeight || 13,
     columnsPadding: props.modelValue.table?.columnsPadding ?? 4,
+    columnsSpacing: props.modelValue.table?.columnsSpacing ?? 4,
   },
   description: {
     labelColor: props.modelValue.description?.labelColor || '#000000',
@@ -1012,7 +1046,9 @@ const local = reactive<StyleConfig>({
     labelWidth: props.modelValue.hInfo?.labelWidth ?? 80,
     labelValueGap: props.modelValue.hInfo?.labelValueGap ?? 8,
     itemGap: props.modelValue.hInfo?.itemGap ?? 4,
+    columnGap: props.modelValue.hInfo?.columnGap ?? 8,
     columnsPadding: props.modelValue.hInfo?.columnsPadding ?? 8,
+    columnsSpacing: props.modelValue.hInfo?.columnsSpacing ?? 8,
   },
   footer: {
     textColor: props.modelValue.footer?.textColor || '#000000',

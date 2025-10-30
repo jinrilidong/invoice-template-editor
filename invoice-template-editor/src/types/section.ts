@@ -81,6 +81,7 @@ export interface HInfoData {
 export interface HInfoColumn {
   id: string
   items: BaseItem[]
+  width?: number // 列宽权重/百分比，渲染时按比例归一化
 }
 
 // Footer Section 数据

@@ -32,7 +32,7 @@
               v-for="(column, columnIndex) in hInfo.columns"
               :key="'column-' + columnIndex"
               :style="{
-                width: columnWidth + '%',
+                width: getColumnWidthPercent(columnIndex) + '%',
                 paddingLeft:
                   columnIndex === 0 ? '0' : (styleConfig?.hInfo?.columnsPadding ?? 8) / 2 + 'px',
                 paddingRight:
@@ -56,7 +56,6 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
 import HInfoColumn from './HInfoColumn.vue'
 
 interface HInfoItem {
@@ -68,6 +67,7 @@ interface HInfoItem {
 interface HInfoColumn {
   id: string
   items: HInfoItem[]
+  width?: number
 }
 
 interface HInfo {
@@ -97,11 +97,20 @@ const props = defineProps<{
   styleConfig: StyleConfig
 }>()
 
-// 计算每列的宽度
-const columnWidth = computed(() => {
-  const columnCount = props.hInfo.columns?.length || 1
-  return Math.floor(100 / columnCount)
-})
+// 列宽按索引计算
+
+// 根据索引返回列宽百分比
+const getColumnWidthPercent = (index: number): string => {
+  const columns = (props.hInfo.columns || []) as HInfoColumn[]
+  const columnCount = columns.length || 1
+  const hasCustom = columns.some((c) => typeof c.width === 'number' && c.width! > 0)
+  if (!hasCustom) return (100 / columnCount).toFixed(4)
+  const weights = columns.map((c) => (typeof c.width === 'number' && c.width! > 0 ? c.width! : 0))
+  const total = weights.reduce((a, b) => a + b, 0) || 1
+  const w = typeof weights[index] === 'number' ? (weights[index] as number) : 0
+  const pct = (w / total) * 100
+  return (isFinite(pct) ? pct : 0).toFixed(4)
+}
 
 // 字体权重转换函数
 const getFontWeight = (weight: string): string => {

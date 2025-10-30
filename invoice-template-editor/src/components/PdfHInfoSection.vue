@@ -140,6 +140,24 @@
                 </div>
                 <h4 class="text-sm font-semibold text-[#0e171f]">Column {{ columnIndex + 1 }}</h4>
               </div>
+              <!-- Column width percentage input -->
+              <div class="flex items-center gap-2">
+                <label class="text-xs text-[#0e171f]">Width (%)</label>
+                <input
+                  type="number"
+                  min="0"
+                  class="w-20 border border-[#d3ddde] rounded px-2 py-1 text-xs"
+                  :value="column.width ?? ''"
+                  @input="
+                    (e: Event) =>
+                      updateHInfoColumnWidth(
+                        hInfoIndex,
+                        columnIndex,
+                        Number((e.target as HTMLInputElement).value || 0),
+                      )
+                  "
+                />
+              </div>
               <TextButton
                 @click="removeHInfoColumn(hInfoIndex, columnIndex)"
                 variant="default"
@@ -280,7 +298,10 @@ const props = defineProps<HInfoSectionsProps>()
 const emit = defineEmits<HInfoSectionsEmits>()
 
 // 注入确认对话框
-const confirmDialog = inject('confirmDialog') as any
+type ConfirmDialog = {
+  showConfirm: (opts: { message: string; onConfirm: () => void }) => void
+}
+const confirmDialog = inject('confirmDialog') as ConfirmDialog
 
 // H-Info sections 展开状态管理
 const expandedHInfoSections = ref<Set<number>>(new Set([0])) // 默认第一个 h-info section 展开
@@ -344,8 +365,10 @@ const hInfoSectionsData = computed({
 
 // 获取列宽度设置（存储在 section 的 metadata 中）
 const getColumnWidth = (hInfoIndex: number) => {
-  const section = hInfoSectionsData.value[hInfoIndex]
-  return (section as any).columnWidth || '1/2'
+  const section = hInfoSectionsData.value[hInfoIndex] as
+    | (HInfoData & { columnWidth?: string })
+    | undefined
+  return section?.columnWidth || '1/2'
 }
 
 // 更新列宽度
@@ -358,7 +381,7 @@ const updateColumnWidth = (hInfoIndex: number, width: string) => {
 }
 
 // 更新 h-info section 字段
-const updateHInfoField = (hInfoIndex: number, field: keyof HInfoData, value: any) => {
+const updateHInfoField = (hInfoIndex: number, field: keyof HInfoData, value: string) => {
   const newHInfoSections = [...hInfoSectionsData.value]
   if (newHInfoSections[hInfoIndex]) {
     newHInfoSections[hInfoIndex] = { ...newHInfoSections[hInfoIndex], [field]: value }
@@ -372,7 +395,7 @@ const updateHInfoItemField = (
   columnIndex: number,
   itemIndex: number,
   field: keyof BaseItem,
-  value: any,
+  value: string,
 ) => {
   const newHInfoSections = [...hInfoSectionsData.value]
   if (newHInfoSections[hInfoIndex] && newHInfoSections[hInfoIndex].columns) {
@@ -463,6 +486,20 @@ const removeHInfoColumn = (hInfoIndex: number, columnIndex: number) => {
       }
     },
   })
+}
+
+// 更新列宽（百分比/权重，渲染时会按比例归一化）
+const updateHInfoColumnWidth = (hInfoIndex: number, columnIndex: number, width: number) => {
+  const newHInfoSections = [...hInfoSectionsData.value]
+  if (newHInfoSections[hInfoIndex] && newHInfoSections[hInfoIndex].columns) {
+    const newColumns = [...newHInfoSections[hInfoIndex].columns]
+    const col = newColumns[columnIndex]
+    if (col) {
+      newColumns[columnIndex] = { ...col, width: isFinite(width) && width >= 0 ? width : 0 }
+      newHInfoSections[hInfoIndex] = { ...newHInfoSections[hInfoIndex], columns: newColumns }
+      emit('update:modelValue', newHInfoSections)
+    }
+  }
 }
 
 // 添加 h-info item

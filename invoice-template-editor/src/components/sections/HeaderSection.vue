@@ -6,7 +6,14 @@
   >
     <tr>
       <!-- Title and Description Column -->
-      <td v-if="hasTitleOrDescription" style="width: auto; padding: 0; vertical-align: top">
+      <td
+        v-if="hasTitleOrDescription"
+        :style="{
+          width: 'auto',
+          padding: '0',
+          verticalAlign: getVerticalAlign(styleConfig?.header?.verticalAlign || 'top'),
+        }"
+      >
         <table style="width: 100%; border-collapse: collapse" cellpadding="0" cellspacing="0">
           <tr>
             <td style="padding: 0; vertical-align: top">
@@ -45,7 +52,7 @@
         :style="{
           width: hasTitleOrDescription ? '240px' : '100%',
           padding: 0,
-          verticalAlign: 'top',
+          verticalAlign: getVerticalAlign(styleConfig?.header?.verticalAlign || 'top'),
           textAlign: hasTitleOrDescription ? 'right' : 'left',
         }"
       >
@@ -139,6 +146,7 @@ interface StyleConfig {
     descriptionColor: string
     descriptionSize: number
     descriptionWeight: string
+    verticalAlign?: 'top' | 'middle' | 'bottom'
   }
 }
 
@@ -164,6 +172,19 @@ const getFontWeight = (weight: string): string => {
     case 'normal':
     default:
       return '400'
+  }
+}
+
+// 垂直对齐转换函数
+const getVerticalAlign = (align: 'top' | 'middle' | 'bottom' | undefined): string => {
+  switch (align) {
+    case 'middle':
+      return 'middle'
+    case 'bottom':
+      return 'bottom'
+    case 'top':
+    default:
+      return 'top'
   }
 }
 </script>

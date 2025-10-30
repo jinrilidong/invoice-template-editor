@@ -47,6 +47,7 @@ const styleConfig = reactive({
     descriptionColor: '#919191',
     descriptionSize: 7,
     descriptionWeight: 'normal' as const,
+    verticalAlign: 'top' as 'top' | 'middle' | 'bottom',
   },
   info: {
     sectionTitleColor: '#6b7280',
@@ -104,6 +105,16 @@ const styleConfig = reactive({
     textColor: '#000000',
     textSize: 7,
     textWeight: 'normal' as const,
+  },
+  summary: {
+    labelText: 'Total USD',
+    labelColor: '#000000',
+    labelWeight: 'semibold' as const,
+    contentColor: '#000000',
+    contentWeight: 'semibold' as const,
+    labelSize: 10,
+    contentSize: 14,
+    labelContentGap: 12,
   },
   hInfo: {
     sectionTitleColor: '#6b7280',

@@ -36,7 +36,7 @@
                     : '400',
             color: styleConfig?.summary?.contentColor || '#000000',
             lineHeight: '17px',
-            paddingLeft: '12px',
+            paddingLeft: (styleConfig?.summary?.labelContentGap ?? 12) + 'px',
           }"
         >
           ${{ totalAmount.toFixed(2) }}
@@ -83,6 +83,7 @@ interface StyleConfig {
     contentWeight: string
     labelSize: number
     contentSize: number
+    labelContentGap?: number
   }
 }
 

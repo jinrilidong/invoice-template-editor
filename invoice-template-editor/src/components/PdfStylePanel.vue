@@ -73,88 +73,6 @@
               max="24"
             />
           </div>
-
-          <!-- Footer Info -->
-          <div class="border-t border-[#d3ddde] pt-4 mt-4">
-            <h4 class="text-xs font-semibold text-[#0e171f] mb-3">Footer Info</h4>
-            <div class="space-y-3">
-              <div class="flex items-center gap-3">
-                <label class="w-32 text-sm text-[#0e171f]">Text Color</label>
-                <input
-                  type="color"
-                  class="h-8 w-12 border border-[#d3ddde] rounded"
-                  v-model="local.footerInfo.textColor"
-                />
-                <input
-                  type="text"
-                  class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-                  v-model="local.footerInfo.textColor"
-                />
-              </div>
-              <div class="flex items-center gap-3">
-                <label class="w-32 text-sm text-[#0e171f]">Text Size (px)</label>
-                <input
-                  type="number"
-                  class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-                  v-model.number="local.footerInfo.textSize"
-                  min="4"
-                  max="16"
-                />
-              </div>
-              <div class="flex items-center gap-3">
-                <label class="w-32 text-sm text-[#0e171f]">Text Weight</label>
-                <select
-                  class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-                  v-model="local.footerInfo.textWeight"
-                >
-                  <option value="normal">Normal</option>
-                  <option value="semibold">Semibold</option>
-                  <option value="bold">Bold</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <!-- Footer Name -->
-          <div class="border-t border-[#d3ddde] pt-4 mt-4">
-            <h4 class="text-xs font-semibold text-[#0e171f] mb-3">Footer Name</h4>
-            <div class="space-y-3">
-              <div class="flex items-center gap-3">
-                <label class="w-32 text-sm text-[#0e171f]">Text Color</label>
-                <input
-                  type="color"
-                  class="h-8 w-12 border border-[#d3ddde] rounded"
-                  v-model="local.footerName.textColor"
-                />
-                <input
-                  type="text"
-                  class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-                  v-model="local.footerName.textColor"
-                />
-              </div>
-              <div class="flex items-center gap-3">
-                <label class="w-32 text-sm text-[#0e171f]">Text Size (px)</label>
-                <input
-                  type="number"
-                  class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-                  v-model.number="local.footerName.textSize"
-                  min="4"
-                  max="16"
-                />
-              </div>
-              <div class="flex items-center gap-3">
-                <label class="w-32 text-sm text-[#0e171f]">Text Weight</label>
-                <select
-                  class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-                  v-model="local.footerName.textWeight"
-                >
-                  <option value="normal">Normal</option>
-                  <option value="semibold">Semibold</option>
-                  <option value="bold">Bold</option>
-                </select>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -887,9 +805,9 @@
         </div>
       </section>
 
-      <!-- Footer Section -->
+      <!-- Footer Pagination -->
       <section v-if="showFooterSettings">
-        <h3 class="text-sm font-semibold text-[#0e171f] mb-3">Footer Section</h3>
+        <h3 class="text-sm font-semibold text-[#0e171f] mb-3">Footer Pagination</h3>
         <div class="space-y-3">
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Text Color</label>
@@ -913,6 +831,87 @@
               min="6"
               max="16"
             />
+          </div>
+          <!-- Footer Info (moved from Global Settings) -->
+          <div class="border-t border-[#d3ddde] pt-4 mt-4">
+            <h4 class="text-xs font-semibold text-[#0e171f] mb-3">Footer Info</h4>
+            <div class="space-y-3">
+              <div class="flex items-center gap-3">
+                <label class="w-32 text-sm text-[#0e171f]">Text Color</label>
+                <input
+                  type="color"
+                  class="h-8 w-12 border border-[#d3ddde] rounded"
+                  v-model="local.footerInfo.textColor"
+                />
+                <input
+                  type="text"
+                  class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+                  v-model="local.footerInfo.textColor"
+                />
+              </div>
+              <div class="flex items-center gap-3">
+                <label class="w-32 text-sm text-[#0e171f]">Text Size (px)</label>
+                <input
+                  type="number"
+                  class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+                  v-model.number="local.footerInfo.textSize"
+                  min="4"
+                  max="16"
+                />
+              </div>
+              <div class="flex items-center gap-3">
+                <label class="w-32 text-sm text-[#0e171f]">Text Weight</label>
+                <select
+                  class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+                  v-model="local.footerInfo.textWeight"
+                >
+                  <option value="normal">Normal</option>
+                  <option value="semibold">Semibold</option>
+                  <option value="bold">Bold</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Footer Name (moved from Global Settings) -->
+          <div class="border-t border-[#d3ddde] pt-4 mt-4">
+            <h4 class="text-xs font-semibold text-[#0e171f] mb-3">Footer Name</h4>
+            <div class="space-y-3">
+              <div class="flex items-center gap-3">
+                <label class="w-32 text-sm text-[#0e171f]">Text Color</label>
+                <input
+                  type="color"
+                  class="h-8 w-12 border border-[#d3ddde] rounded"
+                  v-model="local.footerName.textColor"
+                />
+                <input
+                  type="text"
+                  class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+                  v-model="local.footerName.textColor"
+                />
+              </div>
+              <div class="flex items-center gap-3">
+                <label class="w-32 text-sm text-[#0e171f]">Text Size (px)</label>
+                <input
+                  type="number"
+                  class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+                  v-model.number="local.footerName.textSize"
+                  min="4"
+                  max="16"
+                />
+              </div>
+              <div class="flex items-center gap-3">
+                <label class="w-32 text-sm text-[#0e171f]">Text Weight</label>
+                <select
+                  class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+                  v-model="local.footerName.textWeight"
+                >
+                  <option value="normal">Normal</option>
+                  <option value="semibold">Semibold</option>
+                  <option value="bold">Bold</option>
+                </select>
+              </div>
+            </div>
           </div>
         </div>
       </section>

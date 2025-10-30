@@ -157,6 +157,7 @@ import PdfCompatibleRenderer from './PdfCompatibleRenderer.vue'
 import IconButton from './IconButton.vue'
 import TextButton from './TextButton.vue'
 import type { TemplateData } from '../types/section'
+import type { StyleConfig } from '../types/style'
 
 // PDF页面尺寸常量
 const PAGE_WIDTH = 612
@@ -172,89 +173,7 @@ interface SectionStates {
   footer: boolean
 }
 
-interface StyleConfig {
-  baseFontSize: number
-  sectionGap: number
-  sameTypeSectionGap: number
-  summaryGap: number
-  header: {
-    titleColor: string
-    titleSize: number
-    titleWeight: string
-    descriptionColor: string
-    descriptionSize: number
-    descriptionWeight: string
-  }
-  info: {
-    sectionTitleColor: string
-    sectionTitleWeight: string
-    labelColor: string
-    labelWeight: string
-    valueColor: string
-    valueWeight: string
-    itemGap: number
-    itemsPerRow: number
-    itemsSpacing: number
-    labelValueGap: number
-  }
-  table: {
-    sectionTitleColor: string
-    subsectionTitleColor: string
-    headerColor: string
-    columnNameWeight: string
-    rowTextColor: string
-    borderColor: string
-    rowHeight: number
-    columnsPadding: number
-  }
-  description: {
-    labelColor: string
-    labelWeight: string
-    textColor: string
-    textWeight: string
-    textSize: number
-    lineHeight: number
-  }
-  item: {
-    sectionTitleColor: string
-    sectionTitleWeight: string
-    labelColor: string
-    labelWeight: string
-    valueColor: string
-    valueWeight: string
-    itemGap: number
-    itemsPerRow: number
-    itemsSpacing: number
-    labelValueGap: number
-  }
-  footer: {
-    textColor: string
-    textSize: number
-    textWeight: string
-  }
-  footerInfo: {
-    textColor: string
-    textSize: number
-    textWeight: string
-  }
-  footerName: {
-    textColor: string
-    textSize: number
-    textWeight: string
-  }
-  hInfo: {
-    sectionTitleColor: string
-    sectionTitleWeight: string
-    labelColor: string
-    labelWeight: string
-    valueColor: string
-    valueWeight: string
-    labelWidth: number
-    labelValueGap: number
-    itemGap: number
-    columnsPadding: number
-  }
-}
+// 使用共享类型定义
 
 const props = defineProps<{
   sectionStates: SectionStates

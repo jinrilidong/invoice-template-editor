@@ -45,7 +45,7 @@
                 >
                   <HeaderSection
                     :header="props.templateData.header"
-                    :style-config="props.styleConfig"
+                    :style-config="props.styleConfig as any"
                   />
                 </td>
               </tr>
@@ -65,7 +65,7 @@
                   style="padding: 0; vertical-align: top"
                   @click.stop="handleSectionClick('info-section')"
                 >
-                  <InfoSection :info="infoSection" :style-config="props.styleConfig" />
+                  <InfoSection :info="infoSection" :style-config="props.styleConfig as any" />
                   <!-- Section spacer after each info section -->
                   <table
                     :style="{ width: '100%', height: (props.styleConfig?.sectionGap || 10) + 'px' }"
@@ -91,7 +91,7 @@
                   style="padding: 0; vertical-align: top"
                   @click.stop="handleSectionClick('h-info-section')"
                 >
-                  <HInfoSection :h-info="hInfoSection" :style-config="props.styleConfig" />
+                  <HInfoSection :h-info="hInfoSection" :style-config="props.styleConfig as any" />
                   <!-- Section spacer after each h-info section -->
                   <table
                     :style="{ width: '100%', height: (props.styleConfig?.sectionGap || 10) + 'px' }"
@@ -117,7 +117,7 @@
                   style="padding: 0; vertical-align: top"
                   @click.stop="handleSectionClick(`table-section-${index}`)"
                 >
-                  <TableSection :table="tableSection" :style-config="props.styleConfig" />
+                  <TableSection :table="tableSection" :style-config="props.styleConfig as any" />
                   <!-- Section spacer after each table section -->
                   <table
                     :style="{
@@ -154,7 +154,7 @@
                 >
                   <SummarySection
                     :tables="props.templateData.tables"
-                    :style-config="props.styleConfig"
+                    :style-config="props.styleConfig as any"
                   />
                   <!-- Section spacer after summary section -->
                   <table
@@ -188,7 +188,7 @@
                 >
                   <DescriptionSection
                     :description="descriptionSection"
-                    :style-config="props.styleConfig"
+                    :style-config="props.styleConfig as any"
                   />
                   <!-- Section spacer after each description section -->
                   <table
@@ -212,7 +212,7 @@
                   style="padding: 0; vertical-align: top"
                   @click.stop="handleSectionClick('item-section')"
                 >
-                  <ItemSection :item="itemSection" :style-config="props.styleConfig" />
+                  <ItemSection :item="itemSection" :style-config="props.styleConfig as any" />
                   <!-- Section spacer after each item section -->
                   <table
                     :style="{ width: '100%', height: (props.styleConfig?.sectionGap || 10) + 'px' }"
@@ -237,7 +237,7 @@
                 >
                   <FooterSection
                     :footer="props.templateData.footer"
-                    :style-config="props.styleConfig"
+                    :style-config="props.styleConfig as any"
                     :current-page="1"
                     :total-pages="1"
                   />
@@ -261,6 +261,7 @@ import DescriptionSection from './sections/DescriptionSection.vue'
 import ItemSection from './sections/ItemSection.vue'
 import FooterSection from './sections/FooterSection.vue'
 import type { TemplateData } from '../types/section'
+import type { StyleConfig } from '../types/style'
 
 // PDF页面尺寸常量
 const PAGE_WIDTH = 612
@@ -276,104 +277,7 @@ interface SectionStates {
   footer: boolean
 }
 
-interface StyleConfig {
-  baseFontSize: number
-  sectionGap: number
-  sameTypeSectionGap: number
-  summaryGap: number
-  // 为与各子组件类型匹配，补充必要配置段
-  header: {
-    titleColor: string
-    titleSize: number
-    titleWeight: string
-    descriptionColor: string
-    descriptionSize: number
-    descriptionWeight: string
-  }
-  info: {
-    sectionTitleColor: string
-    sectionTitleWeight: string
-    labelColor: string
-    labelWeight: string
-    valueColor: string
-    valueWeight: string
-    itemGap: number
-    itemsPerRow: number
-    itemsSpacing: number
-    labelValueGap: number
-  }
-  table: {
-    sectionTitleColor: string
-    // 子组件 TableSection 需要的字段
-    sectionTitleWeight: string
-    subsectionTitleColor: string
-    subsectionTitleWeight: string
-    headerColor: string
-    columnNameWeight: string
-    rowTextColor: string
-    borderColor: string
-    rowHeight: number
-    columnsPadding: number
-  }
-  // 子组件 SummarySection 需要的配置
-  summary?: {
-    labelText?: string
-    labelColor: string
-    labelWeight: string
-    contentColor: string
-    contentWeight: string
-    labelSize: number
-    contentSize: number
-    labelContentGap?: number
-  }
-  description: {
-    labelColor: string
-    labelWeight: string
-    textColor: string
-    textWeight: string
-    textSize: number
-    lineHeight: number
-  }
-  item: {
-    sectionTitleColor: string
-    sectionTitleWeight: string
-    labelColor: string
-    labelWeight: string
-    valueColor: string
-    valueWeight: string
-    itemGap: number
-    itemsPerRow: number
-    itemsSpacing: number
-    labelValueGap: number
-  }
-  footer: {
-    textColor: string
-    textSize: number
-    textWeight: string
-  }
-  footerInfo: {
-    textColor: string
-    textSize: number
-    textWeight: string
-  }
-  footerName: {
-    textColor: string
-    textSize: number
-    textWeight: string
-  }
-  hInfo: {
-    sectionTitleColor: string
-    sectionTitleWeight: string
-    labelColor: string
-    labelWeight: string
-    valueColor: string
-    valueWeight: string
-    labelWidth: number
-    labelValueGap: number
-    itemGap: number
-    columnsPadding: number
-  }
-}
+// 使用共享类型定义
 
 // ✅ 修复：正确解构 props
 const props = defineProps<{

@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <button
     :id="id"
@@ -20,8 +21,6 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-
 interface Props {
   modelValue: boolean
   id?: string
@@ -68,7 +67,7 @@ const toggle = () => {
   }
 
   /* Disabled styles */
-  :is(&--disabled) {
+  &--disabled {
     cursor: not-allowed;
     opacity: 0.5;
   }

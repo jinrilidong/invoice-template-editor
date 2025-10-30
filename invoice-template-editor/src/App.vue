@@ -134,9 +134,7 @@ const styleConfig = reactive({
 const importFileInputRef = ref<HTMLInputElement | null>(null)
 
 // Active sections count
-const activeSectionsCount = computed(() => {
-  return Object.values(sectionStates.value).filter(Boolean).length
-})
+// removed: activeSectionsCount (unused)
 
 // Global confirm dialog
 const confirmDialog = useConfirmDialog()
@@ -463,16 +461,17 @@ const handleManualSave = () => {
 }
 
 // Validate imported JSON structure
-const validateImportedData = (payload: any) => {
+const validateImportedData = (payload: unknown) => {
   if (!payload || typeof payload !== 'object') return '文件内容不是有效的 JSON 对象'
-  if (!payload.data || !payload.sections) return '缺少必要字段：data 或 sections'
-  if (typeof payload.sections !== 'object') return 'sections 字段格式不正确'
-  if (typeof payload.data !== 'object') return 'data 字段格式不正确'
+  const obj = payload as { data?: unknown; sections?: unknown }
+  if (!('data' in obj) || !('sections' in obj)) return '缺少必要字段：data 或 sections'
+  if (typeof obj.sections !== 'object') return 'sections 字段格式不正确'
+  if (typeof obj.data !== 'object') return 'data 字段格式不正确'
   return null
 }
 
 // Migrate imported data to current schema if needed (no-op for 1.0.0)
-const migrateImportedData = (payload: any) => {
+const migrateImportedData = <T extends Record<string, unknown>>(payload: T): T => {
   // 预留版本迁移点
   return payload
 }
@@ -509,8 +508,8 @@ const handleImportFileChange = async (event: Event) => {
     undoSystem.saveState(sectionStates.value, templateData, styleConfig)
     saveToLocalStorage()
     showNotification('模板导入成功', 'success')
-  } catch (e) {
-    console.error('Import failed:', e)
+  } catch (err) {
+    console.error('Import failed:', err)
     showNotification('导入失败，请确认文件为导出的 JSON 模板', 'error')
   } finally {
     if (importFileInputRef.value) importFileInputRef.value.value = ''
@@ -745,7 +744,7 @@ const exportHtmlTemplate = async () => {
             reader.readAsDataURL(blob)
           })
           img.setAttribute('src', dataUrl)
-        } catch (e) {
+        } catch {
           // fallback: remove image to prevent renderer failure
           img.remove()
         }
@@ -811,777 +810,10 @@ ${formattedBody}
   }
 }
 
-// Generate pages with pagination logic for HTML export
-const generatePagesWithPagination = (data: any, sections: any) => {
-  const PAGE_WIDTH = 612
-  const PAGE_HEIGHT = 792
-  const PAGE_PADDING = 24
-  const CONTENT_HEIGHT = 727 // 固定高度727px
-  const SECTION_GAP = 8 // 8px section间距
-
-  const pages: any[] = []
-  let currentPageSections: any[] = []
-  let currentPageHeight = 0
-  let pageNumber = 1
-
-  // 获取可见的sections
-  const visibleSections = []
-  if (sections.header && data.header) {
-    visibleSections.push({
-      type: 'header',
-      content: data.header,
-      height: 48,
-    })
-  }
-
-  if (sections.info && data.info) {
-    const infoHeight = 9 + (data.info.items ? Math.ceil(data.info.items.length / 5) * 18 : 0)
-    visibleSections.push({
-      type: 'info',
-      content: data.info,
-      height: infoHeight,
-    })
-  }
-
-  if (sections.table && data.tables && data.tables.length > 0) {
-    data.tables.forEach((table: any) => {
-      const tableHeight =
-        9 + (table.subsectionTitle ? 9 : 0) + 13 + (table.rowsNumber || 2) * 13 + 13 + 1
-      visibleSections.push({
-        type: 'table',
-        content: table,
-        height: tableHeight,
-      })
-    })
-  }
-
-  if (sections.description && data.description) {
-    const descHeight = 9 + Math.ceil((data.description.content || '').length / 60) * 9
-    visibleSections.push({
-      type: 'description',
-      content: data.description,
-      height: descHeight,
-    })
-  }
-
-  if (sections.item && data.item) {
-    const itemHeight = 9 + (data.item.items ? Math.ceil(data.item.items.length / 5) * 18 : 0)
-    visibleSections.push({
-      type: 'item',
-      content: data.item,
-      height: itemHeight,
-    })
-  }
-
-  // 添加Summary section - 在table和description之间
-  if (sections.table && data.tables && data.tables.length > 0) {
-    // 找到table section的索引
-    const tableIndex = visibleSections.findIndex((s) => s.type === 'table')
-    if (tableIndex !== -1) {
-      // 在table section之后插入summary section
-      visibleSections.splice(tableIndex + 1, 0, {
-        type: 'summary',
-        content: {
-          total: data.tables.reduce((sum: number, table: any) => sum + (table.total || 0), 0),
-        },
-        height: 18,
-      })
-    }
-  }
-
-  const footerSection =
-    sections.footer && data.footer
-      ? {
-          type: 'footer',
-          content: data.footer,
-          height: 9,
-        }
-      : null
-
-  // 分页逻辑
-  for (let i = 0; i < visibleSections.length; i++) {
-    const section = visibleSections[i]
-    if (!section) continue
-
-    const gap = currentPageSections.length > 0 ? SECTION_GAP : 0
-    const sectionHeightWithGap = section.height + gap
-
-    // 检查是否需要新页面
-    if (currentPageHeight + sectionHeightWithGap > CONTENT_HEIGHT) {
-      // 如果是table section，尝试拆分
-      if (section.type === 'table') {
-        const splitResult = splitTableSectionForHtml(section, currentPageHeight, CONTENT_HEIGHT)
-
-        if (splitResult.firstPart) {
-          // 添加第一部分到当前页面
-          currentPageSections.push(splitResult.firstPart)
-          currentPageHeight += splitResult.firstPartHeight + gap
-        }
-
-        // 保存当前页面
-        const pageSections = [...currentPageSections]
-        if (footerSection) {
-          pageSections.push(footerSection)
-        }
-        pages.push({
-          id: `page-${pageNumber}`,
-          sections: pageSections,
-          totalHeight: currentPageHeight,
-          pageNumber: pageNumber,
-        })
-
-        // 开始新页面
-        pageNumber++
-        currentPageSections = []
-        currentPageHeight = 0
-
-        // 添加第二部分到新页面
-        if (splitResult.secondPart) {
-          currentPageSections.push(splitResult.secondPart)
-          currentPageHeight += splitResult.secondPartHeight
-        }
-
-        // 为新页面添加footer
-        if (footerSection) {
-          currentPageSections.push(footerSection)
-          currentPageHeight += footerSection.height
-        }
-      } else {
-        // 非table section，正常分页
-        // 保存当前页面
-        const pageSections = [...currentPageSections]
-        if (footerSection) {
-          pageSections.push(footerSection)
-        }
-        pages.push({
-          id: `page-${pageNumber}`,
-          sections: pageSections,
-          totalHeight: currentPageHeight,
-          pageNumber: pageNumber,
-        })
-
-        // 开始新页面
-        pageNumber++
-        currentPageSections = []
-        currentPageHeight = 0
-
-        // 添加section到新页面
-        currentPageSections.push(section)
-        currentPageHeight += sectionHeightWithGap
-
-        // 为新页面添加footer
-        if (footerSection) {
-          currentPageSections.push(footerSection)
-          currentPageHeight += footerSection.height
-        }
-      }
-    } else {
-      // 添加section到当前页面
-      currentPageSections.push(section)
-      currentPageHeight += sectionHeightWithGap
-    }
-  }
-
-  // 添加最后一页
-  if (currentPageSections.length > 0) {
-    const pageSections = [...currentPageSections]
-    if (footerSection) {
-      pageSections.push(footerSection)
-    }
-    pages.push({
-      id: `page-${pageNumber}`,
-      sections: pageSections,
-      totalHeight: currentPageHeight,
-      pageNumber: pageNumber,
-    })
-  }
-
-  return pages
-}
-
-// Split table section for HTML export
-const splitTableSectionForHtml = (
-  section: any,
-  currentPageHeight: number,
-  contentHeight: number,
-) => {
-  const table = section.content
-  const availableHeight = contentHeight - currentPageHeight
-
-  // 计算table各部分的高度
-  let titleHeight = 0
-  let subtitleHeight = 0
-  const headerHeight = 13
-  const rowHeight = 13
-  const subtotalHeight = 13
-  const borderHeight = 1
-
-  if (table.sectionTitle) titleHeight = 9
-  if (table.subsectionTitle) subtitleHeight = 9
-
-  // 计算第一部分可以包含多少行
-  let firstPartRows = 0
-  let firstPartHeight = titleHeight + subtitleHeight + headerHeight
-
-  const rowsNumber = table.rowsNumber || 2
-  for (let i = 0; i < rowsNumber; i++) {
-    if (firstPartHeight + rowHeight <= availableHeight) {
-      firstPartRows++
-      firstPartHeight += rowHeight
-    } else {
-      break
-    }
-  }
-
-  // 如果第一部分可以包含所有行，则不需要拆分
-  if (firstPartRows >= rowsNumber) {
-    return {
-      firstPart: section,
-      firstPartHeight: section.height,
-      secondPart: null,
-      secondPartHeight: 0,
-    }
-  }
-
-  // 创建第一部分（包含标题、子标题、表头、部分数据行）
-  const firstPart = {
-    ...section,
-    id: `${section.id}-part1`,
-    content: {
-      ...table,
-      rowsNumber: firstPartRows,
-      isFirstPart: true,
-      showHeader: true, // 显示标题、副标题、表头
-      showSubtotal: false, // 不显示小计和边框
-      showBorder: false,
-    },
-    height: firstPartHeight,
-  }
-
-  // 创建第二部分（只包含剩余数据行、小计、边框）
-  const secondPartRows = rowsNumber - firstPartRows
-  const secondPartHeight = secondPartRows * rowHeight + subtotalHeight + borderHeight
-
-  const secondPart = {
-    ...section,
-    id: `${section.id}-part2`,
-    content: {
-      ...table,
-      rowsNumber: secondPartRows,
-      startRowIndex: firstPartRows,
-      isSecondPart: true,
-      showHeader: false, // 不显示标题、副标题、表头
-      showSubtotal: true, // 显示小计和边框
-      showBorder: true,
-    },
-    height: secondPartHeight,
-  }
-
-  return {
-    firstPart,
-    firstPartHeight,
-    secondPart,
-    secondPartHeight,
-  }
-}
-
-// Generate HTML template content with pagination support
-const generateHtmlTemplate = () => {
-  const { sections, data } = { sections: sectionStates.value, data: templateData }
-
-  // 使用PDF分页逻辑生成页面
-  const pages = generatePagesWithPagination(data, sections)
-
-  let htmlContent = `
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Invoice Template</title>
-    <style type="text/css">
-        @page {
-            size: 612px 792px;
-            margin: 23px;
-        }
-
-        body {
-            margin: 0;
-            padding: 15px;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            font-size: 12px;
-            line-height: 1.2;
-            min-height: 762px; /* 792px - 30px padding */
-            width: 612px; /* PDF页面宽度 */
-            max-width: 612px; /* 限制最大宽度 */
-            word-wrap: break-word; /* 允许长单词换行 */
-            overflow-wrap: break-word; /* 现代浏览器的换行支持 */
-            white-space: normal; /* 确保文本可以换行 */
-        }
-
-        .invoice-container {
-            width: 582px; /* 内容区域宽度 (612px - 15px*2) */
-            min-height: 722px; /* 762px - 40px padding */
-            position: relative;
-        }
-
-        .page-break {
-            page-break-before: always;
-        }
-
-        .section-spacer {
-            height: 6px;
-        }
-
-        .section-spacer td {
-            height: 6px;
-        }
-
-        .header-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 6px;
-        }
-
-        .header-table td {
-            vertical-align: top;
-            padding: 0;
-        }
-
-        .header-title {
-            font-size: 20px;
-            font-weight: bold;
-            color: #000000;
-            line-height: 24px;
-        }
-
-        .header-description {
-            font-size: 7px;
-            color: #000000;
-            line-height: 9px;
-            margin-top: 1px;
-        }
-
-        .logo-container {
-            text-align: right;
-            width: 240px;
-        }
-
-        .logo-container.default img {
-            height: 48px;
-            width: 240px;
-        }
-
-        .logo-container.large img {
-            height: 72px; /* 48px * 1.5 */
-            width: 240px;
-        }
-
-        .logo-placeholder {
-            border: 1px dashed #000000;
-            text-align: center;
-            color: #919191;
-            font-size: 7px;
-            line-height: 9px;
-            height: 48px;
-            width: 240px;
-        }
-
-        .logo-placeholder td {
-            text-align: center;
-            height: 48px;
-            width: 240px;
-        }
-
-        .info-section-title {
-            font-size: 7px;
-            font-weight: 600;
-            color: #6b7280;
-            line-height: 9px;
-            margin-bottom: 2px;
-        }
-
-        .info-items-table {
-            width: 100%;
-            border-collapse: collapse;
-            table-layout: fixed;
-        }
-
-        .info-items-table td {
-            width: 20%;
-            padding: 0 8px; /* 上下0px，左右8px */
-            vertical-align: top; /* 顶部对齐 */
-        }
-
-        .info-items-table td:first-child {
-            padding-left: 0; /* 第一列左边无间距 */
-        }
-
-        .info-items-table td:last-child {
-            padding-right: 0; /* 最后一列右边无间距 */
-        }
-
-        .info-items-table tr:not(:first-child) td {
-            padding-top: 2px;
-        }
-
-        .info-item-label {
-            font-size: 7px;
-            font-weight: 600;
-            color: #000000;
-            line-height: 9px;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            white-space: normal;
-        }
-
-        .info-item-value {
-            font-size: 7px;
-            font-weight: 400;
-            color: #919191;
-            line-height: 9px;
-            margin-top: 2px;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            white-space: normal;
-        }
-
-        .table-section-title {
-            font-size: 7px;
-            font-weight: 600;
-            color: #6b7280;
-            line-height: 9px;
-            margin-bottom: 2px;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            white-space: normal;
-        }
-
-        .table-subsection-title {
-            font-size: 7px;
-            font-weight: 600;
-            color: #000000;
-            line-height: 9px;
-            margin-bottom: 2px;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            white-space: normal;
-        }
-
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            table-layout: fixed;
-        }
-
-        .data-table th,
-        .data-table td {
-            padding: 2px 8px; /* 上下2px，左右8px */
-            font-size: 7px;
-            line-height: 9px;
-            height: 13px;
-            word-wrap: break-word; /* 允许长单词换行 */
-            overflow-wrap: break-word; /* 现代浏览器的换行支持 */
-            white-space: normal; /* 确保文本可以换行 */
-            vertical-align: top; /* 顶部对齐 */
-        }
-
-        .data-table th:first-child,
-        .data-table td:first-child {
-            width: 25%;
-            padding-left: 0; /* 第一列左边无间距 */
-        }
-
-        .data-table th:nth-child(2),
-        .data-table td:nth-child(2) {
-            width: 25%;
-        }
-
-        .data-table th:nth-child(3),
-        .data-table td:nth-child(3) {
-            width: 25%;
-        }
-
-        .data-table th:last-child,
-        .data-table td:last-child {
-            width: 25%;
-            padding-right: 0; /* 最后一列右边无间距 */
-        }
-
-        .data-table th {
-            font-weight: 500;
-            text-align: left;
-            color: #6b7280;
-            border-bottom: 1px solid #d2d2d2;
-        }
-
-        .data-table th.text-right {
-            text-align: right;
-        }
-
-        .data-table td {
-            text-align: left;
-            color: #000000;
-        }
-
-        .data-table td.text-right {
-            text-align: right;
-        }
-
-        .subtotal-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .subtotal-table td {
-            padding: 0;
-            font-size: 7px;
-            line-height: 9px;
-            border-top: 1px solid #d2d2d2;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            white-space: normal;
-            vertical-align: top; /* 顶部对齐 */
-        }
-
-        .subtotal-value {
-            font-weight: 600;
-            text-align: right;
-            color: #919191;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            white-space: normal;
-        }
-
-        .summary-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .summary-table td {
-            padding: 0;
-            vertical-align: top; /* 顶部对齐 */
-            text-align: right;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            white-space: normal;
-        }
-
-        .summary-content {
-            font-size: 14px;
-            font-weight: 600;
-            color: #000000;
-            line-height: 17px;
-            margin-top: 2px;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            white-space: normal;
-        }
-
-        .summary-label {
-            font-size: 10px;
-            font-weight: 600;
-            color: #000000;
-            line-height: 9px;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            white-space: normal;
-        }
-
-        .description-label {
-            font-size: 7px;
-            font-weight: 600;
-            color: #000000;
-            line-height: 9px;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            white-space: normal;
-        }
-
-        .description-text {
-            font-size: 7px;
-            font-weight: 400;
-            color: #919191;
-            line-height: 9px;
-            margin-top: 2px;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            white-space: normal;
-        }
-
-        .item-section-title {
-            font-size: 7px;
-            font-weight: 600;
-            color: #6b7280;
-            line-height: 9px;
-            margin-bottom: 2px;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            white-space: normal;
-        }
-
-        .item-items-table {
-            width: 100%;
-            border-collapse: collapse;
-            table-layout: fixed;
-        }
-
-        .item-items-table td {
-            padding: 0 8px; /* 上下0px，左右8px */
-            vertical-align: top; /* 顶部对齐 */
-            width: 20%;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            white-space: normal;
-        }
-
-        .item-items-table td:first-child {
-            padding-left: 0; /* 第一列左边无间距 */
-        }
-
-        .item-items-table td:last-child {
-            padding-right: 0; /* 最后一列右边无间距 */
-        }
-
-        .item-item-label {
-            font-size: 7px;
-            font-weight: 600;
-            color: #000000;
-            line-height: 9px;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            white-space: normal;
-        }
-
-        .item-item-value {
-            font-size: 7px;
-            font-weight: 400;
-            color: #919191;
-            line-height: 9px;
-            margin-top: 2px;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            white-space: normal;
-        }
-
-        .footer-section {
-            width: 100%;
-            border-collapse: collapse;
-            position: absolute;
-            bottom: -40px;
-            left: 0;
-        }
-
-        .footer-section td {
-            padding: 0;
-            font-size: 7px;
-            line-height: 9px;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            white-space: normal;
-            vertical-align: top; /* 顶部对齐 */
-        }
-
-        .footer-info {
-            text-align: left;
-        }
-
-        .footer-name {
-            text-align: center;
-        }
-
-        .footer-page {
-            text-align: right;
-        }
-
-        tr, tfoot {
-            page-break-inside: avoid;
-        }
-    </style>
-</head>
-<body>
-`
-
-  // 生成每一页的内容
-  pages.forEach((page, pageIndex) => {
-    if (pageIndex > 0) {
-      htmlContent += `<div class="page-break"></div>`
-    }
-
-    htmlContent += `
-    <table class="invoice-container">
-        <tr>
-            <td>
-`
-
-    // 生成页面中的每个section
-    page.sections.forEach((section: any) => {
-      if (section.type === 'header') {
-        htmlContent += generateHeaderSection(section.content)
-      } else if (section.type === 'info') {
-        htmlContent += generateInfoSection(section.content)
-      } else if (section.type === 'table') {
-        htmlContent += generateTableSection(section.content)
-      } else if (section.type === 'summary') {
-        htmlContent += generateSummarySection(section.content)
-      } else if (section.type === 'description') {
-        htmlContent += generateDescriptionSection(section.content)
-      } else if (section.type === 'item') {
-        htmlContent += generateItemSection(section.content)
-      } else if (section.type === 'footer') {
-        htmlContent += generateFooterSection(section.content, page.pageNumber, pages.length)
-      }
-    })
-
-    htmlContent += `
-            </td>
-        </tr>
-    </table>
-`
-  })
-
-  htmlContent += `
-</body>
-</html>
-  `
-
-  return htmlContent
-}
-
-// Generate header section HTML
-const generateHeaderSection = (header: any) => {
-  const hasTitleOrDescription = header.title || header.description
-  const logoAlign = hasTitleOrDescription ? 'right' : 'left'
-
-  return `
-        <table class="header-table">
-            <tr>
-                ${
-                  hasTitleOrDescription
-                    ? `
-                <td>
-                    ${header.title ? `<span class="header-title">${header.title}</span>` : ''}
-                    ${header.description ? `<span class="header-description">${header.description}</span>` : ''}
-                </td>
-                `
-                    : ''
-                }
-                <td class="logo-container ${header.logoSize === 'large' ? 'large' : 'default'}" ${!hasTitleOrDescription ? 'colspan="2"' : ''}>
-                    ${
-                      header.logo
-                        ? `<img src="${header.logo}" alt="Logo" style="object-position: ${logoAlign};" />`
-                        : `<table class="logo-placeholder"><tr><td>Logo Placeholder</td></tr></table>`
-                    }
-                    ${header.logoDescription ? `<div class="logo-description" style="font-size: 7px; color: #919191; text-align: ${logoAlign}; margin-top: 4px;">${header.logoDescription}</div>` : ''}
-                </td>
-            </tr>
-        </table>
-    `
-}
-
-// Generate info section HTML
-const generateInfoSection = (info: any) => {
+// Removed legacy HTML generators (no pagination/export-by-string)
+/* const generateInfoSection = (info: any) => {
   let html = `
-        ${info.sectionTitle ? `<span class="info-section-title">${info.sectionTitle}</span>` : ''}
+        ${info.sectionTitle ? `<span class="info-section-title">${toXhtml(info.sectionTitle)}</span>` : ''}
         <table class="info-items-table">
             <tr>
     `
@@ -1595,8 +827,8 @@ const generateInfoSection = (info: any) => {
       }
       html += `
                 <td style="width: 20%;">
-                    <span class="info-item-label">${item.label || ''}</span>
-                    <span class="info-item-value">${item.value || ''}</span>
+                    <span class="info-item-label">${toXhtml(item.label || '')}</span>
+                    <span class="info-item-value">${toXhtml(item.value || '')}</span>
                 </td>
         `
     })
@@ -1615,17 +847,16 @@ const generateInfoSection = (info: any) => {
         </table>
     `
   return html
-}
+} */
 
-// Generate table section HTML with pagination support
-const generateTableSection = (table: any) => {
+/* const generateTableSection = (table: any) => {
   let html = ''
 
   // 根据分页状态决定是否显示标题和副标题
   if (table.showHeader !== false) {
     html += `
-        ${table.sectionTitle ? `<span class="table-section-title">${table.sectionTitle}</span>` : ''}
-        ${table.subsectionTitle ? `<span class="table-subsection-title">${table.subsectionTitle}</span>` : ''}
+        ${table.sectionTitle ? `<span class="table-section-title">${toXhtml(table.sectionTitle)}</span>` : ''}
+        ${table.subsectionTitle ? `<span class="table-subsection-title">${toXhtml(table.subsectionTitle)}</span>` : ''}
     `
   }
 
@@ -1723,10 +954,9 @@ const generateTableSection = (table: any) => {
   }
 
   return html
-}
+} */
 
-// Get table rows for current page (with pagination support)
-const getTableRowsForPage = (table: any) => {
+/* const getTableRowsForPage = (table: any) => {
   const baseRows = table.rows || []
   const rowsNumber = table.rowsNumber || 2
   const startRowIndex = table.startRowIndex || 0
@@ -1757,10 +987,9 @@ const getTableRowsForPage = (table: any) => {
 
   // 返回当前页面应该显示的行
   return baseRows.slice(startRowIndex, startRowIndex + rowsNumber)
-}
+} */
 
-// Generate summary section HTML
-const generateSummarySection = (summary: any) => {
+/* const generateSummarySection = (summary: any) => {
   return `
         <table class="summary-table">
             <tr>
@@ -1771,20 +1000,18 @@ const generateSummarySection = (summary: any) => {
             </tr>
         </table>
     `
-}
+} */
 
-// Generate description section HTML
-const generateDescriptionSection = (description: any) => {
+/* const generateDescriptionSection = (description: any) => {
   return `
-        ${description.sectionTitle ? `<span class="description-label">${description.sectionTitle}</span>` : ''}
-        <span class="description-text">${description.content || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'}</span>
+        ${description.sectionTitle ? `<span class="description-label">${toXhtml(description.sectionTitle)}</span>` : ''}
+        <span class="description-text">${toXhtml(description.content || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.')}</span>
     `
-}
+} */
 
-// Generate item section HTML
-const generateItemSection = (item: any) => {
+/* const generateItemSection = (item: any) => {
   let html = `
-        ${item.sectionTitle ? `<span class="item-section-title">${item.sectionTitle}</span>` : ''}
+        ${item.sectionTitle ? `<span class="item-section-title">${toXhtml(item.sectionTitle)}</span>` : ''}
         <table class="item-items-table">
             <tr>
     `
@@ -1798,8 +1025,8 @@ const generateItemSection = (item: any) => {
       }
       html += `
                 <td style="width: 20%;">
-                    <span class="item-item-label">${itemData.label || ''}</span>
-                    <span class="item-item-value">${itemData.value || ''}</span>
+                    <span class="item-item-label">${toXhtml(itemData.label || '')}</span>
+                    <span class="item-item-value">${toXhtml(itemData.value || '')}</span>
                 </td>
         `
     })
@@ -1818,10 +1045,9 @@ const generateItemSection = (item: any) => {
         </table>
     `
   return html
-}
+} */
 
-// Generate footer section HTML
-const generateFooterSection = (footer: any, currentPage: number, totalPages: number) => {
+/* const generateFooterSection = (footer: any, currentPage: number, totalPages: number) => {
   const footerInfoStyle = {
     fontSize: styleConfig.footerInfo.textSize + 'px',
     color: styleConfig.footerInfo.textColor,
@@ -1846,13 +1072,13 @@ const generateFooterSection = (footer: any, currentPage: number, totalPages: num
   return `
         <table class="footer-section">
             <tr>
-                <td class="footer-info" style="font-size: ${footerInfoStyle.fontSize}; color: ${footerInfoStyle.color}; font-weight: ${footerInfoStyle.fontWeight};">${footer.info || ''}</td>
-                <td class="footer-name" style="font-size: ${footerNameStyle.fontSize}; color: ${footerNameStyle.color}; font-weight: ${footerNameStyle.fontWeight};">${footer.name || ''}</td>
+                <td class="footer-info" style="font-size: ${footerInfoStyle.fontSize}; color: ${footerInfoStyle.color}; font-weight: ${footerInfoStyle.fontWeight};">${toXhtml(footer.info || '')}</td>
+                <td class="footer-name" style="font-size: ${footerNameStyle.fontSize}; color: ${footerNameStyle.color}; font-weight: ${footerNameStyle.fontWeight};">${toXhtml(footer.name || '')}</td>
                 <td class="footer-page">Page: ${currentPage} of ${totalPages}</td>
             </tr>
         </table>
     `
-}
+} */
 
 // Show notification message
 const showNotification = (message: string, type: 'success' | 'error' | 'info' = 'success') => {
@@ -1894,7 +1120,7 @@ onMounted(() => {
 })
 
 // Update template data function
-const updateTemplateData = (newData: any) => {
+const updateTemplateData = (newData: TemplateData) => {
   console.log('App.vue: updateTemplateData called', newData)
   // 更新 reactive 对象的属性
   Object.assign(templateData, newData)

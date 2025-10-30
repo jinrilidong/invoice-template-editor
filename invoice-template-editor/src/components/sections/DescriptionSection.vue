@@ -32,14 +32,14 @@
             'px',
           padding: '0',
         }"
-      >
-        {{ description.content }}
-      </td>
+        v-html="toXhtml(description.content || '')"
+      ></td>
     </tr>
   </table>
 </template>
 
 <script setup lang="ts">
+import { toXhtml } from '@/utils/text'
 interface Description {
   id?: string
   sectionTitle?: string

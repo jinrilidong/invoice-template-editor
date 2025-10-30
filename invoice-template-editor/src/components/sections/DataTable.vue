@@ -148,14 +148,15 @@ const displayRows = computed(() => {
   return baseRows.slice(0, rowsNumber)
 })
 
-// 计算列宽度
+// 计算列宽度：使用权重归一化百分比，与导出逻辑保持一致
 const getColumnWidth = (column: TableColumn): number => {
-  if (column.width && typeof column.width === 'number') {
-    return column.width
-  }
+  const columns = props.table.columns || []
+  if (!columns.length) return 0
 
-  // 默认平均分配
-  return Math.floor(100 / props.table.columns.length)
+  const weights = columns.map((c) => (typeof c.width === 'number' ? c.width : 100))
+  const total = weights.reduce((a, b) => a + b, 0) || 1
+  const w = typeof column.width === 'number' ? column.width : 100
+  return (w / total) * 100
 }
 
 // 字体权重转换函数

@@ -8,41 +8,6 @@
       <div class="flex items-center justify-between w-full">
         <h2 class="text-lg font-semibold text-primary">PDF Template Preview</h2>
         <div class="flex items-center gap-2">
-          <!-- Page Navigation -->
-          <div class="flex items-center gap-2">
-            <IconButton
-              @click="goToPreviousPage"
-              :disabled="currentPage <= 1"
-              title="Previous Page"
-            >
-              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M15 19l-7-7 7-7"
-                ></path>
-              </svg>
-            </IconButton>
-            <span class="text-sm text-primary min-w-[4rem] text-center">
-              Page {{ currentPage }} of {{ totalPages }}
-            </span>
-            <IconButton
-              @click="goToNextPage"
-              :disabled="currentPage >= totalPages"
-              title="Next Page"
-            >
-              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M9 5l7 7-7 7"
-                ></path>
-              </svg>
-            </IconButton>
-          </div>
-          <div class="h-6 w-px bg-primary/20"></div>
           <!-- Zoom Controls -->
           <div class="flex items-center gap-2">
             <IconButton @click="zoomOut" title="Zoom Out">
@@ -187,29 +152,12 @@ const emit = defineEmits<{
   'section-select': [sectionType: string | null]
 }>()
 
-// 当前页面和总页数
-const currentPage = ref(1)
-const totalPages = ref(1)
-
 // 缩放级别
 const zoomLevel = ref(1.2)
 const containerRef = ref<HTMLElement>()
 
 // 导出模式
 const isExportMode = computed(() => props.exportMode || false)
-
-// 页面导航
-const goToPreviousPage = () => {
-  if (currentPage.value > 1) {
-    currentPage.value--
-  }
-}
-
-const goToNextPage = () => {
-  if (currentPage.value < totalPages.value) {
-    currentPage.value++
-  }
-}
 
 // 缩放控制
 const zoomIn = () => {

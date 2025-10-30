@@ -5,9 +5,9 @@
       <div class="flex items-center justify-between w-full">
         <h2 class="text-lg font-semibold text-[#0e171f]">Configuration Panel</h2>
         <div class="flex items-center gap-2">
-          <TextButton 
+          <TextButton
             @click="collapseAllSections"
-            variant="default" 
+            variant="default"
             size="sm"
             class="text-gray-600 hover:text-gray-800"
           >
@@ -39,16 +39,19 @@
         <template v-for="(section, index) in visibleSections" :key="section.key">
           <!-- Section Content -->
           <div :class="section.class" :id="section.id || undefined">
-            <component 
+            <component
               :is="section.component"
               :model-value="section.modelValue as any"
               @update:model-value="(newData: any) => updateTemplateData(section.dataKey, newData)"
             />
           </div>
-          
+
           <!-- 分割线：只在不同类型section之间显示 -->
-          <div 
-            v-if="index < visibleSections.length - 1 && section.type !== visibleSections[index + 1]?.type" 
+          <div
+            v-if="
+              index < visibleSections.length - 1 &&
+              section.type !== visibleSections[index + 1]?.type
+            "
             class="border-t border-[#d3ddde] my-4"
           ></div>
         </template>
@@ -58,7 +61,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import PdfHeaderSection from './PdfHeaderSection.vue'
 import PdfInfoSection from './PdfInfoSection.vue'
 import PdfTableSection from './PdfTableSection.vue'
@@ -89,7 +92,7 @@ const getSectionName = (section: string) => {
     table: 'Table Section',
     description: 'Description Section',
     item: 'Item Section',
-    footer: 'Footer Section'
+    footer: 'Footer Section',
   }
   return names[section] || section
 }
@@ -107,10 +110,16 @@ const collapseAllSections = () => {
   window.dispatchEvent(new CustomEvent('collapse-all-sections'))
 }
 
+// 默认进入时折叠全部
+onMounted(() => {
+  // 等待子组件挂载后再触发折叠事件，避免竞态
+  requestAnimationFrame(() => collapseAllSections())
+})
+
 // 计算可见的sections，用于动态渲染和分割线
 const visibleSections = computed(() => {
   const sections = []
-  
+
   // Header Section
   if (props.sectionStates.header) {
     sections.push({
@@ -120,10 +129,10 @@ const visibleSections = computed(() => {
       modelValue: props.templateData.header,
       dataKey: 'header',
       class: 'transition-all duration-300',
-      id: null
+      id: null,
     })
   }
-  
+
   // Info Section
   if (props.sectionStates.info) {
     sections.push({
@@ -133,10 +142,10 @@ const visibleSections = computed(() => {
       modelValue: props.templateData.info,
       dataKey: 'info',
       class: 'transition-all duration-300',
-      id: 'config-info-section'
+      id: 'config-info-section',
     })
   }
-  
+
   // H-Info Section (放在 Info Section 之后)
   if (props.sectionStates.hInfo) {
     sections.push({
@@ -146,10 +155,10 @@ const visibleSections = computed(() => {
       modelValue: props.templateData.hInfo,
       dataKey: 'hInfo',
       class: 'transition-all duration-300',
-      id: 'config-h-info-section'
+      id: 'config-h-info-section',
     })
   }
-  
+
   // Table Section
   if (props.sectionStates.table) {
     sections.push({
@@ -159,10 +168,10 @@ const visibleSections = computed(() => {
       modelValue: props.templateData.tables,
       dataKey: 'tables',
       class: 'transition-all duration-300',
-      id: 'config-table-section'
+      id: 'config-table-section',
     })
   }
-  
+
   // Description Section
   if (props.sectionStates.description) {
     sections.push({
@@ -172,10 +181,10 @@ const visibleSections = computed(() => {
       modelValue: props.templateData.description,
       dataKey: 'description',
       class: 'transition-all duration-300',
-      id: null
+      id: null,
     })
   }
-  
+
   // Item Section
   if (props.sectionStates.item) {
     sections.push({
@@ -185,10 +194,10 @@ const visibleSections = computed(() => {
       modelValue: props.templateData.item,
       dataKey: 'item',
       class: 'transition-all duration-300',
-      id: 'config-item-section'
+      id: 'config-item-section',
     })
   }
-  
+
   // Footer Section
   if (props.sectionStates.footer) {
     sections.push({
@@ -198,10 +207,10 @@ const visibleSections = computed(() => {
       modelValue: props.templateData.footer,
       dataKey: 'footer',
       class: 'transition-all duration-300',
-      id: null
+      id: null,
     })
   }
-  
+
   return sections
 })
 

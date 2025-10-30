@@ -31,9 +31,8 @@
                 padding: 0,
                 verticalAlign: 'top',
               }"
-            >
-              {{ item.label }}
-            </td>
+              v-html="toXhtml(item.label)"
+            ></td>
             <td
               :style="{
                 fontSize: '7px',
@@ -43,9 +42,8 @@
                 padding: (styleConfig?.hInfo?.labelValueGap ?? 0) + 'px 0 0 0',
                 verticalAlign: 'top',
               }"
-            >
-              {{ item.value }}
-            </td>
+              v-html="toXhtml(item.value)"
+            ></td>
           </tr>
         </table>
 
@@ -65,9 +63,8 @@
                 lineHeight: '9px',
                 padding: 0,
               }"
-            >
-              {{ item.label }}
-            </td>
+              v-html="toXhtml(item.label)"
+            ></td>
           </tr>
           <tr>
             <td
@@ -78,9 +75,8 @@
                 lineHeight: '9px',
                 padding: (styleConfig?.hInfo?.labelValueGap ?? 2) + 'px 0 0 0',
               }"
-            >
-              {{ item.value }}
-            </td>
+              v-html="toXhtml(item.value)"
+            ></td>
           </tr>
         </table>
       </td>
@@ -89,6 +85,7 @@
 </template>
 
 <script setup lang="ts">
+import { toXhtml } from '@/utils/text'
 interface HInfoItem {
   id: string
   label: string

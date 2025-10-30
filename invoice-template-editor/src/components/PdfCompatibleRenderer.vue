@@ -29,221 +29,253 @@
             box-sizing: border-box;
           "
         >
-          <!-- Main content table -->
+          <!-- Fixed content area (723px) -->
+          <div :style="{ width: '100%', height: CONTENT_HEIGHT + 'px', position: 'relative' }">
+            <table
+              ref="contentInnerRef"
+              style="width: 100%; border-collapse: collapse; table-layout: fixed"
+              cellpadding="0"
+              cellspacing="0"
+            >
+              <!-- Header Section -->
+              <template v-if="props.sectionStates.header && props.templateData.header">
+                <tr>
+                  <td
+                    class="section-clickable"
+                    style="padding: 0; vertical-align: top"
+                    @click.stop="handleSectionClick('header-section')"
+                  >
+                    <HeaderSection
+                      :header="props.templateData.header"
+                      :style-config="props.styleConfig as any"
+                    />
+                  </td>
+                </tr>
+                <!-- Section Spacer -->
+                <tr>
+                  <td
+                    :style="{ height: (props.styleConfig?.sectionGap || 10) + 'px', padding: 0 }"
+                  ></td>
+                </tr>
+              </template>
+
+              <!-- Info Sections -->
+              <template v-if="props.sectionStates.info">
+                <tr v-for="(infoSection, index) in props.templateData.info" :key="'info-' + index">
+                  <td
+                    class="section-clickable"
+                    style="padding: 0; vertical-align: top"
+                    @click.stop="handleSectionClick('info-section')"
+                  >
+                    <InfoSection :info="infoSection" :style-config="props.styleConfig as any" />
+                    <!-- Section spacer after each info section -->
+                    <table
+                      :style="{
+                        width: '100%',
+                        height: (props.styleConfig?.sectionGap || 10) + 'px',
+                      }"
+                      cellpadding="0"
+                      cellspacing="0"
+                    >
+                      <tr>
+                        <td></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </template>
+
+              <!-- H-Info Sections -->
+              <template v-if="props.sectionStates.hInfo">
+                <tr
+                  v-for="(hInfoSection, index) in props.templateData.hInfo"
+                  :key="'h-info-' + index"
+                >
+                  <td
+                    class="section-clickable"
+                    style="padding: 0; vertical-align: top"
+                    @click.stop="handleSectionClick('h-info-section')"
+                  >
+                    <HInfoSection :h-info="hInfoSection" :style-config="props.styleConfig as any" />
+                    <!-- Section spacer after each h-info section -->
+                    <table
+                      :style="{
+                        width: '100%',
+                        height: (props.styleConfig?.sectionGap || 10) + 'px',
+                      }"
+                      cellpadding="0"
+                      cellspacing="0"
+                    >
+                      <tr>
+                        <td></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </template>
+
+              <!-- Table Sections -->
+              <template v-if="props.sectionStates.table">
+                <tr
+                  v-for="(tableSection, index) in props.templateData.tables"
+                  :key="'table-' + index"
+                >
+                  <td
+                    class="section-clickable"
+                    style="padding: 0; vertical-align: top"
+                    @click.stop="handleSectionClick(`table-section-${index}`)"
+                  >
+                    <TableSection :table="tableSection" :style-config="props.styleConfig as any" />
+                    <!-- Section spacer after each table section -->
+                    <table
+                      :style="{
+                        width: '100%',
+                        height:
+                          (props.styleConfig?.sameTypeSectionGap ??
+                            props.styleConfig?.sectionGap ??
+                            10) + 'px',
+                      }"
+                      cellpadding="0"
+                      cellspacing="0"
+                    >
+                      <tr>
+                        <td></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </template>
+
+              <!-- Summary Section (if tables exist) -->
+              <template
+                v-if="
+                  props.sectionStates.table &&
+                  props.templateData.tables &&
+                  props.templateData.tables.length > 0
+                "
+              >
+                <tr>
+                  <td
+                    class="section-clickable"
+                    style="padding: 0; vertical-align: top"
+                    @click.stop="handleSectionClick('summary-section')"
+                  >
+                    <SummarySection
+                      :tables="props.templateData.tables"
+                      :style-config="props.styleConfig as any"
+                    />
+                    <!-- Section spacer after summary section -->
+                    <table
+                      :style="{
+                        width: '100%',
+                        height:
+                          (props.styleConfig?.summaryGap ?? props.styleConfig?.sectionGap ?? 10) +
+                          'px',
+                      }"
+                      cellpadding="0"
+                      cellspacing="0"
+                    >
+                      <tr>
+                        <td></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </template>
+
+              <!-- Description Sections -->
+              <template v-if="props.sectionStates.description">
+                <tr
+                  v-for="(descriptionSection, index) in props.templateData.description"
+                  :key="'description-' + index"
+                >
+                  <td
+                    class="section-clickable"
+                    style="padding: 0; vertical-align: top"
+                    @click.stop="handleSectionClick('description-section')"
+                  >
+                    <DescriptionSection
+                      :description="descriptionSection"
+                      :style-config="props.styleConfig as any"
+                    />
+                    <!-- Section spacer after each description section -->
+                    <table
+                      :style="{
+                        width: '100%',
+                        height: (props.styleConfig?.sectionGap || 10) + 'px',
+                      }"
+                      cellpadding="0"
+                      cellspacing="0"
+                    >
+                      <tr>
+                        <td></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </template>
+
+              <!-- Item Sections -->
+              <template v-if="props.sectionStates.item">
+                <tr v-for="(itemSection, index) in props.templateData.item" :key="'item-' + index">
+                  <td
+                    class="section-clickable"
+                    style="padding: 0; vertical-align: top"
+                    @click.stop="handleSectionClick('item-section')"
+                  >
+                    <ItemSection :item="itemSection" :style-config="props.styleConfig as any" />
+                    <!-- Section spacer after each item section -->
+                    <table
+                      :style="{
+                        width: '100%',
+                        height: (props.styleConfig?.sectionGap || 10) + 'px',
+                      }"
+                      cellpadding="0"
+                      cellspacing="0"
+                    >
+                      <tr>
+                        <td></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </template>
+            </table>
+            <!-- Overflow red line indicator -->
+            <div
+              v-if="isOverflow"
+              :style="{
+                position: 'absolute',
+                left: 0,
+                right: 0,
+                bottom: 0,
+                height: '2px',
+                background: '#ff0000',
+              }"
+            ></div>
+          </div>
+
+          <!-- Footer Section (fixed 9px, no extra gap with content area) -->
           <table
+            v-if="props.sectionStates.footer && props.templateData.footer"
             style="width: 100%; border-collapse: collapse; table-layout: fixed"
             cellpadding="0"
             cellspacing="0"
           >
-            <!-- Header Section -->
-            <template v-if="props.sectionStates.header && props.templateData.header">
-              <tr>
-                <td
-                  class="section-clickable"
-                  style="padding: 0; vertical-align: top"
-                  @click.stop="handleSectionClick('header-section')"
-                >
-                  <HeaderSection
-                    :header="props.templateData.header"
-                    :style-config="props.styleConfig as any"
-                  />
-                </td>
-              </tr>
-              <!-- Section Spacer -->
-              <tr>
-                <td
-                  :style="{ height: (props.styleConfig?.sectionGap || 10) + 'px', padding: 0 }"
-                ></td>
-              </tr>
-            </template>
-
-            <!-- Info Sections -->
-            <template v-if="props.sectionStates.info">
-              <tr v-for="(infoSection, index) in props.templateData.info" :key="'info-' + index">
-                <td
-                  class="section-clickable"
-                  style="padding: 0; vertical-align: top"
-                  @click.stop="handleSectionClick('info-section')"
-                >
-                  <InfoSection :info="infoSection" :style-config="props.styleConfig as any" />
-                  <!-- Section spacer after each info section -->
-                  <table
-                    :style="{ width: '100%', height: (props.styleConfig?.sectionGap || 10) + 'px' }"
-                    cellpadding="0"
-                    cellspacing="0"
-                  >
-                    <tr>
-                      <td></td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </template>
-
-            <!-- H-Info Sections -->
-            <template v-if="props.sectionStates.hInfo">
-              <tr
-                v-for="(hInfoSection, index) in props.templateData.hInfo"
-                :key="'h-info-' + index"
+            <tr>
+              <td
+                class="section-clickable"
+                style="padding: 0; vertical-align: top"
+                @click.stop="handleSectionClick('footer-section')"
               >
-                <td
-                  class="section-clickable"
-                  style="padding: 0; vertical-align: top"
-                  @click.stop="handleSectionClick('h-info-section')"
-                >
-                  <HInfoSection :h-info="hInfoSection" :style-config="props.styleConfig as any" />
-                  <!-- Section spacer after each h-info section -->
-                  <table
-                    :style="{ width: '100%', height: (props.styleConfig?.sectionGap || 10) + 'px' }"
-                    cellpadding="0"
-                    cellspacing="0"
-                  >
-                    <tr>
-                      <td></td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </template>
-
-            <!-- Table Sections -->
-            <template v-if="props.sectionStates.table">
-              <tr
-                v-for="(tableSection, index) in props.templateData.tables"
-                :key="'table-' + index"
-              >
-                <td
-                  class="section-clickable"
-                  style="padding: 0; vertical-align: top"
-                  @click.stop="handleSectionClick(`table-section-${index}`)"
-                >
-                  <TableSection :table="tableSection" :style-config="props.styleConfig as any" />
-                  <!-- Section spacer after each table section -->
-                  <table
-                    :style="{
-                      width: '100%',
-                      height:
-                        (props.styleConfig?.sameTypeSectionGap ??
-                          props.styleConfig?.sectionGap ??
-                          10) + 'px',
-                    }"
-                    cellpadding="0"
-                    cellspacing="0"
-                  >
-                    <tr>
-                      <td></td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </template>
-
-            <!-- Summary Section (if tables exist) -->
-            <template
-              v-if="
-                props.sectionStates.table &&
-                props.templateData.tables &&
-                props.templateData.tables.length > 0
-              "
-            >
-              <tr>
-                <td
-                  class="section-clickable"
-                  style="padding: 0; vertical-align: top"
-                  @click.stop="handleSectionClick('summary-section')"
-                >
-                  <SummarySection
-                    :tables="props.templateData.tables"
-                    :style-config="props.styleConfig as any"
-                  />
-                  <!-- Section spacer after summary section -->
-                  <table
-                    :style="{
-                      width: '100%',
-                      height:
-                        (props.styleConfig?.summaryGap ?? props.styleConfig?.sectionGap ?? 10) +
-                        'px',
-                    }"
-                    cellpadding="0"
-                    cellspacing="0"
-                  >
-                    <tr>
-                      <td></td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </template>
-
-            <!-- Description Sections -->
-            <template v-if="props.sectionStates.description">
-              <tr
-                v-for="(descriptionSection, index) in props.templateData.description"
-                :key="'description-' + index"
-              >
-                <td
-                  class="section-clickable"
-                  style="padding: 0; vertical-align: top"
-                  @click.stop="handleSectionClick('description-section')"
-                >
-                  <DescriptionSection
-                    :description="descriptionSection"
-                    :style-config="props.styleConfig as any"
-                  />
-                  <!-- Section spacer after each description section -->
-                  <table
-                    :style="{ width: '100%', height: (props.styleConfig?.sectionGap || 10) + 'px' }"
-                    cellpadding="0"
-                    cellspacing="0"
-                  >
-                    <tr>
-                      <td></td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </template>
-
-            <!-- Item Sections -->
-            <template v-if="props.sectionStates.item">
-              <tr v-for="(itemSection, index) in props.templateData.item" :key="'item-' + index">
-                <td
-                  class="section-clickable"
-                  style="padding: 0; vertical-align: top"
-                  @click.stop="handleSectionClick('item-section')"
-                >
-                  <ItemSection :item="itemSection" :style-config="props.styleConfig as any" />
-                  <!-- Section spacer after each item section -->
-                  <table
-                    :style="{ width: '100%', height: (props.styleConfig?.sectionGap || 10) + 'px' }"
-                    cellpadding="0"
-                    cellspacing="0"
-                  >
-                    <tr>
-                      <td></td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </template>
-
-            <!-- Footer Section -->
-            <template v-if="props.sectionStates.footer && props.templateData.footer">
-              <tr>
-                <td
-                  class="section-clickable"
-                  style="padding: 0; vertical-align: top"
-                  @click.stop="handleSectionClick('footer-section')"
-                >
-                  <FooterSection
-                    :footer="props.templateData.footer"
-                    :style-config="props.styleConfig as any"
-                    :current-page="1"
-                    :total-pages="1"
-                  />
-                </td>
-              </tr>
-            </template>
+                <FooterSection
+                  :footer="props.templateData.footer"
+                  :style-config="props.styleConfig as any"
+                  :current-page="1"
+                  :total-pages="1"
+                />
+              </td>
+            </tr>
           </table>
         </td>
       </tr>
@@ -262,10 +294,12 @@ import ItemSection from './sections/ItemSection.vue'
 import FooterSection from './sections/FooterSection.vue'
 import type { TemplateData } from '../types/section'
 import type { StyleConfig } from '../types/style'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 
 // PDF页面尺寸常量
 const PAGE_WIDTH = 612
 const PAGE_HEIGHT = 792
+const CONTENT_HEIGHT = 723
 
 interface SectionStates {
   header: boolean
@@ -299,6 +333,37 @@ const handleSectionClick = (sectionType: string) => {
 const handleBackgroundClick = () => {
   emit('section-select', null)
 }
+
+// Overflow detection
+const contentInnerRef = ref<HTMLElement | null>(null)
+const isOverflow = ref(false)
+let resizeObserver: ResizeObserver | null = null
+
+const updateOverflow = () => {
+  const el = contentInnerRef.value
+  if (!el) {
+    isOverflow.value = false
+    return
+  }
+  isOverflow.value = el.scrollHeight > CONTENT_HEIGHT
+}
+
+onMounted(() => {
+  updateOverflow()
+  if (typeof window !== 'undefined' && 'ResizeObserver' in window) {
+    resizeObserver = new ResizeObserver(() => updateOverflow())
+    if (contentInnerRef.value) resizeObserver.observe(contentInnerRef.value)
+  } else {
+    if (typeof window !== 'undefined') (window as Window).addEventListener('resize', updateOverflow)
+  }
+})
+
+onBeforeUnmount(() => {
+  if (resizeObserver && contentInnerRef.value) resizeObserver.unobserve(contentInnerRef.value)
+  resizeObserver = null
+  if (typeof window !== 'undefined')
+    (window as Window).removeEventListener('resize', updateOverflow)
+})
 </script>
 
 <style scoped>

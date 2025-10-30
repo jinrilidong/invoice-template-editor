@@ -30,9 +30,8 @@
                   lineHeight: '9px',
                   padding: '0',
                 }"
-              >
-                {{ item.label }}
-              </td>
+                v-html="toXhtml(item.label)"
+              ></td>
             </tr>
             <tr>
               <td
@@ -43,9 +42,8 @@
                   lineHeight: '9px',
                   padding: (styleConfig?.info?.labelValueGap ?? 2) + 'px 0 0 0',
                 }"
-              >
-                {{ item.value }}
-              </td>
+                v-html="toXhtml(item.value)"
+              ></td>
             </tr>
           </table>
         </td>
@@ -77,6 +75,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { toXhtml } from '@/utils/text'
 
 interface InfoItem {
   id: string

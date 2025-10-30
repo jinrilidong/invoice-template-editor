@@ -26,9 +26,8 @@
                   lineHeight: '24px',
                   display: 'block',
                 }"
-              >
-                {{ header.title }}
-              </span>
+                v-html="toXhtml(header.title)"
+              ></span>
               <span
                 v-if="header.description"
                 :style="{
@@ -39,9 +38,8 @@
                   display: 'block',
                   marginTop: '1px',
                 }"
-              >
-                {{ header.description }}
-              </span>
+                v-html="toXhtml(header.description)"
+              ></span>
             </td>
           </tr>
         </table>
@@ -128,6 +126,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { toXhtml } from '@/utils/text'
 
 interface Header {
   title?: string

@@ -101,7 +101,6 @@ export interface StyleConfig {
     labelValueGap: number
     itemGap: number
     columnsPadding: number
-    columnsSpacing?: number
     columnGap?: number
   }
 }

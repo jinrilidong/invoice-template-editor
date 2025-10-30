@@ -11,7 +11,6 @@
           width: '100%',
           textAlign: 'right',
           padding: '2px 0',
-          borderTop: '1px solid ' + (styleConfig?.table?.borderColor || '#d2d2d2'),
           lineHeight: '9px',
           verticalAlign: 'top',
         }"

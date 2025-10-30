@@ -281,6 +281,7 @@ interface StyleConfig {
   sectionGap: number
   sameTypeSectionGap: number
   summaryGap: number
+  // 为与各子组件类型匹配，补充必要配置段
   header: {
     titleColor: string
     titleSize: number
@@ -303,13 +304,27 @@ interface StyleConfig {
   }
   table: {
     sectionTitleColor: string
+    // 子组件 TableSection 需要的字段
+    sectionTitleWeight: string
     subsectionTitleColor: string
+    subsectionTitleWeight: string
     headerColor: string
     columnNameWeight: string
     rowTextColor: string
     borderColor: string
     rowHeight: number
     columnsPadding: number
+  }
+  // 子组件 SummarySection 需要的配置
+  summary?: {
+    labelText?: string
+    labelColor: string
+    labelWeight: string
+    contentColor: string
+    contentWeight: string
+    labelSize: number
+    contentSize: number
+    labelContentGap?: number
   }
   description: {
     labelColor: string

@@ -52,6 +52,11 @@ export interface TableData {
   total: number
   rowsNumber?: number
   showSubtotal?: boolean // 控制是否显示 Subtotal 的开关
+  /**
+   * 列宽单位：percent 表示以百分比（按权重归一化）配置；px 表示以像素配置
+   * 默认 'percent'
+   */
+  columnsWidthUnit?: 'percent' | 'px'
 }
 
 // Description Section 数据

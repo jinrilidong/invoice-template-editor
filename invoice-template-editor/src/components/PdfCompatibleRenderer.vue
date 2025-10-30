@@ -255,6 +255,14 @@
             ></div>
           </div>
 
+          <!-- Spacer to push footer to the bottom of pdf-container -->
+          <div
+            :style="{
+              width: '100%',
+              height: 'calc(100% - ' + CONTENT_HEIGHT + 'px - 9px)',
+            }"
+          ></div>
+
           <!-- Footer Section (fixed 9px, no extra gap with content area) -->
           <table
             v-if="props.sectionStates.footer && props.templateData.footer"

@@ -137,7 +137,7 @@
                   </p>
                   <div class="info-items-container">
                     <div
-                      v-for="(item, index) in infoSection.items || []"
+                      v-for="item in infoSection.items || []"
                       :key="item.id"
                       class="info-item cursor-pointer transition-all duration-200"
                       :class="getItemHighlightClass(`info-section-${infoIndex}`, item.id)"
@@ -228,7 +228,7 @@
                         v-for="(column, columnIndex) in table.columns || []"
                         :key="column.id"
                         class="flex flex-col items-start min-w-0 overflow-hidden"
-                        :style="{ width: `${getColumnWidthPercent(table, column)}%` }"
+                        :style="{ width: getTableColWidthStyle(table, column) }"
                       >
                         <!-- Header -->
                         <div
@@ -298,7 +298,7 @@
                           v-for="(column, columnIndex) in table.columns || []"
                           :key="column.id"
                           class="flex items-start min-w-0 overflow-hidden"
-                          :style="{ width: `${getColumnWidthPercent(table, column)}%` }"
+                          :style="{ width: getTableColWidthStyle(table, column) }"
                         >
                           <div
                             class="flex items-start overflow-hidden py-0.5 w-full cursor-pointer transition-all duration-200 min-h-[13px]"
@@ -360,7 +360,7 @@
                         v-for="(column, columnIndex) in table.columns || []"
                         :key="column.id"
                         class="flex flex-col items-start min-w-0 overflow-hidden"
-                        :style="{ width: `${getColumnWidthPercent(table, column)}%` }"
+                        :style="{ width: getTableColWidthStyle(table, column) }"
                       >
                         <div class="flex flex-col items-start justify-center w-full h-3.25">
                           <div class="flex items-center w-full h-full">
@@ -484,7 +484,7 @@
                   </p>
                   <div class="item-items-container">
                     <div
-                      v-for="(item, index) in itemSection.items || []"
+                      v-for="item in itemSection.items || []"
                       :key="item.id"
                       class="item-item cursor-pointer transition-all duration-200"
                       :class="getItemHighlightClass(`item-section-${itemIndex}`, item.id)"
@@ -520,18 +520,15 @@
                   <p v-if="hInfoSection.sectionTitle" class="h-info-section-title">
                     {{ hInfoSection.sectionTitle }}
                   </p>
-                  <div
-                    class="h-info-columns-container"
-                    :style="getColumnContainerStyle(hInfoSection)"
-                  >
+                  <div class="h-info-columns-container" :style="getColumnContainerStyle()">
                     <div
-                      v-for="(column, columnIndex) in hInfoSection.columns || []"
+                      v-for="column in hInfoSection.columns || []"
                       :key="column.id"
                       class="h-info-column"
                       :style="getColumnStyle(hInfoSection) as any"
                     >
                       <div
-                        v-for="(item, itemIndex) in column.items || []"
+                        v-for="item in column.items || []"
                         :key="item.id"
                         class="h-info-item cursor-pointer transition-all duration-200"
                         :class="getItemHighlightClass(`h-info-section-${hInfoIndex}`, item.id)"
@@ -712,10 +709,7 @@
                         handleItemClick('table-section-' + tableIndex, 'column-header-' + column.id)
                       "
                       :style="{
-                        width:
-                          (table.columns?.some((c) => c.width)
-                            ? column.width || 0
-                            : 100 / (table.columns?.length || 1)) + '%',
+                        width: getTableColWidthExport(table, column),
                         padding:
                           columnIndex === 0
                             ? '0 8px 0 0'
@@ -754,10 +748,7 @@
                       v-for="(column, columnIndex) in table.columns || []"
                       :key="column.id"
                       :style="{
-                        width:
-                          (table.columns?.some((c) => c.width)
-                            ? column.width || 0
-                            : 100 / (table.columns?.length || 1)) + '%',
+                        width: getTableColWidthExport(table, column),
                         padding:
                           columnIndex === 0
                             ? '2px 8px 2px 0'
@@ -903,7 +894,7 @@
               </p>
               <div style="display: flex; gap: 8px; width: 100%">
                 <div
-                  v-for="(column, columnIndex) in hInfoSection.columns || []"
+                  v-for="column in hInfoSection.columns || []"
                   :key="column.id"
                   :style="{
                     width: getColumnWidthStyle(hInfoSection),
@@ -1084,7 +1075,11 @@ const containerRef = ref<HTMLElement>()
 const exportContainerRef = ref<HTMLElement>()
 
 // 动态生成表格行数据
-const getTableRows = (table: any) => {
+const getTableRows = (table: {
+  rows?: Array<{ id: string; data: Record<string, string>; total: number }>
+  rowsNumber?: number
+  columns?: Array<{ id: string }>
+}) => {
   const baseRows = table.rows || []
   const rowsNumber = table.rowsNumber || 2
 
@@ -1100,10 +1095,10 @@ const getTableRows = (table: any) => {
 
       // 为每个列生成数据
       if (table.columns) {
-        table.columns.forEach((column: any) => {
+        table.columns.forEach((column: { id: string }) => {
           // 使用第一行的数据作为模板，或者使用默认值
           const templateValue = baseRows[0]?.data[column.id] || 'Placeholder'
-          newRow.data[column.id] = templateValue.replace(/\d+/, i + 1)
+          newRow.data[column.id] = templateValue.replace(/\d+/, String(i + 1))
         })
       }
 
@@ -1115,14 +1110,42 @@ const getTableRows = (table: any) => {
   return baseRows.slice(0, rowsNumber)
 }
 
-// 将列宽按相对权重归一化为百分比
-const getColumnWidthPercent = (table: any, column: any) => {
-  const cols = table.columns || []
-  if (!cols.length) return 100
-  const weights = cols.map((c: any) => (typeof c.width === 'number' ? c.width : 100))
-  const total = weights.reduce((a: number, b: number) => a + b, 0) || 1
-  const current = typeof column.width === 'number' ? column.width : 100
-  return (current / total) * 100
+// 列宽样式（编辑预览区域，容器宽度固定 572px）
+const getTableColWidthStyle = (table: unknown, column: unknown): string => {
+  const t = table as { columns?: Array<{ width?: number }>; columnsWidthUnit?: 'percent' | 'px' }
+  const col = column as { width?: number }
+  const unit = t.columnsWidthUnit || 'percent'
+  const cols = t.columns || []
+  if (!cols.length) return '100%'
+  if (unit === 'px') {
+    const px = typeof col.width === 'number' ? col.width : Math.floor(572 / cols.length)
+    return `${px}px`
+  }
+  // percent（按权重归一化）
+  const weights = cols.map((c) => (typeof c.width === 'number' ? c.width : 100))
+  const total = weights.reduce((a, b) => a + b, 0) || 1
+  const current = typeof col.width === 'number' ? col.width : 100
+  const percent = (current / total) * 100
+  return `${percent}%`
+}
+
+// 导出模式下列宽（table/th/td 支持 px 或 %）
+const getTableColWidthExport = (table: unknown, column: unknown): string => {
+  const t = table as { columns?: Array<{ width?: number }>; columnsWidthUnit?: 'percent' | 'px' }
+  const col = column as { width?: number }
+  const unit = t.columnsWidthUnit || 'percent'
+  if (unit === 'px') {
+    const px =
+      typeof col.width === 'number' ? col.width : Math.floor(572 / ((t.columns || []).length || 1))
+    return `${px}px`
+  }
+  const cols = t.columns || []
+  if (!cols.length) return '100%'
+  const weights = cols.map((c) => (typeof c.width === 'number' ? c.width : 100))
+  const total = weights.reduce((a, b) => a + b, 0) || 1
+  const current = typeof col.width === 'number' ? col.width : 100
+  const percent = (current / total) * 100
+  return `${percent}%`
 }
 
 // Debug: Log table data changes
@@ -1151,14 +1174,8 @@ watch(
 )
 
 // H-Info Section 样式计算函数
-const getColumnContainerStyle = (hInfoSection: any) => {
-  const columnWidth = hInfoSection.columnWidth || '1/2'
-  const columnCount = hInfoSection.columns?.length || 1
-
-  let widthPercent = 50 // 默认 1/2
-  if (columnWidth === '1/3') widthPercent = 33.33
-  else if (columnWidth === '1/4') widthPercent = 25
-
+const getColumnContainerStyle = () => {
+  // 当前容器始终占满 100%，间距固定
   return {
     display: 'flex',
     gap: '8px',
@@ -1166,10 +1183,11 @@ const getColumnContainerStyle = (hInfoSection: any) => {
   }
 }
 
-const getColumnStyle = (hInfoSection: any) => {
-  const columnWidth = hInfoSection.columnWidth || '1/2'
+const getColumnStyle = (hInfoSection: unknown) => {
+  const section = hInfoSection as { columnWidth?: '1/2' | '1/3' | '1/4' }
+  const columnWidth = section.columnWidth || '1/2'
 
-  let widthPercent = 50 // 默认 1/2
+  let widthPercent = 50
   if (columnWidth === '1/3') widthPercent = 33.33
   else if (columnWidth === '1/4') widthPercent = 25
 
@@ -1181,16 +1199,16 @@ const getColumnStyle = (hInfoSection: any) => {
   }
 }
 
-const getColumnWidthStyle = (hInfoSection: any) => {
-  const columnWidth = hInfoSection.columnWidth || '1/2'
+const getColumnWidthStyle = (hInfoSection: unknown) => {
+  const section = hInfoSection as { columnWidth?: '1/2' | '1/3' | '1/4' }
+  const columnWidth = section.columnWidth || '1/2'
 
   if (columnWidth === '1/3') return '33.33%'
   else if (columnWidth === '1/4') return '25%'
   else return '50%' // 默认 1/2
 }
 
-// Responsive detection
-const isMobile = computed(() => window.innerWidth < 1280)
+// Responsive detection (不再使用，移除以避免 linter 报错)
 
 // Zoom controls
 const zoomIn = () => {

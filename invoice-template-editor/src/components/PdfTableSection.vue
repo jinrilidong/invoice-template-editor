@@ -92,6 +92,24 @@
           <div class="mb-5">
             <h4 class="text-sm font-medium text-gray-600">Table Column</h4>
           </div>
+          <!-- Width Unit Selector -->
+          <div class="flex items-center gap-2 mb-3">
+            <label class="text-xs text-[#0e171f]">Width Unit</label>
+            <select
+              class="border border-[#d3ddde] rounded px-2 py-1 text-xs"
+              :value="tablesData[tableIndex]?.columnsWidthUnit || 'percent'"
+              @change="
+                (e: Event) =>
+                  changeColumnsWidthUnit(
+                    tableIndex,
+                    (e.target as HTMLSelectElement).value as 'percent' | 'px',
+                  )
+              "
+            >
+              <option value="percent">Percent</option>
+              <option value="px">px</option>
+            </select>
+          </div>
           <div class="space-y-4">
             <div
               v-for="(column, index) in table.columns"
@@ -158,7 +176,7 @@
                       (value: string) =>
                         updateColumnField(tableIndex, index, 'width', Number(value) || 100)
                     "
-                    label="Column Width (%)"
+                    :label="`Column Width (${(tablesData[tableIndex]?.columnsWidthUnit || 'percent') === 'percent' ? '%' : 'px'})`"
                     type="number"
                   />
                 </div>
@@ -264,19 +282,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch, onMounted, onUnmounted, inject } from 'vue'
+import { computed, ref, onMounted, onUnmounted, inject } from 'vue'
 import UnifiedLInput from './UnifiedLInput.vue'
-import SectionTitle from './SectionTitle.vue'
 import TextButton from './TextButton.vue'
 import Toggle from './Toggle.vue'
 import { generateId } from '../composables/useSectionData'
-import type {
-  TableData,
-  TableColumn,
-  TableRow,
-  BaseSectionProps,
-  BaseSectionEmits,
-} from '../types/section'
+import type { TableData, TableColumn } from '../types/section'
 
 // 修改 props 和 emits 以支持多个表格
 interface TablesProps {
@@ -292,7 +303,7 @@ const props = defineProps<TablesProps>()
 const emit = defineEmits<TablesEmits>()
 
 // 注入确认对话框
-const confirmDialog = inject('confirmDialog') as any
+const confirmDialog = inject('confirmDialog') as { showConfirm: (opts: unknown) => void } | null
 
 // 表格展开状态管理
 const expandedTables = ref<Set<number>>(new Set([0])) // 默认第一个表格展开
@@ -336,6 +347,7 @@ const defaultTableData: TableData = {
   id: generateId(),
   sectionTitle: 'Table Title',
   subsectionTitle: 'Subsection',
+  columnsWidthUnit: 'percent',
   columns: [
     { id: '1', name: 'Column 1', type: 'text', alignment: 'left', width: 100 },
     { id: '2', name: 'Column 2', type: 'text', alignment: 'left', width: 100 },
@@ -388,16 +400,20 @@ const getTemplateData = (tableIndex: number) => {
 }
 
 // 更新表格字段
-const updateTableField = (tableIndex: number, field: keyof TableData, value: any) => {
+const updateTableField = (tableIndex: number, field: keyof TableData, value: unknown) => {
   console.log('PdfTableSection: updateTableField called', { tableIndex, field, value })
   const newTables = [...tablesData.value]
   if (newTables[tableIndex]) {
     let processedValue
     if (field === 'rowsNumber') {
-      processedValue = Number(value) || 2
+      processedValue = Number(value as number) || 2
     } else if (field === 'total') {
       // 处理 total: 空字符串设为 null，否则转为数字（包括0）
-      processedValue = value === '' ? null : Number(value)
+      if (typeof value === 'string') {
+        processedValue = value === '' ? null : Number(value)
+      } else {
+        processedValue = Number(value as number)
+      }
     } else {
       processedValue = value
     }
@@ -412,13 +428,16 @@ const updateColumnField = (
   tableIndex: number,
   columnIndex: number,
   field: keyof TableColumn,
-  value: any,
+  value: unknown,
 ) => {
   const newTables = [...tablesData.value]
   if (newTables[tableIndex] && newTables[tableIndex].columns) {
     const newColumns = [...newTables[tableIndex].columns]
     if (newColumns[columnIndex]) {
-      newColumns[columnIndex] = { ...newColumns[columnIndex], [field]: value }
+      newColumns[columnIndex] = {
+        ...newColumns[columnIndex],
+        [field]: value as unknown as TableColumn[keyof TableColumn],
+      }
       newTables[tableIndex] = { ...newTables[tableIndex], columns: newColumns }
       emit('update:modelValue', newTables)
     }
@@ -445,6 +464,7 @@ const addTable = () => {
     id: generateId(),
     sectionTitle: 'Table Title',
     subsectionTitle: 'Subsection',
+    columnsWidthUnit: 'percent',
     columns: [
       { id: generateId(), name: 'Column 1', type: 'text', alignment: 'left' },
       { id: generateId(), name: 'Column 2', type: 'text', alignment: 'left' },
@@ -473,9 +493,52 @@ const addTable = () => {
   emit('update:modelValue', newTables)
 }
 
+// 切换列宽单位并转换现有列宽
+const changeColumnsWidthUnit = (tableIndex: number, nextUnit: 'percent' | 'px') => {
+  const newTables = [...tablesData.value]
+  const table = newTables[tableIndex]
+  if (!table) return
+
+  const prevUnit = (table as Partial<TableData>).columnsWidthUnit || 'percent'
+  if (prevUnit === nextUnit) {
+    newTables[tableIndex] = { ...table, columnsWidthUnit: nextUnit }
+    emit('update:modelValue', newTables)
+    return
+  }
+
+  const CONTENT_WIDTH_PX = 572
+  const cols = table.columns || []
+  if (!cols.length) {
+    newTables[tableIndex] = { ...table, columnsWidthUnit: nextUnit }
+    emit('update:modelValue', newTables)
+    return
+  }
+
+  let converted = cols
+  if (prevUnit === 'percent' && nextUnit === 'px') {
+    const weights = cols.map((c) => (typeof c.width === 'number' ? c.width : 100))
+    const total = weights.reduce((a, b) => a + b, 0) || 1
+    converted = cols.map((c) => {
+      const current = typeof c.width === 'number' ? c.width : 100
+      const percent = (current / total) * 100
+      const px = Math.round((percent / 100) * CONTENT_WIDTH_PX)
+      return { ...c, width: px }
+    })
+  } else if (prevUnit === 'px' && nextUnit === 'percent') {
+    converted = cols.map((c) => {
+      const px = typeof c.width === 'number' ? c.width : CONTENT_WIDTH_PX / cols.length
+      const percent = Math.max(0, Math.round((px / CONTENT_WIDTH_PX) * 100))
+      return { ...c, width: percent }
+    })
+  }
+
+  newTables[tableIndex] = { ...table, columns: converted, columnsWidthUnit: nextUnit }
+  emit('update:modelValue', newTables)
+}
+
 // 删除表格
 const removeTable = (tableIndex: number) => {
-  confirmDialog.showConfirm({
+  confirmDialog?.showConfirm({
     message: `Are you sure you want to delete Table Section ${tableIndex + 1}? This action cannot be undone.`,
     onConfirm: () => {
       const newTables = tablesData.value.filter((_, index) => index !== tableIndex)
@@ -536,7 +599,7 @@ const removeColumn = (tableIndex: number, columnIndex: number) => {
     return
   }
 
-  confirmDialog.showConfirm({
+  confirmDialog?.showConfirm({
     message: `Are you sure you want to delete Column ${columnIndex + 1}? This action cannot be undone.`,
     onConfirm: () => {
       const newTables = [...tablesData.value]
@@ -634,41 +697,9 @@ const handleColumnDragEnd = () => {
   draggedColumn.value = null
 }
 
-// Ensure rows exist according to rowsNumber
-const ensureRows = (tableIndex: number): TableRow[] => {
-  const newTables = [...tablesData.value]
-  const table = newTables[tableIndex]
-  if (!table) return []
-  const rowsNumber = table.rowsNumber || 2
-  const baseRows = table.rows ? [...table.rows] : []
-  // extend rows if needed
-  for (let i = baseRows.length; i < rowsNumber; i++) {
-    baseRows.push({ id: generateId(), data: {}, total: 0 })
-  }
-  // trim extra
-  const finalRows = baseRows.slice(0, rowsNumber)
-  // write back if changed
-  if (!table.rows || table.rows.length !== finalRows.length) {
-    newTables[tableIndex] = { ...table, rows: finalRows }
-    emit('update:modelValue', newTables)
-  }
-  return finalRows
-}
+// 注意：行编辑网格已移除，故本组件不再负责动态扩展表格行
 
-// Update a specific cell value
-const updateCell = (tableIndex: number, rowIndex: number, columnId: string, value: string) => {
-  const newTables = [...tablesData.value]
-  const table = newTables[tableIndex]
-  if (!table) return
-  const rows = ensureRows(tableIndex)
-  const targetRow = rows[rowIndex]
-  if (!targetRow) return
-  const newRow: TableRow = { ...targetRow, data: { ...targetRow.data, [columnId]: value } }
-  const newRows = [...rows]
-  newRows[rowIndex] = newRow
-  newTables[tableIndex] = { ...table, rows: newRows }
-  emit('update:modelValue', newTables)
-}
+// 保留 ensureRows，移除未使用的 updateCell 以通过 linter
 
 // 监听全局 collapse-all-sections 事件
 const handleCollapseAll = () => {

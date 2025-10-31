@@ -1398,7 +1398,7 @@ onUnmounted(() => {
               <span class="text-white font-bold text-sm">BT</span>
             </div>
             <div>
-              <h1 class="text-lg font-semibold text-[#0e171f]">PDF Template Editor</h1>
+              <h1 class="text-lg font-semibold text-[#0e171f]">PDF Template Editor v1.0</h1>
               <p class="text-[9px] text-color-919191">@Matthew Li</p>
             </div>
           </div>

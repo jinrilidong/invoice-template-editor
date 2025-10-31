@@ -70,6 +70,7 @@
               :section-states="sectionStates"
               :template-data="templateData"
               :style-config="styleConfig"
+              :is-edit-mode="!!props.isEditMode"
               @section-select="handleSectionClick"
             />
           </div>
@@ -107,6 +108,7 @@
               :section-states="sectionStates"
               :template-data="templateData"
               :style-config="styleConfig"
+              :is-edit-mode="false"
               @section-select="handleSectionClick"
             />
           </div>
@@ -146,6 +148,7 @@ const props = defineProps<{
   styleConfig: StyleConfig
   exportMode?: boolean
   selectedSection?: string | null
+  isEditMode?: boolean
 }>()
 
 const emit = defineEmits<{

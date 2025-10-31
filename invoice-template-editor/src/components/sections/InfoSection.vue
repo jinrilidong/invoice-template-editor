@@ -5,7 +5,7 @@
     cellspacing="0"
   >
     <!-- Section Title -->
-    <tr v-if="info.sectionTitle">
+    <tr v-if="info.sectionTitle || isEditMode">
       <td
         :style="{
           fontSize: '7px',
@@ -15,14 +15,21 @@
           padding: '0 0 2px 0',
         }"
       >
-        {{ info.sectionTitle }}
+        <template v-if="!isEditMode">{{ info.sectionTitle }}</template>
+        <template v-else>
+          <EditableText v-model="info.sectionTitle" :editing="true" />
+        </template>
       </td>
     </tr>
 
     <!-- Info Items -->
     <tr v-if="info.items && info.items.length > 0">
       <td style="padding: 0">
-        <InfoItemsTable :items="info.items" :style-config="styleConfig" />
+        <InfoItemsTable
+          :items="info.items"
+          :style-config="styleConfig"
+          :is-edit-mode="isEditMode"
+        />
       </td>
     </tr>
   </table>
@@ -30,6 +37,7 @@
 
 <script setup lang="ts">
 import InfoItemsTable from './InfoItemsTable.vue'
+import EditableText from '../EditableText.vue'
 
 interface InfoItem {
   id: string
@@ -61,6 +69,7 @@ interface StyleConfig {
 defineProps<{
   info: Info
   styleConfig: StyleConfig
+  isEditMode?: boolean
 }>()
 
 // 字体权重转换函数

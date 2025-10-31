@@ -20,7 +20,7 @@
     </tr>
 
     <!-- Description Content -->
-    <tr v-if="description.content">
+    <tr v-if="description.content || isEditMode">
       <td
         :style="{
           fontSize: (styleConfig?.description?.textSize || 7) + 'px',
@@ -32,14 +32,17 @@
             'px',
           padding: '0',
         }"
-        v-html="toXhtml(description.content || '')"
-      ></td>
+      >
+        <div v-if="!isEditMode" v-html="toXhtml(description.content || '')"></div>
+        <EditableText v-else v-model="description.content" :editing="true" />
+      </td>
     </tr>
   </table>
 </template>
 
 <script setup lang="ts">
 import { toXhtml } from '@/utils/text'
+import EditableText from '../EditableText.vue'
 interface Description {
   id?: string
   sectionTitle?: string
@@ -60,6 +63,7 @@ interface StyleConfig {
 defineProps<{
   description: Description
   styleConfig: StyleConfig
+  isEditMode?: boolean
 }>()
 
 // 字体权重转换函数

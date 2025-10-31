@@ -48,6 +48,7 @@
                     <HeaderSection
                       :header="props.templateData.header"
                       :style-config="props.styleConfig as any"
+                      :is-edit-mode="!!props.isEditMode"
                     />
                   </td>
                 </tr>
@@ -67,7 +68,11 @@
                     style="padding: 0; vertical-align: top"
                     @click.stop="handleSectionClick('info-section')"
                   >
-                    <InfoSection :info="infoSection" :style-config="props.styleConfig as any" />
+                    <InfoSection
+                      :info="infoSection"
+                      :style-config="props.styleConfig as any"
+                      :is-edit-mode="!!props.isEditMode"
+                    />
                     <!-- Section spacer after each info section -->
                     <table
                       :style="{
@@ -96,7 +101,11 @@
                     style="padding: 0; vertical-align: top"
                     @click.stop="handleSectionClick('h-info-section')"
                   >
-                    <HInfoSection :h-info="hInfoSection" :style-config="props.styleConfig as any" />
+                    <HInfoSection
+                      :h-info="hInfoSection"
+                      :style-config="props.styleConfig as any"
+                      :is-edit-mode="!!props.isEditMode"
+                    />
                     <!-- Section spacer after each h-info section -->
                     <table
                       :style="{
@@ -125,7 +134,11 @@
                     style="padding: 0; vertical-align: top"
                     @click.stop="handleSectionClick(`table-section-${index}`)"
                   >
-                    <TableSection :table="tableSection" :style-config="props.styleConfig as any" />
+                    <TableSection
+                      :table="tableSection"
+                      :style-config="props.styleConfig as any"
+                      :is-edit-mode="!!props.isEditMode"
+                    />
                     <!-- Section spacer after each table section -->
                     <table
                       :style="{
@@ -197,6 +210,7 @@
                     <DescriptionSection
                       :description="descriptionSection"
                       :style-config="props.styleConfig as any"
+                      :is-edit-mode="!!props.isEditMode"
                     />
                     <!-- Section spacer after each description section -->
                     <table
@@ -223,7 +237,11 @@
                     style="padding: 0; vertical-align: top"
                     @click.stop="handleSectionClick('item-section')"
                   >
-                    <ItemSection :item="itemSection" :style-config="props.styleConfig as any" />
+                    <ItemSection
+                      :item="itemSection"
+                      :style-config="props.styleConfig as any"
+                      :is-edit-mode="!!props.isEditMode"
+                    />
                     <!-- Section spacer after each item section -->
                     <table
                       :style="{
@@ -281,6 +299,7 @@
                   :style-config="props.styleConfig as any"
                   :current-page="1"
                   :total-pages="1"
+                  :is-edit-mode="!!props.isEditMode"
                 />
               </td>
             </tr>
@@ -326,6 +345,7 @@ const props = defineProps<{
   sectionStates: SectionStates
   templateData: TemplateData
   styleConfig: StyleConfig
+  isEditMode?: boolean
 }>()
 
 // ✅ 添加事件处理

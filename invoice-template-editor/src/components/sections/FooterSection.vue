@@ -18,7 +18,10 @@
           verticalAlign: 'top',
         }"
       >
-        {{ footer.info || '' }}
+        <template v-if="!isEditMode">{{ footer.info || '' }}</template>
+        <template v-else>
+          <EditableText v-model="footer.info" :editing="true" />
+        </template>
       </td>
 
       <!-- Footer Name -->
@@ -34,7 +37,10 @@
           verticalAlign: 'top',
         }"
       >
-        {{ footer.name || '' }}
+        <template v-if="!isEditMode">{{ footer.name || '' }}</template>
+        <template v-else>
+          <EditableText v-model="footer.name" :editing="true" />
+        </template>
       </td>
 
       <!-- Page Number -->
@@ -57,6 +63,7 @@
 </template>
 
 <script setup lang="ts">
+import EditableText from '../EditableText.vue'
 interface Footer {
   info?: string
   name?: string
@@ -85,6 +92,7 @@ defineProps<{
   styleConfig: StyleConfig
   currentPage: number
   totalPages: number
+  isEditMode?: boolean
 }>()
 
 // 字体权重转换函数

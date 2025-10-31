@@ -29,7 +29,12 @@
             verticalAlign: 'bottom',
           }"
         >
-          {{ column.name }}
+          <template v-if="!isEditMode">
+            <div v-html="toXhtml(column.name || '')"></div>
+          </template>
+          <template v-else>
+            <EditableText v-model="column.name" :editing="true" />
+          </template>
         </th>
       </tr>
     </thead>
@@ -63,7 +68,12 @@
                 : 'none',
           }"
         >
-          {{ row.data[column.id] || '' }}
+          <template v-if="!isEditMode">
+            <div v-html="toXhtml(row.data[column.id] || '')"></div>
+          </template>
+          <template v-else>
+            <EditableText v-model="row.data[column.id]" :editing="true" />
+          </template>
         </td>
       </tr>
     </tbody>
@@ -72,6 +82,8 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import EditableText from '../EditableText.vue'
+import { toXhtml } from '@/utils/text'
 
 interface TableColumn {
   id: string
@@ -114,6 +126,7 @@ interface StyleConfig {
 const props = defineProps<{
   table: Table
   styleConfig: StyleConfig
+  isEditMode?: boolean
 }>()
 
 // 计算要显示的行数

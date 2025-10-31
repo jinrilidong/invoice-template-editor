@@ -31,8 +31,10 @@
                 padding: 0,
                 verticalAlign: 'top',
               }"
-              v-html="toXhtml(item.label)"
-            ></td>
+            >
+              <div v-if="!isEditMode" v-html="toXhtml(item.label)"></div>
+              <EditableText v-else v-model="item.label" :editing="true" />
+            </td>
             <td
               :style="{
                 fontSize: '7px',
@@ -42,8 +44,10 @@
                 padding: (styleConfig?.hInfo?.labelValueGap ?? 0) + 'px 0 0 0',
                 verticalAlign: 'top',
               }"
-              v-html="toXhtml(item.value)"
-            ></td>
+            >
+              <div v-if="!isEditMode" v-html="toXhtml(item.value)"></div>
+              <EditableText v-else v-model="item.value" :editing="true" />
+            </td>
           </tr>
         </table>
 
@@ -63,8 +67,10 @@
                 lineHeight: '9px',
                 padding: 0,
               }"
-              v-html="toXhtml(item.label)"
-            ></td>
+            >
+              <div v-if="!isEditMode" v-html="toXhtml(item.label)"></div>
+              <EditableText v-else v-model="item.label" :editing="true" />
+            </td>
           </tr>
           <tr>
             <td
@@ -75,8 +81,10 @@
                 lineHeight: '9px',
                 padding: (styleConfig?.hInfo?.labelValueGap ?? 2) + 'px 0 0 0',
               }"
-              v-html="toXhtml(item.value)"
-            ></td>
+            >
+              <div v-if="!isEditMode" v-html="toXhtml(item.value)"></div>
+              <EditableText v-else v-model="item.value" :editing="true" />
+            </td>
           </tr>
         </table>
       </td>
@@ -86,6 +94,7 @@
 
 <script setup lang="ts">
 import { toXhtml } from '@/utils/text'
+import EditableText from '../EditableText.vue'
 interface HInfoItem {
   id: string
   label: string
@@ -116,6 +125,7 @@ defineProps<{
   column: HInfoColumn
   styleConfig: StyleConfig
   labelValueLayout: 'horizontal' | 'vertical'
+  isEditMode?: boolean
 }>()
 
 // 字体权重转换函数

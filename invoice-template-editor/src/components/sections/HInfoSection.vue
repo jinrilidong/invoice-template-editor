@@ -5,7 +5,7 @@
     cellspacing="0"
   >
     <!-- Section Title -->
-    <tr v-if="hInfo.sectionTitle">
+    <tr v-if="hInfo.sectionTitle || isEditMode">
       <td
         :style="{
           fontSize: '7px',
@@ -15,7 +15,10 @@
           padding: '0 0 2px 0',
         }"
       >
-        {{ hInfo.sectionTitle }}
+        <template v-if="!isEditMode">{{ hInfo.sectionTitle }}</template>
+        <template v-else>
+          <EditableText v-model="hInfo.sectionTitle" :editing="true" />
+        </template>
       </td>
     </tr>
 
@@ -46,6 +49,7 @@
                 :column="column"
                 :style-config="styleConfig"
                 :label-value-layout="hInfo.labelValueLayout || 'vertical'"
+                :is-edit-mode="isEditMode"
               />
             </td>
           </tr>
@@ -57,6 +61,7 @@
 
 <script setup lang="ts">
 import HInfoColumn from './HInfoColumn.vue'
+import EditableText from '../EditableText.vue'
 
 interface HInfoItem {
   id: string
@@ -95,6 +100,7 @@ interface StyleConfig {
 const props = defineProps<{
   hInfo: HInfo
   styleConfig: StyleConfig
+  isEditMode?: boolean
 }>()
 
 // 列宽按索引计算

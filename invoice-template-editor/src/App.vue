@@ -27,6 +27,9 @@ const activeRightTab = ref<RightTab>('config')
 
 // Export mode (for WYSIWYG DOM export)
 const exportMode = ref(false)
+// Edit mode state
+const isEditMode = ref(false)
+const editSnapshot = ref<any | null>(null)
 
 // Preview refresh key for forcing component re-render
 const previewKey = ref(0)
@@ -1165,6 +1168,39 @@ const handleSectionSelect = (sectionType: string | null) => {
   selectedSection.value = sectionType
 }
 
+// Edit mode handlers
+const enterEditMode = () => {
+  editSnapshot.value = JSON.parse(JSON.stringify(templateData))
+  isEditMode.value = true
+}
+
+const saveEdits = () => {
+  try {
+    // Save only templateData to localStorage alongside existing payload structure
+    const savedRaw = localStorage.getItem(STORAGE_KEY)
+    const prev = savedRaw ? JSON.parse(savedRaw) : {}
+    const toSave = {
+      version: STORAGE_VERSION,
+      sections: sectionStates.value,
+      data: templateData,
+      styleConfig: styleConfig,
+      lastSaved: new Date().toISOString(),
+    }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...prev, ...toSave }))
+    isEditMode.value = false
+    editSnapshot.value = null
+    showNotification('Saved locally', 'success')
+  } catch (e) {
+    showNotification('Save failed', 'error')
+  }
+}
+
+const exitWithoutSaving = () => {
+  if (editSnapshot.value) Object.assign(templateData, editSnapshot.value)
+  isEditMode.value = false
+  editSnapshot.value = null
+}
+
 // Save data before page unload and clear history
 window.addEventListener('beforeunload', () => {
   saveToLocalStorage()
@@ -1260,6 +1296,21 @@ onUnmounted(() => {
               </svg>
               Save
             </TextButton>
+            <!-- Edit Mode Controls -->
+            <div class="h-6 w-px bg-[#d3ddde]"></div>
+            <template v-if="!isEditMode">
+              <TextButton @click="enterEditMode" variant="default" size="sm">
+                Edit Mode
+              </TextButton>
+            </template>
+            <template v-else>
+              <TextButton @click="saveEdits" variant="default" size="sm" class="bg-[#FF761F] text-white hover:bg-[#e66a1a]">
+                Save
+              </TextButton>
+              <TextButton @click="confirmDialog.open('Exit without saving?', () => exitWithoutSaving())" variant="default" size="sm">
+                Exit
+              </TextButton>
+            </template>
             <div class="h-6 w-px bg-[#d3ddde]"></div>
             <!-- Export Buttons -->
             <div class="flex items-center gap-2">
@@ -1328,6 +1379,7 @@ onUnmounted(() => {
               :template-data="templateData"
               :style-config="styleConfig"
               :export-mode="exportMode"
+              :is-edit-mode="isEditMode"
               :selected-section="selectedSection"
               @section-select="handleSectionSelect"
             />

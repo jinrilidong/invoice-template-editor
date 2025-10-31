@@ -30,8 +30,10 @@
                   lineHeight: '9px',
                   padding: '0',
                 }"
-                v-html="toXhtml(item.label)"
-              ></td>
+              >
+                <div v-if="!isEditMode" v-html="toXhtml(item.label)"></div>
+                <EditableText v-else v-model="item.label" :editing="true" />
+              </td>
             </tr>
             <tr>
               <td
@@ -42,8 +44,10 @@
                   lineHeight: '9px',
                   padding: (styleConfig?.info?.labelValueGap ?? 2) + 'px 0 0 0',
                 }"
-                v-html="toXhtml(item.value)"
-              ></td>
+              >
+                <div v-if="!isEditMode" v-html="toXhtml(item.value)"></div>
+                <EditableText v-else v-model="item.value" :editing="true" />
+              </td>
             </tr>
           </table>
         </td>
@@ -76,6 +80,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { toXhtml } from '@/utils/text'
+import EditableText from '../EditableText.vue'
 
 interface InfoItem {
   id: string
@@ -101,6 +106,7 @@ interface StyleConfig {
 const props = defineProps<{
   items: InfoItem[]
   styleConfig: StyleConfig
+  isEditMode?: boolean
 }>()
 
 // 将items按行分组，每行5个

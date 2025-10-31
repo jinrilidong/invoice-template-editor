@@ -37,7 +37,7 @@
     <!-- Data Table -->
     <tr v-if="table.columns && table.columns.length > 0">
       <td style="padding: 0">
-        <DataTable :table="table" :style-config="styleConfig" />
+        <DataTable :table="table" :style-config="styleConfig" :is-edit-mode="isEditMode" />
       </td>
     </tr>
 
@@ -97,6 +97,7 @@ interface StyleConfig {
 defineProps<{
   table: Table
   styleConfig: StyleConfig
+  isEditMode?: boolean
 }>()
 
 // 字体权重转换函数

@@ -18,7 +18,7 @@
           <tr>
             <td style="padding: 0; vertical-align: top">
               <span
-                v-if="header.title"
+                v-if="header.title && !isEditMode"
                 :style="{
                   fontSize: (styleConfig?.header?.titleSize || 20) + 'px',
                   fontWeight: getFontWeight(styleConfig?.header?.titleWeight || 'semibold'),
@@ -28,8 +28,9 @@
                 }"
                 v-html="toXhtml(header.title)"
               ></span>
+              <EditableText v-else v-model="header.title" :editing="!!isEditMode" />
               <span
-                v-if="header.description"
+                v-if="header.description && !isEditMode"
                 :style="{
                   fontSize: (styleConfig?.header?.descriptionSize || 7) + 'px',
                   fontWeight: getFontWeight(styleConfig?.header?.descriptionWeight || 'normal'),
@@ -40,6 +41,7 @@
                 }"
                 v-html="toXhtml(header.description)"
               ></span>
+              <EditableText v-else v-model="header.description" :editing="!!isEditMode" />
             </td>
           </tr>
         </table>
@@ -127,6 +129,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { toXhtml } from '@/utils/text'
+import EditableText from '../EditableText.vue'
 
 interface Header {
   title?: string
@@ -152,6 +155,7 @@ interface StyleConfig {
 const props = defineProps<{
   header: Header
   styleConfig: StyleConfig
+  isEditMode?: boolean
 }>()
 
 // 计算是否有标题或描述

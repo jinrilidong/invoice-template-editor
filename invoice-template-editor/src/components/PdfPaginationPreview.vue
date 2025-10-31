@@ -6,7 +6,9 @@
     <!-- Preview Header -->
     <div class="bg-gray-100 border-b border-[#d3ddde] flex-shrink-0 p-2 min-h-[3rem] w-full">
       <div class="flex items-center justify-between w-full">
-        <h2 class="text-lg font-semibold text-primary">PDF Template Preview</h2>
+        <h2 class="text-lg font-semibold text-primary">PDF Template Preview
+          <span v-if="!isExportMode && props.isEditMode" class="ml-2 font-semibold" style="color: #FF761F;">Text Edit Mode</span>
+        </h2>
         <div class="flex items-center gap-2">
           <!-- Zoom Controls -->
           <div class="flex items-center gap-2">

@@ -24,10 +24,10 @@
             <tr>
               <td
                 :style="{
-                  fontSize: '7px',
+                  fontSize: (styleConfig?.info?.labelSize || 7) + 'px',
                   fontWeight: getFontWeight(styleConfig?.info?.labelWeight || 'semibold'),
                   color: styleConfig?.info?.labelColor || '#000000',
-                  lineHeight: '9px',
+                  lineHeight: (styleConfig?.info?.labelSize || 7) + 2 + 'px',
                   padding: '0',
                 }"
               >
@@ -38,10 +38,10 @@
             <tr>
               <td
                 :style="{
-                  fontSize: '7px',
+                  fontSize: (styleConfig?.info?.valueSize || 7) + 'px',
                   fontWeight: getFontWeight(styleConfig?.info?.valueWeight || 'normal'),
                   color: styleConfig?.info?.valueColor || '#919191',
-                  lineHeight: '9px',
+                  lineHeight: (styleConfig?.info?.valueSize || 7) + 2 + 'px',
                   padding: (styleConfig?.info?.labelValueGap ?? 2) + 'px 0 0 0',
                 }"
               >

@@ -26,9 +26,9 @@
                   lineHeight: '24px',
                   display: 'block',
                 }"
-                v-html="toXhtml(header.title)"
+                v-html="toXhtml(header.title || '')"
               ></span>
-              <EditableText v-else v-model="header.title" :editing="!!isEditMode" />
+              <span v-else v-html="toXhtml(header.title || '')"></span>
               <span
                 v-if="header.description && !isEditMode"
                 :style="{
@@ -39,9 +39,9 @@
                   display: 'block',
                   marginTop: '1px',
                 }"
-                v-html="toXhtml(header.description)"
+                v-html="toXhtml(header.description || '')"
               ></span>
-              <EditableText v-else v-model="header.description" :editing="!!isEditMode" />
+              <span v-else v-html="toXhtml(header.description || '')"></span>
             </td>
           </tr>
         </table>
@@ -109,11 +109,12 @@
               <div
                 v-if="header.logoDescription"
                 :style="{
-                  fontSize: '7px',
-                  color: '#919191',
+                  fontSize: (styleConfig?.header?.logoDescriptionSize || 7) + 'px',
+                  fontWeight: getFontWeight(styleConfig?.header?.logoDescriptionWeight || 'normal'),
+                  color: styleConfig?.header?.logoDescriptionColor || '#919191',
                   textAlign: hasTitleOrDescription ? 'right' : 'left',
                   marginTop: '4px',
-                  lineHeight: '9px',
+                  lineHeight: (styleConfig?.header?.logoDescriptionSize || 7) + 2 + 'px',
                 }"
               >
                 {{ header.logoDescription }}
@@ -129,15 +130,14 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { toXhtml } from '@/utils/text'
-import EditableText from '../EditableText.vue'
 
 interface Header {
-  title?: string
-  description?: string
+  title: string
+  description: string
   logo?: string
   companyName?: string
   logoSize?: 'default' | 'large'
-  logoDescription?: string
+  logoDescription: string
 }
 
 interface StyleConfig {
@@ -148,6 +148,9 @@ interface StyleConfig {
     descriptionColor: string
     descriptionSize: number
     descriptionWeight: string
+    logoDescriptionColor?: string
+    logoDescriptionSize?: number
+    logoDescriptionWeight?: string
     verticalAlign?: 'top' | 'middle' | 'bottom'
   }
 }

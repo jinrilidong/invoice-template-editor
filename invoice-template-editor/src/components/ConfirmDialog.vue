@@ -3,7 +3,7 @@
     <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
       <!-- Header -->
       <div class="px-6 py-4 border-b border-gray-200">
-        <h3 class="text-lg font-semibold text-gray-900">Confirm Delete</h3>
+        <h3 class="text-lg font-semibold text-gray-900">{{ title || 'Confirm' }}</h3>
       </div>
       
       <!-- Content -->
@@ -17,13 +17,13 @@
           @click="handleCancel"
           class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors"
         >
-          Cancel
+          {{ cancelLabel || 'Cancel' }}
         </button>
         <button
           @click="handleConfirm"
           class="px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors"
         >
-          Delete
+          {{ confirmLabel || 'Confirm' }}
         </button>
       </div>
     </div>
@@ -36,6 +36,9 @@ import { ref, watch } from 'vue'
 interface Props {
   visible: boolean
   message?: string
+  title?: string
+  confirmLabel?: string
+  cancelLabel?: string
 }
 
 interface Emits {
@@ -48,10 +51,16 @@ const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 const isVisible = ref(props.visible)
+const title = ref(props.title)
+const confirmLabel = ref(props.confirmLabel)
+const cancelLabel = ref(props.cancelLabel)
 
 watch(() => props.visible, (newValue) => {
   isVisible.value = newValue
 })
+watch(() => props.title, (newValue) => { title.value = newValue })
+watch(() => props.confirmLabel, (newValue) => { confirmLabel.value = newValue })
+watch(() => props.cancelLabel, (newValue) => { cancelLabel.value = newValue })
 
 const handleConfirm = () => {
   emit('confirm')

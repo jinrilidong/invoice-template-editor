@@ -24,10 +24,10 @@
             <td
               :style="{
                 width: (styleConfig?.hInfo?.labelWidth || 80) + 'px',
-                fontSize: '7px',
+                fontSize: (styleConfig?.hInfo?.labelSize || 7) + 'px',
                 fontWeight: getFontWeight(styleConfig?.hInfo?.labelWeight || 'semibold'),
                 color: styleConfig?.hInfo?.labelColor || '#000000',
-                lineHeight: '9px',
+                lineHeight: (styleConfig?.hInfo?.labelSize || 7) + 2 + 'px',
                 padding: 0,
                 verticalAlign: 'top',
               }"
@@ -37,10 +37,10 @@
             </td>
             <td
               :style="{
-                fontSize: '7px',
+                fontSize: (styleConfig?.hInfo?.valueSize || 7) + 'px',
                 fontWeight: getFontWeight(styleConfig?.hInfo?.valueWeight || 'normal'),
                 color: styleConfig?.hInfo?.valueColor || '#919191',
-                lineHeight: '9px',
+                lineHeight: (styleConfig?.hInfo?.valueSize || 7) + 2 + 'px',
                 padding: (styleConfig?.hInfo?.labelValueGap ?? 0) + 'px 0 0 0',
                 verticalAlign: 'top',
               }"
@@ -61,10 +61,10 @@
           <tr>
             <td
               :style="{
-                fontSize: '7px',
+                fontSize: (styleConfig?.hInfo?.labelSize || 7) + 'px',
                 fontWeight: getFontWeight(styleConfig?.hInfo?.labelWeight || 'semibold'),
                 color: styleConfig?.hInfo?.labelColor || '#000000',
-                lineHeight: '9px',
+                lineHeight: (styleConfig?.hInfo?.labelSize || 7) + 2 + 'px',
                 padding: 0,
               }"
             >
@@ -75,10 +75,10 @@
           <tr>
             <td
               :style="{
-                fontSize: '7px',
+                fontSize: (styleConfig?.hInfo?.valueSize || 7) + 'px',
                 fontWeight: getFontWeight(styleConfig?.hInfo?.valueWeight || 'normal'),
                 color: styleConfig?.hInfo?.valueColor || '#919191',
-                lineHeight: '9px',
+                lineHeight: (styleConfig?.hInfo?.valueSize || 7) + 2 + 'px',
                 padding: (styleConfig?.hInfo?.labelValueGap ?? 2) + 'px 0 0 0',
               }"
             >

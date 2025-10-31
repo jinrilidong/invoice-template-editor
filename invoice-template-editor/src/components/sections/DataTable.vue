@@ -12,7 +12,7 @@
           :key="'header-' + columnIndex"
           :style="{
             width: getColumnWidth(column) + '%',
-            fontSize: '7px',
+            fontSize: (styleConfig?.table?.columnNameSize || 7) + 'px',
             fontWeight: getFontWeight(styleConfig?.table?.columnNameWeight || 'medium'),
             color: styleConfig?.table?.headerColor || '#919191',
             textAlign: column.alignment === 'right' ? 'right' : 'left',
@@ -25,7 +25,7 @@
             paddingTop: '2px',
             paddingBottom: '2px',
             borderBottom: '1px solid ' + (styleConfig?.table?.borderColor || '#d2d2d2'),
-            lineHeight: '9px',
+            lineHeight: (styleConfig?.table?.columnNameSize || 7) + 2 + 'px',
             verticalAlign: 'bottom',
           }"
         >
@@ -47,7 +47,7 @@
           :key="'cell-' + rowIndex + '-' + columnIndex"
           :style="{
             width: getColumnWidth(column) + '%',
-            fontSize: '7px',
+            fontSize: (styleConfig?.table?.rowTextSize || 7) + 'px',
             fontWeight: '400',
             color: styleConfig?.table?.rowTextColor || '#000000',
             textAlign: column.alignment === 'right' ? 'right' : 'left',
@@ -59,7 +59,7 @@
                 : (styleConfig?.table?.columnsPadding ?? 8) / 2 + 'px',
             paddingTop: '2px',
             paddingBottom: '2px',
-            lineHeight: '9px',
+            lineHeight: (styleConfig?.table?.rowTextSize || 7) + 2 + 'px',
             verticalAlign: 'top',
             height: (styleConfig?.table?.rowHeight || 13) + 'px',
             borderBottom:

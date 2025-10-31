@@ -11,37 +11,117 @@ export function usePdfInteraction(sectionStates?: any) {
   const highlightedItem = ref<string | null>(null)
   const configPanelRef = ref<HTMLElement | null>(null)
   const hoverTimeout = ref<number | null>(null)
-  
+
   // Section mapping between PDF sections and config panel elements
   const sectionMappings: SectionMapping[] = [
-    { pdfSection: 'header-section', configSection: 'header', configElementId: 'config-header-section' },
+    {
+      pdfSection: 'header-section',
+      configSection: 'header',
+      configElementId: 'config-header-section',
+    },
     { pdfSection: 'info-section', configSection: 'info', configElementId: 'config-info-section' },
-    { pdfSection: 'h-info-section', configSection: 'hInfo', configElementId: 'config-h-info-section' },
-    { pdfSection: 'table-section', configSection: 'table', configElementId: 'config-table-section' },
-    { pdfSection: 'table-section-0', configSection: 'table', configElementId: 'config-table-0-section' },
-    { pdfSection: 'table-section-1', configSection: 'table', configElementId: 'config-table-1-section' },
-    { pdfSection: 'table-section-2', configSection: 'table', configElementId: 'config-table-2-section' },
-    { pdfSection: 'table-section-3', configSection: 'table', configElementId: 'config-table-3-section' },
-    { pdfSection: 'table-section-4', configSection: 'table', configElementId: 'config-table-4-section' },
-    { pdfSection: 'table-section-table-0', configSection: 'table', configElementId: 'config-table-0-section' },
-    { pdfSection: 'table-section-table-1', configSection: 'table', configElementId: 'config-table-1-section' },
-    { pdfSection: 'table-section-table-2', configSection: 'table', configElementId: 'config-table-2-section' },
-    { pdfSection: 'table-section-table-3', configSection: 'table', configElementId: 'config-table-3-section' },
-    { pdfSection: 'table-section-table-4', configSection: 'table', configElementId: 'config-table-4-section' },
-    { pdfSection: 'table-section-table-0-part1', configSection: 'table', configElementId: 'config-table-0-section' },
-    { pdfSection: 'table-section-table-1-part1', configSection: 'table', configElementId: 'config-table-1-section' },
-    { pdfSection: 'table-section-table-2-part1', configSection: 'table', configElementId: 'config-table-2-section' },
-    { pdfSection: 'table-section-table-3-part1', configSection: 'table', configElementId: 'config-table-3-section' },
-    { pdfSection: 'table-section-table-4-part1', configSection: 'table', configElementId: 'config-table-4-section' },
-    { pdfSection: 'description-section', configSection: 'description', configElementId: 'config-description-section' },
+    {
+      pdfSection: 'h-info-section',
+      configSection: 'hInfo',
+      configElementId: 'config-h-info-section',
+    },
+    {
+      pdfSection: 'table-section',
+      configSection: 'table',
+      configElementId: 'config-table-section',
+    },
+    {
+      pdfSection: 'table-section-0',
+      configSection: 'table',
+      configElementId: 'config-table-0-section',
+    },
+    {
+      pdfSection: 'table-section-1',
+      configSection: 'table',
+      configElementId: 'config-table-1-section',
+    },
+    {
+      pdfSection: 'table-section-2',
+      configSection: 'table',
+      configElementId: 'config-table-2-section',
+    },
+    {
+      pdfSection: 'table-section-3',
+      configSection: 'table',
+      configElementId: 'config-table-3-section',
+    },
+    {
+      pdfSection: 'table-section-4',
+      configSection: 'table',
+      configElementId: 'config-table-4-section',
+    },
+    {
+      pdfSection: 'table-section-table-0',
+      configSection: 'table',
+      configElementId: 'config-table-0-section',
+    },
+    {
+      pdfSection: 'table-section-table-1',
+      configSection: 'table',
+      configElementId: 'config-table-1-section',
+    },
+    {
+      pdfSection: 'table-section-table-2',
+      configSection: 'table',
+      configElementId: 'config-table-2-section',
+    },
+    {
+      pdfSection: 'table-section-table-3',
+      configSection: 'table',
+      configElementId: 'config-table-3-section',
+    },
+    {
+      pdfSection: 'table-section-table-4',
+      configSection: 'table',
+      configElementId: 'config-table-4-section',
+    },
+    {
+      pdfSection: 'table-section-table-0-part1',
+      configSection: 'table',
+      configElementId: 'config-table-0-section',
+    },
+    {
+      pdfSection: 'table-section-table-1-part1',
+      configSection: 'table',
+      configElementId: 'config-table-1-section',
+    },
+    {
+      pdfSection: 'table-section-table-2-part1',
+      configSection: 'table',
+      configElementId: 'config-table-2-section',
+    },
+    {
+      pdfSection: 'table-section-table-3-part1',
+      configSection: 'table',
+      configElementId: 'config-table-3-section',
+    },
+    {
+      pdfSection: 'table-section-table-4-part1',
+      configSection: 'table',
+      configElementId: 'config-table-4-section',
+    },
+    {
+      pdfSection: 'description-section',
+      configSection: 'description',
+      configElementId: 'config-description-section',
+    },
     { pdfSection: 'item-section', configSection: 'item', configElementId: 'config-item-section' },
-    { pdfSection: 'footer-section', configSection: 'footer', configElementId: 'config-footer-section' }
+    {
+      pdfSection: 'footer-section',
+      configSection: 'footer',
+      configElementId: 'config-footer-section',
+    },
   ]
 
   // Function to expand section if it's collapsed
   const expandSectionIfNeeded = (sectionName: string) => {
     if (!sectionStates) return
-    
+
     // Map PDF section names to config section names
     const sectionMap: { [key: string]: string } = {
       'header-section': 'header',
@@ -64,14 +144,14 @@ export function usePdfInteraction(sectionStates?: any) {
       'table-section-table-4-part1': 'table',
       'description-section': 'description',
       'item-section': 'item',
-      'footer-section': 'footer'
+      'footer-section': 'footer',
     }
-    
+
     const configSectionName = sectionMap[sectionName]
     if (configSectionName && !sectionStates[configSectionName]) {
       sectionStates[configSectionName] = true
     }
-    
+
     // For table sections, also expand the specific table
     if (sectionName.startsWith('table-section-')) {
       let tableIndex = ''
@@ -80,11 +160,13 @@ export function usePdfInteraction(sectionStates?: any) {
       } else {
         tableIndex = sectionName.split('-')[2] || '0'
       }
-      
+
       // Dispatch event to expand the specific table
-      window.dispatchEvent(new CustomEvent('expand-table-section', { 
-        detail: { tableIndex: parseInt(tableIndex) } 
-      }))
+      window.dispatchEvent(
+        new CustomEvent('expand-table-section', {
+          detail: { tableIndex: parseInt(tableIndex) },
+        }),
+      )
     }
   }
 
@@ -112,14 +194,17 @@ export function usePdfInteraction(sectionStates?: any) {
   // Handle click on PDF section or item
   const handleSectionClick = (sectionName: string, itemId?: string) => {
     console.log('usePdfInteraction: handleSectionClick called with:', sectionName, itemId)
-    
+
     // Expand section if it's collapsed
     expandSectionIfNeeded(sectionName)
-    
-    const mapping = sectionMappings.find(m => m.pdfSection === sectionName)
+
+    const mapping = sectionMappings.find((m) => m.pdfSection === sectionName)
     if (!mapping) {
       console.log('usePdfInteraction: No mapping found for section:', sectionName)
-      console.log('usePdfInteraction: Available mappings:', sectionMappings.map(m => m.pdfSection))
+      console.log(
+        'usePdfInteraction: Available mappings:',
+        sectionMappings.map((m) => m.pdfSection),
+      )
       return
     }
 
@@ -129,8 +214,10 @@ export function usePdfInteraction(sectionStates?: any) {
     const targetElement = document.getElementById(mapping.configElementId)
     if (!targetElement) {
       console.log('usePdfInteraction: Target element not found:', mapping.configElementId)
-      console.log('usePdfInteraction: Available elements with config- prefix:', 
-        Array.from(document.querySelectorAll('[id^="config-"]')).map(el => el.id))
+      console.log(
+        'usePdfInteraction: Available elements with config- prefix:',
+        Array.from(document.querySelectorAll('[id^="config-"]')).map((el) => el.id),
+      )
       return
     }
 
@@ -140,7 +227,7 @@ export function usePdfInteraction(sectionStates?: any) {
     targetElement.scrollIntoView({
       behavior: 'smooth',
       block: 'start',
-      inline: 'nearest'
+      inline: 'nearest',
     })
 
     // Add temporary highlight to the target section
@@ -153,11 +240,11 @@ export function usePdfInteraction(sectionStates?: any) {
   // Handle click on specific item within a section
   const handleItemClick = (sectionName: string, itemId: string) => {
     console.log('usePdfInteraction: handleItemClick called with:', sectionName, itemId)
-    
+
     // Expand section if it's collapsed
     expandSectionIfNeeded(sectionName)
-    
-    const mapping = sectionMappings.find(m => m.pdfSection === sectionName)
+
+    const mapping = sectionMappings.find((m) => m.pdfSection === sectionName)
     if (!mapping) {
       console.log('usePdfInteraction: No mapping found for section:', sectionName)
       return
@@ -172,12 +259,12 @@ export function usePdfInteraction(sectionStates?: any) {
       sectionElement.scrollIntoView({
         behavior: 'smooth',
         block: 'start',
-        inline: 'nearest'
+        inline: 'nearest',
       })
-      
+
       // Then try to find and highlight the specific item
       let itemElement = null
-      
+
       // Handle different section types
       if (sectionName.startsWith('table-section-')) {
         // Extract table index from section name
@@ -189,9 +276,9 @@ export function usePdfInteraction(sectionStates?: any) {
           // Handle format like "table-section-0" -> "0"
           tableIndex = sectionName.split('-')[2] || '0'
         }
-        
+
         console.log('usePdfInteraction: Table index:', tableIndex)
-        
+
         // Handle different table item types
         if (itemId === 'section-title') {
           const elementId = `config-table-${tableIndex}-section-title`
@@ -227,17 +314,17 @@ export function usePdfInteraction(sectionStates?: any) {
         console.log('usePdfInteraction: Looking for other section element:', elementId)
         itemElement = document.getElementById(elementId)
       }
-      
+
       console.log('usePdfInteraction: Item element found:', itemElement)
-      
+
       if (itemElement) {
         setTimeout(() => {
           itemElement.scrollIntoView({
             behavior: 'smooth',
             block: 'start',
-            inline: 'nearest'
+            inline: 'nearest',
           })
-          
+
           // Highlight the specific item for 1.5 seconds
           itemElement.classList.add('config-item-highlight')
           setTimeout(() => {
@@ -281,6 +368,6 @@ export function usePdfInteraction(sectionStates?: any) {
     handleSectionClick,
     handleItemClick,
     getSectionHighlightClass,
-    getItemHighlightClass
+    getItemHighlightClass,
   }
 }

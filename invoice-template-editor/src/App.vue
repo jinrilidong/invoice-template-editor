@@ -466,10 +466,17 @@ const handleManualSave = () => {
 // Validate imported JSON structure
 const validateImportedData = (payload: unknown) => {
   if (!payload || typeof payload !== 'object') return '文件内容不是有效的 JSON 对象'
-  const obj = payload as { data?: unknown; sections?: unknown }
+  const obj = payload as { data?: unknown; sections?: unknown; styleConfig?: unknown }
   if (!('data' in obj) || !('sections' in obj)) return '缺少必要字段：data 或 sections'
   if (typeof obj.sections !== 'object') return 'sections 字段格式不正确'
   if (typeof obj.data !== 'object') return 'data 字段格式不正确'
+  if (
+    'styleConfig' in obj &&
+    typeof obj.styleConfig !== 'undefined' &&
+    typeof obj.styleConfig !== 'object'
+  ) {
+    return 'styleConfig 字段格式不正确'
+  }
   return null
 }
 
@@ -507,6 +514,10 @@ const handleImportFileChange = async (event: Event) => {
     // 覆盖 sectionStates 和 templateData
     Object.assign(sectionStates.value, migrated.sections)
     Object.assign(templateData, migrated.data)
+    // 覆盖 styleConfig（如果存在）
+    if (migrated.styleConfig && typeof migrated.styleConfig === 'object') {
+      Object.assign(styleConfig, migrated.styleConfig)
+    }
     // 保存历史节点
     undoSystem.saveState(sectionStates.value, templateData, styleConfig)
     saveToLocalStorage()
@@ -584,6 +595,7 @@ const exportJsonTemplate = () => {
     const exportData = {
       sections: sectionStates.value,
       data: templateData,
+      styleConfig: styleConfig,
       metadata: {
         createdAt: new Date().toISOString(),
         version: '1.0.0',
@@ -810,6 +822,163 @@ ${formattedBody}
   } catch (error) {
     console.error('Export failed:', error)
     showNotification('Export failed, please try again', 'error')
+  }
+}
+
+// Export PDF via browser print (U.S. Letter 612×792)
+const exportPdfByPrint = async () => {
+  try {
+    // 1) Use export mode to render clean DOM
+    exportMode.value = true
+    await nextTick()
+
+    // 2) Get export root and clone
+    const container = document.querySelector(
+      '[data-export-root="pagination"]',
+    ) as HTMLElement | null
+    if (!container) throw new Error('Export container not found')
+    const cloned = container.cloneNode(true) as HTMLElement
+
+    // 3) Strip interactive attrs
+    cloned
+      .querySelectorAll('[contenteditable]')
+      .forEach((el) => el.removeAttribute('contenteditable'))
+    cloned.querySelectorAll('[draggable]').forEach((el) => el.removeAttribute('draggable'))
+
+    // 4) Remove data-*/aria-* attrs
+    const removeAttributes = (element: HTMLElement) => {
+      const attributesToRemove: string[] = []
+      Array.from(element.attributes).forEach((attr) => {
+        if (!attr) return
+        const name = attr.name
+        if (name.startsWith('data-') || name.startsWith('aria-') || name === 'role') {
+          attributesToRemove.push(name)
+        }
+      })
+      attributesToRemove.forEach((attrName) => element.removeAttribute(attrName))
+      Array.from(element.children).forEach((child) => {
+        if (child instanceof HTMLElement) removeAttributes(child)
+      })
+    }
+    removeAttributes(cloned)
+
+    // 5) Normalize transforms
+    const normalizeTransforms = (root: HTMLElement) => {
+      const walker = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT)
+      if (root instanceof HTMLElement) {
+        const style = (root as HTMLElement).style
+        if (style && style.transform && style.transform.length > 0) {
+          style.transform = 'scale(1)'
+          style.transformOrigin = 'left top 0px'
+        }
+      }
+      let node = walker.nextNode() as HTMLElement | null
+      while (node) {
+        const style = node.style
+        if (style && style.transform && style.transform.length > 0) {
+          style.transform = 'scale(1)'
+          style.transformOrigin = 'left top 0px'
+        }
+        node = walker.nextNode() as HTMLElement | null
+      }
+    }
+    normalizeTransforms(cloned)
+
+    // 6) Inline images (avoid cross-origin issues in new window)
+    const inlineImages = async () => {
+      const imgEls = Array.from(cloned.querySelectorAll('img')) as HTMLImageElement[]
+      for (const img of imgEls) {
+        const src = img.getAttribute('src') || ''
+        if (!src) {
+          img.remove()
+          continue
+        }
+        if (src.startsWith('data:')) continue
+        try {
+          const resp = await fetch(src, { mode: 'cors' })
+          const blob = await resp.blob()
+          const dataUrl = await new Promise<string>((resolve, reject) => {
+            const reader = new FileReader()
+            reader.onload = () => resolve(String(reader.result || ''))
+            reader.onerror = reject
+            reader.readAsDataURL(blob)
+          })
+          img.setAttribute('src', dataUrl)
+        } catch {
+          img.remove()
+        }
+      }
+    }
+    await inlineImages()
+
+    // 7) Restore preview
+    exportMode.value = false
+    await nextTick()
+
+    // 8) Extract Export PDF Page (from pdf-pages-container -> .pdf-container)
+    const pageEl = cloned.querySelector('.pdf-container') as HTMLElement | null
+    if (!pageEl) throw new Error('Export PDF Page (.pdf-container) not found')
+
+    // 9) Build printable document (Letter size, no margins)
+    const printableHtml = `<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Invoice - Print</title>
+  <style>
+    @page { size: 613px 792px; margin: 0; }
+    html, body { margin: 0; padding: 0; background: #ffffff; }
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    /* Ensure the page takes the full Letter size */
+    #print-root > .pdf-container { width: 613px; height: 792px; box-sizing: border-box; }
+    @media print {
+      html, body { width: 613px; height: 792px; }
+    }
+  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+<body>
+  <div id="print-root">${pageEl.outerHTML}</div>
+</body>
+</html>`
+
+    // 10) Open print window and write
+    const printWindow = window.open('', '_blank')
+    if (!printWindow) throw new Error('Unable to open print window')
+    printWindow.document.open()
+    printWindow.document.write(printableHtml)
+    printWindow.document.close()
+    const triggerPrint = () => {
+      const winDoc = printWindow.document
+      const imgs = Array.from(winDoc.images || [])
+      const waitImages = imgs.map((img) =>
+        img.complete && img.naturalWidth > 0
+          ? Promise.resolve()
+          : new Promise<void>((resolve) => {
+              img.addEventListener('load', () => resolve(), { once: true })
+              img.addEventListener('error', () => resolve(), { once: true })
+            }),
+      )
+      Promise.all(waitImages).then(() => {
+        setTimeout(() => {
+          printWindow.focus()
+          printWindow.print()
+        }, 50)
+      })
+    }
+    if ('onload' in printWindow) {
+      printWindow.addEventListener('load', () => triggerPrint(), { once: true })
+    }
+    // Fallback if load doesn't fire
+    setTimeout(() => triggerPrint(), 300)
+    printWindow.addEventListener('afterprint', () => {
+      try {
+        printWindow.close()
+      } catch {}
+    })
+  } catch (error) {
+    console.error('Export PDF failed:', error)
+    showNotification('导出 PDF 失败，请重试', 'error')
   }
 }
 
@@ -1278,36 +1447,35 @@ onUnmounted(() => {
                 </svg>
               </TextButton>
             </div>
-            <div class="h-6 w-px bg-[#d3ddde]"></div>
-            <!-- Save Button -->
-            <TextButton
-              @click="handleManualSave"
-              variant="default"
-              size="sm"
-              class="bg-[#FF761F] text-white hover:bg-[#e66a1a]"
-            >
-              <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"
-                />
-              </svg>
-              Save
-            </TextButton>
             <!-- Edit Mode Controls -->
             <div class="h-6 w-px bg-[#d3ddde]"></div>
             <template v-if="!isEditMode">
               <TextButton @click="enterEditMode" variant="default" size="sm">
-                Edit Mode
+                Text Edit Mode
               </TextButton>
             </template>
             <template v-else>
-              <TextButton @click="saveEdits" variant="default" size="sm" class="bg-[#FF761F] text-white hover:bg-[#e66a1a]">
+              <TextButton
+                @click="saveEdits"
+                variant="default"
+                size="sm"
+                class="bg-[#FF761F] text-white hover:bg-[#e66a1a]"
+              >
                 Save
               </TextButton>
-              <TextButton @click="confirmDialog.open('Exit without saving?', () => exitWithoutSaving())" variant="default" size="sm">
+              <TextButton
+                @click="
+                  confirmDialog.showConfirm({
+                    message: 'Exit without saving?',
+                    onConfirm: () => exitWithoutSaving(),
+                    confirmLabel: 'Exit',
+                    cancelLabel: 'Cancel',
+                    title: 'Confirm',
+                  })
+                "
+                variant="default"
+                size="sm"
+              >
                 Exit
               </TextButton>
             </template>
@@ -1335,6 +1503,18 @@ onUnmounted(() => {
                   ></path>
                 </svg>
                 Export JSON
+              </TextButton>
+              <div class="h-6 w-px bg-[#d3ddde]"></div>
+              <TextButton @click="exportPdfByPrint" variant="default" size="sm">
+                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2m-2 0H8a2 2 0 01-2-2v-3h12v3a2 2 0 01-2 2z"
+                  />
+                </svg>
+                Export PDF
               </TextButton>
               <TextButton @click="exportHtmlTemplate" variant="primary" size="sm">
                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1443,6 +1623,9 @@ onUnmounted(() => {
     <ConfirmDialog
       v-model:visible="confirmDialog.isVisible.value"
       :message="confirmDialog.message.value"
+      :title="confirmDialog.title.value"
+      :confirm-label="confirmDialog.confirmLabel.value"
+      :cancel-label="confirmDialog.cancelLabel.value"
       @confirm="confirmDialog.handleConfirm"
       @cancel="confirmDialog.handleCancel"
     />

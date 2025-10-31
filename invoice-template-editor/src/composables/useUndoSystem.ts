@@ -10,7 +10,7 @@ interface HistoryState {
 export function useUndoSystem() {
   const history = ref<HistoryState[]>([])
   const currentIndex = ref(-1)
-  const maxHistorySize = 3 // 最多保存3步历史
+  const maxHistorySize = 50 // 最多保存50步历史
 
   // 保存当前状态到历史记录
   const saveState = (sectionStates: any, templateData: any, styleConfig: any) => {

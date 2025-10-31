@@ -8,10 +8,10 @@
     <tr v-if="item.sectionTitle || isEditMode">
       <td
         :style="{
-          fontSize: '7px',
+          fontSize: (styleConfig?.item?.sectionTitleSize || 7) + 'px',
           fontWeight: getFontWeight(styleConfig?.item?.sectionTitleWeight || 'semibold'),
           color: styleConfig?.item?.sectionTitleColor || '#6b7280',
-          lineHeight: '9px',
+          lineHeight: (styleConfig?.item?.sectionTitleSize || 7) + 2 + 'px',
           padding: '0 0 2px 0',
         }"
       >

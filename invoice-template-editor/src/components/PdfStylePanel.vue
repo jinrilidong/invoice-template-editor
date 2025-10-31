@@ -40,7 +40,7 @@
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
               v-model.number="local.baseFontSize"
               min="6"
-              max="16"
+              max="24"
             />
           </div>
           <div class="flex items-center gap-3">
@@ -81,6 +81,17 @@
         <h3 class="text-sm font-semibold text-[#0e171f] mb-3">Header Section</h3>
         <div class="space-y-3">
           <div class="flex items-center gap-3">
+            <label class="w-32 text-sm text-[#0e171f]">Vertical Align</label>
+            <select
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model="local.header.verticalAlign"
+            >
+              <option value="top">Top</option>
+              <option value="middle">Middle</option>
+              <option value="bottom">Bottom</option>
+            </select>
+          </div>
+          <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Title Color</label>
             <input
               type="color"
@@ -99,8 +110,8 @@
               type="number"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
               v-model.number="local.header.titleSize"
-              min="8"
-              max="48"
+              min="6"
+              max="24"
             />
           </div>
           <div class="flex items-center gap-3">
@@ -134,7 +145,7 @@
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
               v-model.number="local.header.descriptionSize"
               min="6"
-              max="16"
+              max="24"
             />
           </div>
           <div class="flex items-center gap-3">
@@ -148,16 +159,45 @@
               <option value="bold">Bold</option>
             </select>
           </div>
-          <div class="flex items-center gap-3">
-            <label class="w-32 text-sm text-[#0e171f]">Vertical Align</label>
-            <select
-              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model="local.header.verticalAlign"
-            >
-              <option value="top">Top</option>
-              <option value="middle">Middle</option>
-              <option value="bottom">Bottom</option>
-            </select>
+          <!-- Logo Description -->
+          <div class="border-t border-[#d3ddde] pt-4 mt-4">
+            <h4 class="text-xs font-semibold text-[#0e171f] mb-3">Logo Description</h4>
+            <div class="space-y-3">
+              <div class="flex items-center gap-3">
+                <label class="w-32 text-sm text-[#0e171f]">Color</label>
+                <input
+                  type="color"
+                  class="h-8 w-12 border border-[#d3ddde] rounded"
+                  v-model="local.header.logoDescriptionColor"
+                />
+                <input
+                  type="text"
+                  class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+                  v-model="local.header.logoDescriptionColor"
+                />
+              </div>
+              <div class="flex items-center gap-3">
+                <label class="w-32 text-sm text-[#0e171f]">Size (px)</label>
+                <input
+                  type="number"
+                  class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+                  v-model.number="local.header.logoDescriptionSize"
+                  min="6"
+                  max="24"
+                />
+              </div>
+              <div class="flex items-center gap-3">
+                <label class="w-32 text-sm text-[#0e171f]">Weight</label>
+                <select
+                  class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+                  v-model="local.header.logoDescriptionWeight"
+                >
+                  <option value="normal">Normal</option>
+                  <option value="semibold">Semibold</option>
+                  <option value="bold">Bold</option>
+                </select>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -177,6 +217,16 @@
               type="text"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
               v-model="local.info.sectionTitleColor"
+            />
+          </div>
+          <div class="flex items-center gap-3">
+            <label class="w-32 text-sm text-[#0e171f]">Section Title Size (px)</label>
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.info.sectionTitleSize"
+              min="6"
+              max="24"
             />
           </div>
           <div class="flex items-center gap-3">
@@ -204,6 +254,16 @@
             />
           </div>
           <div class="flex items-center gap-3">
+            <label class="w-32 text-sm text-[#0e171f]">Label Size (px)</label>
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.info.labelSize"
+              min="6"
+              max="24"
+            />
+          </div>
+          <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Label Weight</label>
             <select
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
@@ -225,6 +285,16 @@
               type="text"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
               v-model="local.info.valueColor"
+            />
+          </div>
+          <div class="flex items-center gap-3">
+            <label class="w-32 text-sm text-[#0e171f]">Value Size (px)</label>
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.info.valueSize"
+              min="6"
+              max="24"
             />
           </div>
           <div class="flex items-center gap-3">
@@ -301,6 +371,16 @@
             />
           </div>
           <div class="flex items-center gap-3">
+            <label class="w-32 text-sm text-[#0e171f]">Section Title Size (px)</label>
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.table.sectionTitleSize"
+              min="6"
+              max="24"
+            />
+          </div>
+          <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Subsection Title Color</label>
             <input
               type="color"
@@ -311,6 +391,16 @@
               type="text"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
               v-model="local.table.subsectionTitleColor"
+            />
+          </div>
+          <div class="flex items-center gap-3">
+            <label class="w-32 text-sm text-[#0e171f]">Subsection Title Size (px)</label>
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.table.subsectionTitleSize"
+              min="6"
+              max="24"
             />
           </div>
           <div class="flex items-center gap-3">
@@ -338,6 +428,16 @@
             </select>
           </div>
           <div class="flex items-center gap-3">
+            <label class="w-32 text-sm text-[#0e171f]">Column Name Size (px)</label>
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.table.columnNameSize"
+              min="6"
+              max="24"
+            />
+          </div>
+          <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Row Text Color</label>
             <input
               type="color"
@@ -348,6 +448,16 @@
               type="text"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
               v-model="local.table.rowTextColor"
+            />
+          </div>
+          <div class="flex items-center gap-3">
+            <label class="w-32 text-sm text-[#0e171f]">Row Text Size (px)</label>
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.table.rowTextSize"
+              min="6"
+              max="24"
             />
           </div>
           <div class="flex items-center gap-3">
@@ -462,8 +572,8 @@
               type="number"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
               v-model.number="local.summary.contentSize"
-              min="8"
-              max="32"
+              min="6"
+              max="24"
             />
           </div>
           <div class="flex items-center gap-3">
@@ -494,6 +604,16 @@
               type="text"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
               v-model="local.description.labelColor"
+            />
+          </div>
+          <div class="flex items-center gap-3">
+            <label class="w-32 text-sm text-[#0e171f]">Label Size (px)</label>
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.description.labelSize"
+              min="6"
+              max="24"
             />
           </div>
           <div class="flex items-center gap-3">
@@ -538,7 +658,7 @@
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
               v-model.number="local.description.textSize"
               min="6"
-              max="16"
+              max="24"
             />
           </div>
           <div class="flex items-center gap-3">
@@ -573,6 +693,16 @@
             />
           </div>
           <div class="flex items-center gap-3">
+            <label class="w-32 text-sm text-[#0e171f]">Section Title Size (px)</label>
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.item.sectionTitleSize"
+              min="6"
+              max="24"
+            />
+          </div>
+          <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Section Title Weight</label>
             <select
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
@@ -597,6 +727,16 @@
             />
           </div>
           <div class="flex items-center gap-3">
+            <label class="w-32 text-sm text-[#0e171f]">Label Size (px)</label>
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.item.labelSize"
+              min="6"
+              max="24"
+            />
+          </div>
+          <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Label Weight</label>
             <select
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
@@ -618,6 +758,16 @@
               type="text"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
               v-model="local.item.valueColor"
+            />
+          </div>
+          <div class="flex items-center gap-3">
+            <label class="w-32 text-sm text-[#0e171f]">Value Size (px)</label>
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.item.valueSize"
+              min="6"
+              max="24"
             />
           </div>
           <div class="flex items-center gap-3">
@@ -694,6 +844,16 @@
             />
           </div>
           <div class="flex items-center gap-3">
+            <label class="w-32 text-sm text-[#0e171f]">Section Title Size (px)</label>
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.hInfo.sectionTitleSize"
+              min="6"
+              max="24"
+            />
+          </div>
+          <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Section Title Weight</label>
             <select
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
@@ -718,6 +878,16 @@
             />
           </div>
           <div class="flex items-center gap-3">
+            <label class="w-32 text-sm text-[#0e171f]">Label Size (px)</label>
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.hInfo.labelSize"
+              min="6"
+              max="24"
+            />
+          </div>
+          <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Label Weight</label>
             <select
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
@@ -739,6 +909,16 @@
               type="text"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
               v-model="local.hInfo.valueColor"
+            />
+          </div>
+          <div class="flex items-center gap-3">
+            <label class="w-32 text-sm text-[#0e171f]">Value Size (px)</label>
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.hInfo.valueSize"
+              min="6"
+              max="24"
             />
           </div>
           <div class="flex items-center gap-3">
@@ -829,7 +1009,7 @@
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
               v-model.number="local.footer.textSize"
               min="6"
-              max="16"
+              max="24"
             />
           </div>
           <!-- Footer Info (moved from Global Settings) -->
@@ -855,8 +1035,8 @@
                   type="number"
                   class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
                   v-model.number="local.footerInfo.textSize"
-                  min="4"
-                  max="16"
+                  min="6"
+                  max="24"
                 />
               </div>
               <div class="flex items-center gap-3">
@@ -896,8 +1076,8 @@
                   type="number"
                   class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
                   v-model.number="local.footerName.textSize"
-                  min="4"
-                  max="16"
+                  min="6"
+                  max="24"
                 />
               </div>
               <div class="flex items-center gap-3">
@@ -944,15 +1124,22 @@ interface SectionStyle {
     descriptionSize: number
     descriptionWeight?: 'normal' | 'semibold' | 'bold'
     verticalAlign?: 'top' | 'middle' | 'bottom'
+    // Logo description below the logo
+    logoDescriptionColor?: string
+    logoDescriptionSize?: number
+    logoDescriptionWeight?: 'normal' | 'semibold' | 'bold'
   }
   // Info Section
   info: {
     sectionTitleColor: string
     sectionTitleWeight?: 'normal' | 'semibold' | 'bold'
+    sectionTitleSize?: number
     labelColor: string
     labelWeight?: 'normal' | 'semibold' | 'bold'
+    labelSize?: number
     valueColor: string
     valueWeight?: 'normal' | 'semibold' | 'bold'
+    valueSize?: number
     itemGap: number
     itemsPerRow?: 2 | 3 | 4 | 5
     itemsSpacing: number
@@ -961,10 +1148,14 @@ interface SectionStyle {
   // Table Section
   table: {
     sectionTitleColor: string
+    sectionTitleSize?: number
     subsectionTitleColor: string
+    subsectionTitleSize?: number
     headerColor: string
     columnNameWeight?: 'normal' | 'semibold' | 'bold'
+    columnNameSize?: number
     rowTextColor: string
+    rowTextSize?: number
     borderColor: string
     rowHeight: number
     columnsPadding: number
@@ -972,6 +1163,7 @@ interface SectionStyle {
   // Description Section
   description: {
     labelColor: string
+    labelSize?: number
     labelWeight?: 'normal' | 'semibold' | 'bold'
     textColor: string
     textWeight?: 'normal' | 'semibold' | 'bold'
@@ -982,10 +1174,13 @@ interface SectionStyle {
   item: {
     sectionTitleColor: string
     sectionTitleWeight?: 'normal' | 'semibold' | 'bold'
+    sectionTitleSize?: number
     labelColor: string
     labelWeight?: 'normal' | 'semibold' | 'bold'
+    labelSize?: number
     valueColor: string
     valueWeight?: 'normal' | 'semibold' | 'bold'
+    valueSize?: number
     itemGap: number
     itemsPerRow?: 2 | 3 | 4 | 5
     itemsSpacing: number
@@ -995,10 +1190,13 @@ interface SectionStyle {
   hInfo: {
     sectionTitleColor: string
     sectionTitleWeight?: 'normal' | 'semibold' | 'bold'
+    sectionTitleSize?: number
     labelColor: string
     labelWeight?: 'normal' | 'semibold' | 'bold'
+    labelSize?: number
     valueColor: string
     valueWeight?: 'normal' | 'semibold' | 'bold'
+    valueSize?: number
     labelWidth: number
     labelValueGap: number
     itemGap: number
@@ -1099,15 +1297,21 @@ const local = reactive<StyleConfig>({
     descriptionColor: props.modelValue.header?.descriptionColor || '#919191',
     descriptionSize: props.modelValue.header?.descriptionSize || 7,
     descriptionWeight: props.modelValue.header?.descriptionWeight || 'normal',
+    logoDescriptionColor: props.modelValue.header?.logoDescriptionColor || '#919191',
+    logoDescriptionSize: props.modelValue.header?.logoDescriptionSize || 7,
+    logoDescriptionWeight: props.modelValue.header?.logoDescriptionWeight || 'normal',
     verticalAlign: props.modelValue.header?.verticalAlign || 'top',
   },
   info: {
     sectionTitleColor: props.modelValue.info?.sectionTitleColor || '#6b7280',
     sectionTitleWeight: props.modelValue.info?.sectionTitleWeight || 'semibold',
+    sectionTitleSize: props.modelValue.info?.sectionTitleSize || 7,
     labelColor: props.modelValue.info?.labelColor || '#000000',
     labelWeight: props.modelValue.info?.labelWeight || 'semibold',
+    labelSize: props.modelValue.info?.labelSize || 7,
     valueColor: props.modelValue.info?.valueColor || '#919191',
     valueWeight: props.modelValue.info?.valueWeight || 'normal',
+    valueSize: props.modelValue.info?.valueSize || 7,
     itemGap: props.modelValue.info?.itemGap ?? 2,
     itemsPerRow: props.modelValue.info?.itemsPerRow || 5,
     itemsSpacing: props.modelValue.info?.itemsSpacing ?? 4,
@@ -1115,16 +1319,21 @@ const local = reactive<StyleConfig>({
   },
   table: {
     sectionTitleColor: props.modelValue.table?.sectionTitleColor || '#6b7280',
+    sectionTitleSize: props.modelValue.table?.sectionTitleSize || 7,
     subsectionTitleColor: props.modelValue.table?.subsectionTitleColor || '#000000',
+    subsectionTitleSize: props.modelValue.table?.subsectionTitleSize || 7,
     headerColor: props.modelValue.table?.headerColor || '#919191',
     columnNameWeight: props.modelValue.table?.columnNameWeight || 'semibold',
+    columnNameSize: props.modelValue.table?.columnNameSize || 7,
     rowTextColor: props.modelValue.table?.rowTextColor || '#000000',
+    rowTextSize: props.modelValue.table?.rowTextSize || 7,
     borderColor: props.modelValue.table?.borderColor || '#d2d2d2',
     rowHeight: props.modelValue.table?.rowHeight || 13,
     columnsPadding: props.modelValue.table?.columnsPadding ?? 4,
   },
   description: {
     labelColor: props.modelValue.description?.labelColor || '#000000',
+    labelSize: props.modelValue.description?.labelSize || 7,
     labelWeight: props.modelValue.description?.labelWeight || 'semibold',
     textColor: props.modelValue.description?.textColor || '#919191',
     textWeight: props.modelValue.description?.textWeight || 'normal',
@@ -1134,10 +1343,13 @@ const local = reactive<StyleConfig>({
   item: {
     sectionTitleColor: props.modelValue.item?.sectionTitleColor || '#6b7280',
     sectionTitleWeight: props.modelValue.item?.sectionTitleWeight || 'semibold',
+    sectionTitleSize: props.modelValue.item?.sectionTitleSize || 7,
     labelColor: props.modelValue.item?.labelColor || '#000000',
     labelWeight: props.modelValue.item?.labelWeight || 'semibold',
+    labelSize: props.modelValue.item?.labelSize || 7,
     valueColor: props.modelValue.item?.valueColor || '#919191',
     valueWeight: props.modelValue.item?.valueWeight || 'normal',
+    valueSize: props.modelValue.item?.valueSize || 7,
     itemGap: props.modelValue.item?.itemGap ?? 2,
     itemsPerRow: props.modelValue.item?.itemsPerRow || 5,
     itemsSpacing: props.modelValue.item?.itemsSpacing ?? 4,
@@ -1146,10 +1358,13 @@ const local = reactive<StyleConfig>({
   hInfo: {
     sectionTitleColor: props.modelValue.hInfo?.sectionTitleColor || '#6b7280',
     sectionTitleWeight: props.modelValue.hInfo?.sectionTitleWeight || 'semibold',
+    sectionTitleSize: props.modelValue.hInfo?.sectionTitleSize || 7,
     labelColor: props.modelValue.hInfo?.labelColor || '#000000',
     labelWeight: props.modelValue.hInfo?.labelWeight || 'semibold',
+    labelSize: props.modelValue.hInfo?.labelSize || 7,
     valueColor: props.modelValue.hInfo?.valueColor || '#919191',
     valueWeight: props.modelValue.hInfo?.valueWeight || 'normal',
+    valueSize: props.modelValue.hInfo?.valueSize || 7,
     labelWidth: props.modelValue.hInfo?.labelWidth ?? 80,
     labelValueGap: props.modelValue.hInfo?.labelValueGap ?? 8,
     itemGap: props.modelValue.hInfo?.itemGap ?? 4,

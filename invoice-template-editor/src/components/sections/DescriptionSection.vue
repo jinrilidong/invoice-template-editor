@@ -8,10 +8,10 @@
     <tr v-if="description.sectionTitle">
       <td
         :style="{
-          fontSize: '7px',
+          fontSize: (styleConfig?.description?.labelSize || 7) + 'px',
           fontWeight: getFontWeight(styleConfig?.description?.labelWeight || 'semibold'),
           color: styleConfig?.description?.labelColor || '#000000',
-          lineHeight: '9px',
+          lineHeight: (styleConfig?.description?.labelSize || 7) + 2 + 'px',
           padding: '0 0 2px 0',
         }"
       >
@@ -34,7 +34,7 @@
         }"
       >
         <div v-if="!isEditMode" v-html="toXhtml(description.content || '')"></div>
-        <EditableText v-else v-model="description.content" :editing="true" />
+        <div v-else v-html="toXhtml(description.content || '')"></div>
       </td>
     </tr>
   </table>
@@ -42,16 +42,16 @@
 
 <script setup lang="ts">
 import { toXhtml } from '@/utils/text'
-import EditableText from '../EditableText.vue'
 interface Description {
   id?: string
-  sectionTitle?: string
-  content?: string
+  sectionTitle: string
+  content: string
 }
 
 interface StyleConfig {
   description: {
     labelColor: string
+    labelSize?: number
     labelWeight: string
     textColor: string
     textWeight: string

@@ -17,7 +17,11 @@
       >
         <template v-if="!isEditMode">{{ item.sectionTitle }}</template>
         <template v-else>
-          <EditableText v-model="item.sectionTitle" :editing="true" />
+          <EditableText
+            :model-value="item.sectionTitle || ''"
+            :editing="true"
+            @update:modelValue="(val) => (item.sectionTitle = val)"
+          />
         </template>
       </td>
     </tr>

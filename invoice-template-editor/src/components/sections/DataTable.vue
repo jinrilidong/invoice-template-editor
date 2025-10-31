@@ -72,7 +72,11 @@
             <div v-html="toXhtml(row.data[column.id] || '')"></div>
           </template>
           <template v-else>
-            <EditableText v-model="row.data[column.id]" :editing="true" />
+            <EditableText
+              :model-value="row.data[column.id] || ''"
+              :editing="true"
+              @update:modelValue="(val) => (row.data[column.id] = val)"
+            />
           </template>
         </td>
       </tr>

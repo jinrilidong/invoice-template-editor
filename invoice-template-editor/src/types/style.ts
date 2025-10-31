@@ -48,6 +48,14 @@ export interface StyleConfig {
     rowHeight: number
     columnsPadding: number
     borderColor?: string
+    // 小计样式（可选）
+    subtotalLabelText?: string
+    subtotalLabelColor?: string
+    subtotalLabelWeight?: string
+    subtotalLabelSize?: number
+    subtotalAmountColor?: string
+    subtotalAmountWeight?: string
+    subtotalAmountSize?: number
   }
 
   summary?: {

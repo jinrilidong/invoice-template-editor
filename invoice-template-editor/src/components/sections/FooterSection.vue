@@ -65,8 +65,8 @@
 <script setup lang="ts">
 import EditableText from '../EditableText.vue'
 interface Footer {
-  info?: string
-  name?: string
+  info: string
+  name: string
 }
 
 interface StyleConfig {

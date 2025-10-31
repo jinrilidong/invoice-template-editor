@@ -110,18 +110,7 @@ interface Table {
   showSubtotal?: boolean
 }
 
-interface StyleConfig {
-  table: {
-    sectionTitleColor: string
-    subsectionTitleColor: string
-    headerColor: string
-    columnNameWeight: string
-    rowTextColor: string
-    borderColor: string
-    rowHeight: number
-    columnsPadding: number
-  }
-}
+import type { StyleConfig } from '@/types/style'
 
 const props = defineProps<{
   table: Table

@@ -82,20 +82,7 @@ interface HInfo {
   columns?: HInfoColumn[]
 }
 
-interface StyleConfig {
-  hInfo: {
-    sectionTitleColor: string
-    sectionTitleWeight: string
-    labelColor: string
-    labelWeight: string
-    valueColor: string
-    valueWeight: string
-    labelWidth: number
-    labelValueGap: number
-    itemGap: number
-    columnsPadding: number
-  }
-}
+import type { StyleConfig } from '@/types/style'
 
 const props = defineProps<{
   hInfo: HInfo

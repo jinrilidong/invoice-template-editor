@@ -106,20 +106,7 @@ interface HInfoColumn {
   items: HInfoItem[]
 }
 
-interface StyleConfig {
-  hInfo: {
-    sectionTitleColor: string
-    sectionTitleWeight: string
-    labelColor: string
-    labelWeight: string
-    valueColor: string
-    valueWeight: string
-    labelWidth: number
-    labelValueGap: number
-    itemGap: number
-    columnsPadding: number
-  }
-}
+import type { StyleConfig } from '@/types/style'
 
 defineProps<{
   column: HInfoColumn

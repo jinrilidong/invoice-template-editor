@@ -46,7 +46,7 @@
                     @click.stop="handleSectionClick('header-section')"
                   >
                     <HeaderSection
-                      :header="props.templateData.header"
+                      :header="normalizedHeader"
                       :style-config="props.styleConfig as any"
                       :is-edit-mode="!!props.isEditMode"
                     />
@@ -208,7 +208,7 @@
                     @click.stop="handleSectionClick('description-section')"
                   >
                     <DescriptionSection
-                      :description="descriptionSection"
+                      :description="normalizeDescription(descriptionSection)"
                       :style-config="props.styleConfig as any"
                       :is-edit-mode="!!props.isEditMode"
                     />
@@ -295,7 +295,7 @@
                 @click.stop="handleSectionClick('footer-section')"
               >
                 <FooterSection
-                  :footer="props.templateData.footer"
+                  :footer="normalizedFooter"
                   :style-config="props.styleConfig as any"
                   :current-page="1"
                   :total-pages="1"
@@ -321,7 +321,7 @@ import ItemSection from './sections/ItemSection.vue'
 import FooterSection from './sections/FooterSection.vue'
 import type { TemplateData } from '../types/section'
 import type { StyleConfig } from '../types/style'
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
 
 // PDF页面尺寸常量
 const PAGE_WIDTH = 612
@@ -391,6 +391,33 @@ onBeforeUnmount(() => {
   resizeObserver = null
   if (typeof window !== 'undefined')
     (window as Window).removeEventListener('resize', updateOverflow)
+})
+
+// 数据规范化，确保传给子组件的必填字符串不为 undefined
+const normalizedHeader = computed(() => {
+  const h = props.templateData.header || {}
+  return {
+    title: (h as any).title || '',
+    description: (h as any).description || '',
+    logo: (h as any).logo || '',
+    companyName: (h as any).companyName || '',
+    logoSize: (h as any).logoSize || 'default',
+    logoDescription: (h as any).logoDescription || '',
+  }
+})
+
+const normalizeDescription = (d: any) => ({
+  id: d?.id,
+  sectionTitle: d?.sectionTitle || '',
+  content: d?.content || '',
+})
+
+const normalizedFooter = computed(() => {
+  const f = props.templateData.footer || {}
+  return {
+    info: (f as any).info || '',
+    name: (f as any).name || '',
+  }
 })
 </script>
 

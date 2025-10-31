@@ -88,20 +88,7 @@ interface InfoItem {
   value: string
 }
 
-interface StyleConfig {
-  info: {
-    sectionTitleColor: string
-    sectionTitleWeight: string
-    labelColor: string
-    labelWeight: string
-    valueColor: string
-    valueWeight: string
-    itemGap: number
-    itemsPerRow: number
-    itemsSpacing: number
-    labelValueGap: number
-  }
-}
+import type { StyleConfig } from '@/types/style'
 
 const props = defineProps<{
   items: InfoItem[]

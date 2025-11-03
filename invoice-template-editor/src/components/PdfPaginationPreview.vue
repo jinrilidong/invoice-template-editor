@@ -125,22 +125,12 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 import PdfCompatibleRenderer from './PdfCompatibleRenderer.vue'
 import IconButton from './IconButton.vue'
 import TextButton from './TextButton.vue'
-import type { TemplateData } from '../types/section'
+import type { TemplateData, SectionStates } from '../types/section'
 import type { StyleConfig } from '../types/style'
 
 // PDF页面尺寸常量
 const PAGE_WIDTH = 612
 const PAGE_HEIGHT = 792
-
-interface SectionStates {
-  header: boolean
-  info: boolean
-  hInfo: boolean
-  table: boolean
-  description: boolean
-  item: boolean
-  footer: boolean
-}
 
 // 使用共享类型定义
 

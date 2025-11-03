@@ -65,6 +65,7 @@ import { computed, onMounted } from 'vue'
 import PdfHeaderSection from './PdfHeaderSection.vue'
 import PdfInfoSection from './PdfInfoSection.vue'
 import PdfTableSection from './PdfTableSection.vue'
+import PdfSummarySection from './PdfSummarySection.vue'
 import PdfDescriptionSection from './PdfDescriptionSection.vue'
 import PdfItemSection from './PdfItemSection.vue'
 import PdfHInfoSection from './PdfHInfoSection.vue'
@@ -90,6 +91,7 @@ const getSectionName = (section: string) => {
     info: 'Info Section',
     hInfo: 'H-Info Section',
     table: 'Table Section',
+    summary: 'Summary Section',
     description: 'Description Section',
     item: 'Item Section',
     footer: 'Footer Section',
@@ -169,6 +171,19 @@ const visibleSections = computed(() => {
       dataKey: 'tables',
       class: 'transition-all duration-300',
       id: 'config-table-section',
+    })
+  }
+
+  // Summary Section (放在 Table Section 之后)
+  if (props.sectionStates.summary) {
+    sections.push({
+      key: 'summary',
+      type: 'summary',
+      component: PdfSummarySection,
+      modelValue: props.templateData.summary,
+      dataKey: 'summary',
+      class: 'transition-all duration-300',
+      id: 'config-summary-section',
     })
   }
 

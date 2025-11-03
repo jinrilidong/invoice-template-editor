@@ -137,6 +137,7 @@ interface SectionStates {
   info: boolean
   hInfo: boolean
   table: boolean
+  summary: boolean
   description: boolean
   item: boolean
   footer: boolean

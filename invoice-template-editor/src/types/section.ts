@@ -95,11 +95,18 @@ export interface FooterData {
   name: string
 }
 
+// Summary Section 数据
+export interface SummaryData {
+  labelText?: string
+  amount?: number
+}
+
 // Section 状态
 export interface SectionStates {
   header: boolean
   info: boolean
   table: boolean
+  summary: boolean
   description: boolean
   item: boolean
   hInfo: boolean
@@ -111,6 +118,7 @@ export interface TemplateData {
   header?: HeaderData
   info?: InfoData[]
   tables?: TableData[]
+  summary?: SummaryData
   description?: DescriptionData[]
   item?: ItemData[]
   hInfo?: HInfoData[]

@@ -159,13 +159,9 @@
                 </tr>
               </template>
 
-              <!-- Summary Section (if tables exist) -->
+              <!-- Summary Section -->
               <template
-                v-if="
-                  props.sectionStates.table &&
-                  props.templateData.tables &&
-                  props.templateData.tables.length > 0
-                "
+                v-if="props.sectionStates.summary && props.templateData.summary"
               >
                 <tr>
                   <td
@@ -174,8 +170,9 @@
                     @click.stop="handleSectionClick('summary-section')"
                   >
                     <SummarySection
-                      :tables="props.templateData.tables"
+                      :tables="props.templateData.tables || []"
                       :style-config="props.styleConfig as any"
+                      :summary-data="props.templateData.summary"
                     />
                     <!-- Section spacer after summary section -->
                     <table
@@ -333,6 +330,7 @@ interface SectionStates {
   info: boolean
   hInfo: boolean
   table: boolean
+  summary: boolean
   description: boolean
   item: boolean
   footer: boolean

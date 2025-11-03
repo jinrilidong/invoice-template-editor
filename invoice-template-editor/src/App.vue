@@ -164,6 +164,7 @@ const sectionStates = ref({
   info: true,
   hInfo: true,
   table: true,
+  summary: true,
   description: true,
   item: true,
   footer: true,
@@ -373,6 +374,10 @@ const templateData = reactive<TemplateData>({
       showSubtotal: true,
     },
   ],
+  summary: {
+    labelText: 'Total USD',
+    amount: 1500,
+  },
   description: [
     {
       id: '1',

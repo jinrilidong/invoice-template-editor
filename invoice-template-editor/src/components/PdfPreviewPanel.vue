@@ -401,7 +401,7 @@
 
               <!-- 3️⃣ Summary Section -->
               <div
-                v-if="props.sectionStates.table"
+                v-if="props.sectionStates.summary"
                 class="summary-section flex gap-3 h-4.25 items-end justify-end w-full"
               >
                 <div class="flex gap-3 grow items-end min-w-0">
@@ -412,18 +412,14 @@
                       class="font-semibold grow leading-2.25 min-w-0 text-right whitespace-nowrap"
                       style="font-size: 10px; color: #919191"
                     >
-                      Total USD
+                      {{ props.templateData.summary?.labelText || 'Total USD' }}
                     </p>
                   </div>
                   <p
                     class="font-semibold leading-4.25 text-black text-right whitespace-pre"
                     style="font-size: 14px"
                   >
-                    ${{
-                      (props.templateData.tables || [])
-                        .reduce((sum: number, table: any) => sum + (table.total || 0), 0)
-                        .toFixed(2)
-                    }}
+                    ${{ (props.templateData.summary?.amount || 0).toFixed(2) }}
                   </p>
                 </div>
               </div>
@@ -778,16 +774,12 @@
           </div>
 
           <!-- Summary -->
-          <div v-if="props.sectionStates.table" style="margin: 8px 0; text-align: right">
+          <div v-if="props.sectionStates.summary" style="margin: 8px 0; text-align: right">
             <span style="font-size: 10px; color: #919191; font-weight: 600; margin-right: 12px"
-              >Total USD</span
+              >{{ props.templateData.summary?.labelText || 'Total USD' }}</span
             >
             <span style="font-size: 14px; font-weight: 600"
-              >${{
-                (props.templateData.tables || [])
-                  .reduce((sum: number, table: any) => sum + (table.total || 0), 0)
-                  .toFixed(2)
-              }}</span
+              >${{ (props.templateData.summary?.amount || 0).toFixed(2) }}</span
             >
           </div>
 
@@ -978,6 +970,7 @@ interface SectionStates {
   header: boolean
   info: boolean
   table: boolean
+  summary: boolean
   description: boolean
   item: boolean
   hInfo: boolean

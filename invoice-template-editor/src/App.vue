@@ -374,10 +374,6 @@ const templateData = reactive<TemplateData>({
       showSubtotal: true,
     },
   ],
-  summary: {
-    labelText: 'Total USD',
-    amount: 1500,
-  },
   description: [
     {
       id: '1',
@@ -433,6 +429,10 @@ const templateData = reactive<TemplateData>({
       ],
     },
   ],
+  summary: {
+    labelText: 'Total USD',
+    amount: undefined,
+  },
   footer: {
     info: '',
     name: '',

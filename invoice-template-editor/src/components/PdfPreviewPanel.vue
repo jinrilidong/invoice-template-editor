@@ -419,7 +419,15 @@
                     class="font-semibold leading-4.25 text-black text-right whitespace-pre"
                     style="font-size: 14px"
                   >
-                    ${{ (props.templateData.summary?.amount || 0).toFixed(2) }}
+                    {{
+                      props.templateData.summary?.amount &&
+                      String(props.templateData.summary.amount).trim() !== ''
+                        ? props.templateData.summary.amount
+                        : '$' +
+                          (props.templateData.tables || [])
+                            .reduce((sum: number, table: any) => sum + (table.total || 0), 0)
+                            .toFixed(2)
+                    }}
                   </p>
                 </div>
               </div>
@@ -774,12 +782,16 @@
           </div>
 
           <!-- Summary -->
-          <div v-if="props.sectionStates.summary" style="margin: 8px 0; text-align: right">
+          <div v-if="props.sectionStates.table" style="margin: 8px 0; text-align: right">
             <span style="font-size: 10px; color: #919191; font-weight: 600; margin-right: 12px"
-              >{{ props.templateData.summary?.labelText || 'Total USD' }}</span
+              >Total USD</span
             >
             <span style="font-size: 14px; font-weight: 600"
-              >${{ (props.templateData.summary?.amount || 0).toFixed(2) }}</span
+              >${{
+                (props.templateData.tables || [])
+                  .reduce((sum: number, table: any) => sum + (table.total || 0), 0)
+                  .toFixed(2)
+              }}</span
             >
           </div>
 
@@ -1013,6 +1025,10 @@ interface TemplateData {
     total: number
     rowsNumber?: number
   }>
+  summary?: {
+    labelText?: string
+    amount?: string
+  }
   description?: Array<{
     id?: string
     content: string

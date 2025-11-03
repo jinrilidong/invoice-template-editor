@@ -174,7 +174,7 @@ const visibleSections = computed(() => {
     })
   }
 
-  // Summary Section (放在 Table Section 之后)
+  // Summary Section (放在 Table Section 下面)
   if (props.sectionStates.summary) {
     sections.push({
       key: 'summary',

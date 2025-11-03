@@ -160,9 +160,7 @@
               </template>
 
               <!-- Summary Section -->
-              <template
-                v-if="props.sectionStates.summary && props.templateData.summary"
-              >
+              <template v-if="props.sectionStates.summary">
                 <tr>
                   <td
                     class="section-clickable"
@@ -170,9 +168,9 @@
                     @click.stop="handleSectionClick('summary-section')"
                   >
                     <SummarySection
-                      :tables="props.templateData.tables || []"
+                      :tables="props.templateData.tables"
+                      :summary="props.templateData.summary"
                       :style-config="props.styleConfig as any"
-                      :summary-data="props.templateData.summary"
                     />
                     <!-- Section spacer after summary section -->
                     <table

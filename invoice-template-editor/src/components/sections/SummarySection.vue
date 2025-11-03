@@ -21,7 +21,7 @@
             lineHeight: '9px',
           }"
         >
-          {{ summaryData?.labelText || styleConfig?.summary?.labelText || 'Total USD' }}
+          {{ summary?.labelText || styleConfig?.summary?.labelText || 'Total USD' }}
         </span>
         <span
           :style="{
@@ -39,7 +39,7 @@
             paddingLeft: (styleConfig?.summary?.labelContentGap ?? 12) + 'px',
           }"
         >
-          ${{ (summaryData?.amount ?? totalAmount.value).toFixed(2) }}
+          {{ displayAmount }}
         </span>
       </td>
     </tr>
@@ -89,21 +89,27 @@ interface StyleConfig {
 
 interface SummaryData {
   labelText?: string
-  amount?: number
+  amount?: string
 }
 
 const props = defineProps<{
   tables?: Table[]
+  summary?: SummaryData
   styleConfig: StyleConfig
-  summaryData?: SummaryData
 }>()
 
-// 计算总金额（作为后备值）
+// 计算总金额（从表格）
 const totalAmount = computed(() => {
-  if (props.tables && props.tables.length > 0) {
-    return props.tables.reduce((sum, table) => sum + (table.total || 0), 0)
+  if (!props.tables || props.tables.length === 0) return 0
+  return props.tables.reduce((sum, table) => sum + (table.total || 0), 0)
+})
+
+// 显示金额：优先使用 summary.amount，否则使用计算的总金额（带 $ 符号和格式化）
+const displayAmount = computed(() => {
+  if (props.summary?.amount && String(props.summary.amount).trim() !== '') {
+    return props.summary.amount
   }
-  return 0
+  return '$' + totalAmount.value.toFixed(2)
 })
 </script>
 

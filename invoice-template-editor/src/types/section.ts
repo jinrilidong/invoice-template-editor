@@ -98,7 +98,7 @@ export interface FooterData {
 // Summary Section 数据
 export interface SummaryData {
   labelText?: string
-  amount?: number
+  amount?: string
 }
 
 // Section 状态

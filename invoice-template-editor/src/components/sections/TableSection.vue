@@ -9,7 +9,7 @@
       <td
         :style="{
           fontSize: '7px',
-          fontWeight: getFontWeight(styleConfig?.table?.sectionTitleWeight || 'semibold'),
+          fontWeight: getFontWeight(styleConfig?.table?.sectionTitleWeight || 'bold'),
           color: styleConfig?.table?.sectionTitleColor || '#6b7280',
           lineHeight: '9px',
           padding: '0 0 2px 0',
@@ -24,7 +24,7 @@
       <td
         :style="{
           fontSize: '7px',
-          fontWeight: getFontWeight(styleConfig?.table?.subsectionTitleWeight || 'semibold'),
+          fontWeight: getFontWeight(styleConfig?.table?.subsectionTitleWeight || 'bold'),
           color: styleConfig?.table?.subsectionTitleColor || '#000000',
           lineHeight: '9px',
           padding: '0 0 2px 0',

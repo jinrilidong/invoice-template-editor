@@ -66,7 +66,9 @@ const styleConfig = reactive({
   },
   table: {
     sectionTitleColor: '#6b7280',
+    sectionTitleWeight: 'bold' as const,
     subsectionTitleColor: '#000000',
+    subsectionTitleWeight: 'bold' as const,
     headerColor: '#919191',
     columnNameWeight: 'semibold' as const,
     rowTextColor: '#000000',

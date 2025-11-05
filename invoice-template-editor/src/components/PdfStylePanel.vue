@@ -381,6 +381,17 @@
             />
           </div>
           <div class="flex items-center gap-3">
+            <label class="w-32 text-sm text-[#0e171f]">Section Title Weight</label>
+            <select
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model="local.table.sectionTitleWeight"
+            >
+              <option value="normal">Normal</option>
+              <option value="semibold">Semibold</option>
+              <option value="bold">Bold</option>
+            </select>
+          </div>
+          <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Subsection Title Color</label>
             <input
               type="color"
@@ -402,6 +413,17 @@
               min="6"
               max="24"
             />
+          </div>
+          <div class="flex items-center gap-3">
+            <label class="w-32 text-sm text-[#0e171f]">Subsection Title Weight</label>
+            <select
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model="local.table.subsectionTitleWeight"
+            >
+              <option value="normal">Normal</option>
+              <option value="semibold">Semibold</option>
+              <option value="bold">Bold</option>
+            </select>
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Header Color</label>

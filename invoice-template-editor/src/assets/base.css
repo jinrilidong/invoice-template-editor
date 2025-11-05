@@ -206,11 +206,12 @@
 }
 
 /* ============================================
-   Dark Mode Support
+   Dark Mode Support - DISABLED
+   已禁用系统 dark mode 自动适配，保持组件颜色与正常情况下一致
    ============================================ */
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
-    /* Override semantic colors for dark mode */
+    Override semantic colors for dark mode
     --color-text-primary: #ffffff;
     --color-text-secondary: rgba(235, 235, 235, 0.8);
     --color-text-tertiary: rgba(235, 235, 235, 0.6);
@@ -227,7 +228,7 @@
     --color-border-hover: rgba(84, 84, 84, 0.65);
     --color-border-disabled: rgba(84, 84, 84, 0.3);
   }
-}
+} */
 
 /* ============================================
    CSS Reset & Base Styles
@@ -253,6 +254,7 @@ html {
   -webkit-text-size-adjust: 100%;
   -moz-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  color-scheme: light; /* 强制使用 light 模式，不受系统 dark mode 影响 */
 }
 
 body {

@@ -1170,8 +1170,10 @@ interface SectionStyle {
   // Table Section
   table: {
     sectionTitleColor: string
+    sectionTitleWeight?: 'normal' | 'semibold' | 'bold'
     sectionTitleSize?: number
     subsectionTitleColor: string
+    subsectionTitleWeight?: 'normal' | 'semibold' | 'bold'
     subsectionTitleSize?: number
     headerColor: string
     columnNameWeight?: 'normal' | 'semibold' | 'bold'

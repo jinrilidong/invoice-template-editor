@@ -24,15 +24,6 @@
       label="Logo Description"
       placeholder="Enter logo description"
     />
-
-    <!-- Logo Size -->
-    <div class="mt-2">
-      <label class="text-sm font-medium">Logo size</label>
-      <select v-model="headerData.logoSize" class="border rounded p-1 text-sm w-full">
-        <option value="default">默认尺寸</option>
-        <option value="large">大尺寸（高度 + 1/2）</option>
-      </select>
-    </div>
   </UnifiedSection>
 </template>
 

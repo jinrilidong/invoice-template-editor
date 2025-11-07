@@ -9,7 +9,7 @@
       <td
         :style="{
           fontSize: (styleConfig?.hInfo?.sectionTitleSize || 7) + 'px',
-          fontWeight: getFontWeight(styleConfig?.hInfo?.sectionTitleWeight || 'semibold'),
+          fontWeight: getFontWeight(styleConfig?.hInfo?.sectionTitleWeight || 'bold'),
           color: styleConfig?.hInfo?.sectionTitleColor || '#6b7280',
           lineHeight: (styleConfig?.hInfo?.sectionTitleSize || 7) + 2 + 'px',
           padding: '0 0 2px 0',
@@ -114,10 +114,6 @@ const getFontWeight = (weight: string): string => {
   switch (weight) {
     case 'bold':
       return '700'
-    case 'semibold':
-      return '600'
-    case 'medium':
-      return '500'
     case 'normal':
     default:
       return '400'

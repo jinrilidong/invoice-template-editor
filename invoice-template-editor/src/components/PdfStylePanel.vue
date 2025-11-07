@@ -121,7 +121,6 @@
               v-model="local.header.titleWeight"
             >
               <option value="normal">Normal</option>
-              <option value="semibold">Semibold</option>
               <option value="bold">Bold</option>
             </select>
           </div>
@@ -155,9 +154,19 @@
               v-model="local.header.descriptionWeight"
             >
               <option value="normal">Normal</option>
-              <option value="semibold">Semibold</option>
               <option value="bold">Bold</option>
             </select>
+          </div>
+          <!-- Logo Height -->
+          <div class="flex items-center gap-3">
+            <label class="w-32 text-sm text-[#0e171f]">Logo Height (px)</label>
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.header.logoHeight"
+              min="20"
+              max="200"
+            />
           </div>
           <!-- Logo Description -->
           <div class="border-t border-[#d3ddde] pt-4 mt-4">
@@ -193,7 +202,6 @@
                   v-model="local.header.logoDescriptionWeight"
                 >
                   <option value="normal">Normal</option>
-                  <option value="semibold">Semibold</option>
                   <option value="bold">Bold</option>
                 </select>
               </div>
@@ -236,7 +244,6 @@
               v-model="local.info.sectionTitleWeight"
             >
               <option value="normal">Normal</option>
-              <option value="semibold">Semibold</option>
               <option value="bold">Bold</option>
             </select>
           </div>
@@ -270,7 +277,6 @@
               v-model="local.info.labelWeight"
             >
               <option value="normal">Normal</option>
-              <option value="semibold">Semibold</option>
               <option value="bold">Bold</option>
             </select>
           </div>
@@ -304,7 +310,6 @@
               v-model="local.info.valueWeight"
             >
               <option value="normal">Normal</option>
-              <option value="semibold">Semibold</option>
               <option value="bold">Bold</option>
             </select>
           </div>
@@ -387,7 +392,6 @@
               v-model="local.table.sectionTitleWeight"
             >
               <option value="normal">Normal</option>
-              <option value="semibold">Semibold</option>
               <option value="bold">Bold</option>
             </select>
           </div>
@@ -421,7 +425,6 @@
               v-model="local.table.subsectionTitleWeight"
             >
               <option value="normal">Normal</option>
-              <option value="semibold">Semibold</option>
               <option value="bold">Bold</option>
             </select>
           </div>
@@ -445,7 +448,6 @@
               v-model="local.table.columnNameWeight"
             >
               <option value="normal">Normal</option>
-              <option value="semibold">Semibold</option>
               <option value="bold">Bold</option>
             </select>
           </div>
@@ -506,6 +508,16 @@
             />
           </div>
           <div class="flex items-center gap-3">
+            <label class="w-32 text-sm text-[#0e171f]">Row Spacing (px)</label>
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.table.rowSpacing"
+              min="0"
+              max="10"
+            />
+          </div>
+          <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Columns Padding (px)</label>
             <input
               type="number"
@@ -514,6 +526,17 @@
               min="0"
               max="16"
             />
+          </div>
+          <div class="flex items-center gap-3">
+            <label class="w-32 text-sm text-[#0e171f]">Subtotal Offset (px)</label>
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.table.subtotalOffset"
+              min="-200"
+              max="200"
+            />
+            <span class="text-xs text-gray-500">Positive: left, Negative: right</span>
           </div>
         </div>
       </section>
@@ -550,7 +573,6 @@
               v-model="local.summary.labelWeight"
             >
               <option value="normal">Normal</option>
-              <option value="semibold">Semibold</option>
               <option value="bold">Bold</option>
             </select>
           </div>
@@ -584,7 +606,6 @@
               v-model="local.summary.contentWeight"
             >
               <option value="normal">Normal</option>
-              <option value="semibold">Semibold</option>
               <option value="bold">Bold</option>
             </select>
           </div>
@@ -645,7 +666,6 @@
               v-model="local.description.labelWeight"
             >
               <option value="normal">Normal</option>
-              <option value="semibold">Semibold</option>
               <option value="bold">Bold</option>
             </select>
           </div>
@@ -669,7 +689,6 @@
               v-model="local.description.textWeight"
             >
               <option value="normal">Normal</option>
-              <option value="semibold">Semibold</option>
               <option value="bold">Bold</option>
             </select>
           </div>
@@ -731,7 +750,6 @@
               v-model="local.item.sectionTitleWeight"
             >
               <option value="normal">Normal</option>
-              <option value="semibold">Semibold</option>
               <option value="bold">Bold</option>
             </select>
           </div>
@@ -765,7 +783,6 @@
               v-model="local.item.labelWeight"
             >
               <option value="normal">Normal</option>
-              <option value="semibold">Semibold</option>
               <option value="bold">Bold</option>
             </select>
           </div>
@@ -799,7 +816,6 @@
               v-model="local.item.valueWeight"
             >
               <option value="normal">Normal</option>
-              <option value="semibold">Semibold</option>
               <option value="bold">Bold</option>
             </select>
           </div>
@@ -882,7 +898,6 @@
               v-model="local.hInfo.sectionTitleWeight"
             >
               <option value="normal">Normal</option>
-              <option value="semibold">Semibold</option>
               <option value="bold">Bold</option>
             </select>
           </div>
@@ -916,7 +931,6 @@
               v-model="local.hInfo.labelWeight"
             >
               <option value="normal">Normal</option>
-              <option value="semibold">Semibold</option>
               <option value="bold">Bold</option>
             </select>
           </div>
@@ -950,7 +964,6 @@
               v-model="local.hInfo.valueWeight"
             >
               <option value="normal">Normal</option>
-              <option value="semibold">Semibold</option>
               <option value="bold">Bold</option>
             </select>
           </div>
@@ -1068,7 +1081,6 @@
                   v-model="local.footerInfo.textWeight"
                 >
                   <option value="normal">Normal</option>
-                  <option value="semibold">Semibold</option>
                   <option value="bold">Bold</option>
                 </select>
               </div>
@@ -1109,7 +1121,6 @@
                   v-model="local.footerName.textWeight"
                 >
                   <option value="normal">Normal</option>
-                  <option value="semibold">Semibold</option>
                   <option value="bold">Bold</option>
                 </select>
               </div>
@@ -1130,9 +1141,9 @@ interface SectionStyle {
   summary: {
     labelText?: string
     labelColor: string
-    labelWeight?: 'normal' | 'semibold' | 'bold'
+    labelWeight?: 'normal' | 'bold'
     contentColor: string
-    contentWeight?: 'normal' | 'semibold' | 'bold'
+    contentWeight?: 'normal' | 'bold'
     labelSize: number
     contentSize: number
     labelContentGap: number
@@ -1141,26 +1152,28 @@ interface SectionStyle {
   header: {
     titleColor: string
     titleSize: number
-    titleWeight?: 'normal' | 'semibold' | 'bold'
+    titleWeight?: 'normal' | 'bold'
     descriptionColor: string
     descriptionSize: number
-    descriptionWeight?: 'normal' | 'semibold' | 'bold'
+    descriptionWeight?: 'normal' | 'bold'
     verticalAlign?: 'top' | 'middle' | 'bottom'
     // Logo description below the logo
     logoDescriptionColor?: string
     logoDescriptionSize?: number
-    logoDescriptionWeight?: 'normal' | 'semibold' | 'bold'
+    logoDescriptionWeight?: 'normal' | 'bold'
+    // Logo height in pixels (maintains aspect ratio)
+    logoHeight?: number
   }
   // Info Section
   info: {
     sectionTitleColor: string
-    sectionTitleWeight?: 'normal' | 'semibold' | 'bold'
+    sectionTitleWeight?: 'normal' | 'bold'
     sectionTitleSize?: number
     labelColor: string
-    labelWeight?: 'normal' | 'semibold' | 'bold'
+    labelWeight?: 'normal' | 'bold'
     labelSize?: number
     valueColor: string
-    valueWeight?: 'normal' | 'semibold' | 'bold'
+    valueWeight?: 'normal' | 'bold'
     valueSize?: number
     itemGap: number
     itemsPerRow?: 2 | 3 | 4 | 5
@@ -1170,40 +1183,42 @@ interface SectionStyle {
   // Table Section
   table: {
     sectionTitleColor: string
-    sectionTitleWeight?: 'normal' | 'semibold' | 'bold'
+    sectionTitleWeight?: 'normal' | 'bold'
     sectionTitleSize?: number
     subsectionTitleColor: string
-    subsectionTitleWeight?: 'normal' | 'semibold' | 'bold'
+    subsectionTitleWeight?: 'normal' | 'bold'
     subsectionTitleSize?: number
     headerColor: string
-    columnNameWeight?: 'normal' | 'semibold' | 'bold'
+    columnNameWeight?: 'normal' | 'bold'
     columnNameSize?: number
     rowTextColor: string
     rowTextSize?: number
     borderColor: string
     rowHeight: number
+    rowSpacing?: number
     columnsPadding: number
+    subtotalOffset?: number
   }
   // Description Section
   description: {
     labelColor: string
     labelSize?: number
-    labelWeight?: 'normal' | 'semibold' | 'bold'
+    labelWeight?: 'normal' | 'bold'
     textColor: string
-    textWeight?: 'normal' | 'semibold' | 'bold'
+    textWeight?: 'normal' | 'bold'
     textSize: number
     lineHeight: number
   }
   // Item Section
   item: {
     sectionTitleColor: string
-    sectionTitleWeight?: 'normal' | 'semibold' | 'bold'
+    sectionTitleWeight?: 'normal' | 'bold'
     sectionTitleSize?: number
     labelColor: string
-    labelWeight?: 'normal' | 'semibold' | 'bold'
+    labelWeight?: 'normal' | 'bold'
     labelSize?: number
     valueColor: string
-    valueWeight?: 'normal' | 'semibold' | 'bold'
+    valueWeight?: 'normal' | 'bold'
     valueSize?: number
     itemGap: number
     itemsPerRow?: 2 | 3 | 4 | 5
@@ -1213,13 +1228,13 @@ interface SectionStyle {
   // H-Info Section
   hInfo: {
     sectionTitleColor: string
-    sectionTitleWeight?: 'normal' | 'semibold' | 'bold'
+    sectionTitleWeight?: 'normal' | 'bold'
     sectionTitleSize?: number
     labelColor: string
-    labelWeight?: 'normal' | 'semibold' | 'bold'
+    labelWeight?: 'normal' | 'bold'
     labelSize?: number
     valueColor: string
-    valueWeight?: 'normal' | 'semibold' | 'bold'
+    valueWeight?: 'normal' | 'bold'
     valueSize?: number
     labelWidth: number
     labelValueGap: number
@@ -1231,7 +1246,7 @@ interface SectionStyle {
   footer: {
     textColor: string
     textSize: number
-    textWeight?: 'normal' | 'semibold' | 'bold'
+    textWeight?: 'normal' | 'bold'
   }
 }
 
@@ -1243,12 +1258,12 @@ interface StyleConfig extends SectionStyle {
   footerInfo: {
     textColor: string
     textSize: number
-    textWeight?: 'normal' | 'semibold' | 'bold'
+    textWeight?: 'normal' | 'bold'
   }
   footerName: {
     textColor: string
     textSize: number
-    textWeight?: 'normal' | 'semibold' | 'bold'
+    textWeight?: 'normal' | 'bold'
   }
 }
 
@@ -1307,9 +1322,9 @@ const local = reactive<StyleConfig>({
   summary: {
     labelText: props.modelValue.summary?.labelText || 'Total USD',
     labelColor: props.modelValue.summary?.labelColor || '#000000',
-    labelWeight: props.modelValue.summary?.labelWeight || 'semibold',
+    labelWeight: props.modelValue.summary?.labelWeight || 'bold',
     contentColor: props.modelValue.summary?.contentColor || '#000000',
-    contentWeight: props.modelValue.summary?.contentWeight || 'semibold',
+    contentWeight: props.modelValue.summary?.contentWeight || 'bold',
     labelSize: props.modelValue.summary?.labelSize || 10,
     contentSize: props.modelValue.summary?.contentSize || 14,
     labelContentGap: props.modelValue.summary?.labelContentGap ?? 12,
@@ -1317,7 +1332,7 @@ const local = reactive<StyleConfig>({
   header: {
     titleColor: props.modelValue.header?.titleColor || '#0e171f',
     titleSize: props.modelValue.header?.titleSize || 20,
-    titleWeight: props.modelValue.header?.titleWeight || 'semibold',
+    titleWeight: props.modelValue.header?.titleWeight || 'bold',
     descriptionColor: props.modelValue.header?.descriptionColor || '#919191',
     descriptionSize: props.modelValue.header?.descriptionSize || 7,
     descriptionWeight: props.modelValue.header?.descriptionWeight || 'normal',
@@ -1325,13 +1340,14 @@ const local = reactive<StyleConfig>({
     logoDescriptionSize: props.modelValue.header?.logoDescriptionSize || 7,
     logoDescriptionWeight: props.modelValue.header?.logoDescriptionWeight || 'normal',
     verticalAlign: props.modelValue.header?.verticalAlign || 'top',
+    logoHeight: props.modelValue.header?.logoHeight ?? 48,
   },
   info: {
     sectionTitleColor: props.modelValue.info?.sectionTitleColor || '#6b7280',
-    sectionTitleWeight: props.modelValue.info?.sectionTitleWeight || 'semibold',
+    sectionTitleWeight: props.modelValue.info?.sectionTitleWeight || 'bold',
     sectionTitleSize: props.modelValue.info?.sectionTitleSize || 7,
     labelColor: props.modelValue.info?.labelColor || '#000000',
-    labelWeight: props.modelValue.info?.labelWeight || 'semibold',
+    labelWeight: props.modelValue.info?.labelWeight || 'bold',
     labelSize: props.modelValue.info?.labelSize || 7,
     valueColor: props.modelValue.info?.valueColor || '#919191',
     valueWeight: props.modelValue.info?.valueWeight || 'normal',
@@ -1347,18 +1363,20 @@ const local = reactive<StyleConfig>({
     subsectionTitleColor: props.modelValue.table?.subsectionTitleColor || '#000000',
     subsectionTitleSize: props.modelValue.table?.subsectionTitleSize || 7,
     headerColor: props.modelValue.table?.headerColor || '#919191',
-    columnNameWeight: props.modelValue.table?.columnNameWeight || 'semibold',
+    columnNameWeight: props.modelValue.table?.columnNameWeight || 'bold',
     columnNameSize: props.modelValue.table?.columnNameSize || 7,
     rowTextColor: props.modelValue.table?.rowTextColor || '#000000',
     rowTextSize: props.modelValue.table?.rowTextSize || 7,
     borderColor: props.modelValue.table?.borderColor || '#d2d2d2',
     rowHeight: props.modelValue.table?.rowHeight || 13,
+    rowSpacing: props.modelValue.table?.rowSpacing ?? 2,
     columnsPadding: props.modelValue.table?.columnsPadding ?? 4,
+    subtotalOffset: props.modelValue.table?.subtotalOffset ?? 0,
   },
   description: {
     labelColor: props.modelValue.description?.labelColor || '#000000',
     labelSize: props.modelValue.description?.labelSize || 7,
-    labelWeight: props.modelValue.description?.labelWeight || 'semibold',
+    labelWeight: props.modelValue.description?.labelWeight || 'bold',
     textColor: props.modelValue.description?.textColor || '#919191',
     textWeight: props.modelValue.description?.textWeight || 'normal',
     textSize: props.modelValue.description?.textSize || 7,
@@ -1366,10 +1384,10 @@ const local = reactive<StyleConfig>({
   },
   item: {
     sectionTitleColor: props.modelValue.item?.sectionTitleColor || '#6b7280',
-    sectionTitleWeight: props.modelValue.item?.sectionTitleWeight || 'semibold',
+    sectionTitleWeight: props.modelValue.item?.sectionTitleWeight || 'bold',
     sectionTitleSize: props.modelValue.item?.sectionTitleSize || 7,
     labelColor: props.modelValue.item?.labelColor || '#000000',
-    labelWeight: props.modelValue.item?.labelWeight || 'semibold',
+    labelWeight: props.modelValue.item?.labelWeight || 'bold',
     labelSize: props.modelValue.item?.labelSize || 7,
     valueColor: props.modelValue.item?.valueColor || '#919191',
     valueWeight: props.modelValue.item?.valueWeight || 'normal',
@@ -1381,10 +1399,10 @@ const local = reactive<StyleConfig>({
   },
   hInfo: {
     sectionTitleColor: props.modelValue.hInfo?.sectionTitleColor || '#6b7280',
-    sectionTitleWeight: props.modelValue.hInfo?.sectionTitleWeight || 'semibold',
+    sectionTitleWeight: props.modelValue.hInfo?.sectionTitleWeight || 'bold',
     sectionTitleSize: props.modelValue.hInfo?.sectionTitleSize || 7,
     labelColor: props.modelValue.hInfo?.labelColor || '#000000',
-    labelWeight: props.modelValue.hInfo?.labelWeight || 'semibold',
+    labelWeight: props.modelValue.hInfo?.labelWeight || 'bold',
     labelSize: props.modelValue.hInfo?.labelSize || 7,
     valueColor: props.modelValue.hInfo?.valueColor || '#919191',
     valueWeight: props.modelValue.hInfo?.valueWeight || 'normal',

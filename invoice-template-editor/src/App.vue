@@ -46,7 +46,7 @@ const styleConfig = reactive({
   header: {
     titleColor: '#0e171f',
     titleSize: 20,
-    titleWeight: 'semibold' as const,
+    titleWeight: 'bold' as const,
     descriptionColor: '#919191',
     descriptionSize: 7,
     descriptionWeight: 'normal' as const,
@@ -54,9 +54,9 @@ const styleConfig = reactive({
   },
   info: {
     sectionTitleColor: '#6b7280',
-    sectionTitleWeight: 'semibold' as const,
+    sectionTitleWeight: 'bold' as const,
     labelColor: '#000000',
-    labelWeight: 'semibold' as const,
+    labelWeight: 'bold' as const,
     valueColor: '#919191',
     valueWeight: 'normal' as const,
     itemGap: 2,
@@ -70,15 +70,17 @@ const styleConfig = reactive({
     subsectionTitleColor: '#000000',
     subsectionTitleWeight: 'bold' as const,
     headerColor: '#919191',
-    columnNameWeight: 'semibold' as const,
+    columnNameWeight: 'bold' as const,
     rowTextColor: '#000000',
     borderColor: '#d2d2d2',
     rowHeight: 13,
+    rowSpacing: 2,
     columnsPadding: 4,
+    subtotalOffset: 0,
   },
   description: {
     labelColor: '#000000',
-    labelWeight: 'semibold' as const,
+    labelWeight: 'bold' as const,
     textColor: '#919191',
     textWeight: 'normal' as const,
     textSize: 7,
@@ -86,9 +88,9 @@ const styleConfig = reactive({
   },
   item: {
     sectionTitleColor: '#6b7280',
-    sectionTitleWeight: 'semibold' as const,
+    sectionTitleWeight: 'bold' as const,
     labelColor: '#000000',
-    labelWeight: 'semibold' as const,
+    labelWeight: 'bold' as const,
     valueColor: '#919191',
     valueWeight: 'normal' as const,
     itemGap: 2,
@@ -114,18 +116,18 @@ const styleConfig = reactive({
   summary: {
     labelText: 'Total USD',
     labelColor: '#000000',
-    labelWeight: 'semibold' as const,
+    labelWeight: 'bold' as const,
     contentColor: '#000000',
-    contentWeight: 'semibold' as const,
+    contentWeight: 'bold' as const,
     labelSize: 10,
     contentSize: 14,
     labelContentGap: 12,
   },
   hInfo: {
     sectionTitleColor: '#6b7280',
-    sectionTitleWeight: 'semibold' as const,
+    sectionTitleWeight: 'bold' as const,
     labelColor: '#000000',
-    labelWeight: 'semibold' as const,
+    labelWeight: 'bold' as const,
     valueColor: '#919191',
     valueWeight: 'normal' as const,
     labelWidth: 80,
@@ -1231,21 +1233,17 @@ const exportPdfByPrint = async () => {
     fontSize: styleConfig.footerInfo.textSize + 'px',
     color: styleConfig.footerInfo.textColor,
     fontWeight:
-      (styleConfig.footerInfo.textWeight as string) === 'semibold'
-        ? '600'
-        : (styleConfig.footerInfo.textWeight as string) === 'bold'
-          ? '700'
-          : '400',
+      (styleConfig.footerInfo.textWeight as string) === 'bold'
+        ? '700'
+        : '400',
   }
   const footerNameStyle = {
     fontSize: styleConfig.footerName.textSize + 'px',
     color: styleConfig.footerName.textColor,
     fontWeight:
-      (styleConfig.footerName.textWeight as string) === 'semibold'
-        ? '600'
-        : (styleConfig.footerName.textWeight as string) === 'bold'
-          ? '700'
-          : '400',
+      (styleConfig.footerName.textWeight as string) === 'bold'
+        ? '700'
+        : '400',
   }
 
   return `

@@ -100,10 +100,6 @@ const getFontWeight = (weight: string): string => {
   switch (weight) {
     case 'bold':
       return '700'
-    case 'semibold':
-      return '600'
-    case 'medium':
-      return '500'
     case 'normal':
     default:
       return '400'

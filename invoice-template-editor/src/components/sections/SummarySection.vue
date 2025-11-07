@@ -10,13 +10,9 @@
           :style="{
             fontSize: (styleConfig?.summary?.labelSize ?? 10) + 'px',
             fontWeight:
-              (styleConfig?.summary?.labelWeight || 'semibold') === 'bold'
+              (styleConfig?.summary?.labelWeight || 'bold') === 'bold'
                 ? '700'
-                : (styleConfig?.summary?.labelWeight || 'semibold') === 'semibold'
-                  ? '600'
-                  : (styleConfig?.summary?.labelWeight || 'semibold') === 'medium'
-                    ? '500'
-                    : '400',
+                : '400',
             color: styleConfig?.summary?.labelColor || '#000000',
             lineHeight: '9px',
           }"
@@ -27,13 +23,9 @@
           :style="{
             fontSize: (styleConfig?.summary?.contentSize ?? 14) + 'px',
             fontWeight:
-              (styleConfig?.summary?.contentWeight || 'semibold') === 'bold'
+              (styleConfig?.summary?.contentWeight || 'bold') === 'bold'
                 ? '700'
-                : (styleConfig?.summary?.contentWeight || 'semibold') === 'semibold'
-                  ? '600'
-                  : (styleConfig?.summary?.contentWeight || 'semibold') === 'medium'
-                    ? '500'
-                    : '400',
+                : '400',
             color: styleConfig?.summary?.contentColor || '#000000',
             lineHeight: '17px',
             paddingLeft: (styleConfig?.summary?.labelContentGap ?? 12) + 'px',

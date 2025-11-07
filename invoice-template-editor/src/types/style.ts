@@ -7,25 +7,27 @@ export interface StyleConfig {
   header: {
     titleColor: string
     titleSize: number
-    titleWeight?: string
+    titleWeight?: 'normal' | 'bold'
     descriptionColor: string
     descriptionSize: number
-    descriptionWeight?: string
+    descriptionWeight?: 'normal' | 'bold'
     // Logo description below the logo (not the title description)
     logoDescriptionColor?: string
     logoDescriptionSize?: number
-    logoDescriptionWeight?: string
+    logoDescriptionWeight?: 'normal' | 'bold'
+    // Logo height in pixels (maintains aspect ratio)
+    logoHeight?: number
   }
 
   info: {
     sectionTitleColor: string
-    sectionTitleWeight?: string
+    sectionTitleWeight?: 'normal' | 'bold'
     sectionTitleSize?: number
     labelColor: string
-    labelWeight?: string
+    labelWeight?: 'normal' | 'bold'
     labelSize?: number
     valueColor: string
-    valueWeight?: string
+    valueWeight?: 'normal' | 'bold'
     valueSize?: number
     itemGap: number
     itemsPerRow?: number
@@ -35,35 +37,37 @@ export interface StyleConfig {
 
   table: {
     sectionTitleColor: string
-    sectionTitleWeight?: string
+    sectionTitleWeight?: 'normal' | 'bold'
     sectionTitleSize?: number
     subsectionTitleColor?: string
-    subsectionTitleWeight?: string
+    subsectionTitleWeight?: 'normal' | 'bold'
     subsectionTitleSize?: number
     headerColor: string
-    columnNameWeight?: string
+    columnNameWeight?: 'normal' | 'bold'
     columnNameSize?: number
     rowTextColor?: string
     rowTextSize?: number
     rowHeight: number
+    rowSpacing?: number
     columnsPadding: number
     borderColor?: string
     // 小计样式（可选）
     subtotalLabelText?: string
     subtotalLabelColor?: string
-    subtotalLabelWeight?: string
+    subtotalLabelWeight?: 'normal' | 'bold'
     subtotalLabelSize?: number
     subtotalAmountColor?: string
-    subtotalAmountWeight?: string
+    subtotalAmountWeight?: 'normal' | 'bold'
     subtotalAmountSize?: number
+    subtotalOffset?: number
   }
 
   summary?: {
     labelText?: string
     labelColor: string
-    labelWeight: string
+    labelWeight: 'normal' | 'bold'
     contentColor: string
-    contentWeight: string
+    contentWeight: 'normal' | 'bold'
     labelSize: number
     contentSize: number
     labelContentGap?: number
@@ -71,23 +75,23 @@ export interface StyleConfig {
 
   description: {
     labelColor: string
-    labelWeight?: string
+    labelWeight?: 'normal' | 'bold'
     labelSize?: number
     textColor: string
-    textWeight?: string
+    textWeight?: 'normal' | 'bold'
     textSize: number
     lineHeight: number
   }
 
   item: {
     sectionTitleColor: string
-    sectionTitleWeight?: string
+    sectionTitleWeight?: 'normal' | 'bold'
     sectionTitleSize?: number
     labelColor: string
-    labelWeight?: string
+    labelWeight?: 'normal' | 'bold'
     labelSize?: number
     valueColor: string
-    valueWeight?: string
+    valueWeight?: 'normal' | 'bold'
     valueSize?: number
     itemGap: number
     itemsPerRow?: number
@@ -98,30 +102,30 @@ export interface StyleConfig {
   footer: {
     textColor: string
     textSize: number
-    textWeight?: string
+    textWeight?: 'normal' | 'bold'
   }
 
   footerInfo?: {
     textColor: string
     textSize: number
-    textWeight?: string
+    textWeight?: 'normal' | 'bold'
   }
 
   footerName?: {
     textColor: string
     textSize: number
-    textWeight?: string
+    textWeight?: 'normal' | 'bold'
   }
 
   hInfo: {
     sectionTitleColor: string
-    sectionTitleWeight?: string
+    sectionTitleWeight?: 'normal' | 'bold'
     sectionTitleSize?: number
     labelColor: string
-    labelWeight?: string
+    labelWeight?: 'normal' | 'bold'
     labelSize?: number
     valueColor: string
-    valueWeight?: string
+    valueWeight?: 'normal' | 'bold'
     valueSize?: number
     labelWidth: number
     labelValueGap: number

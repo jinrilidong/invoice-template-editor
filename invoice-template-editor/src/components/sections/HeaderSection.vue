@@ -21,7 +21,7 @@
                 v-if="header.title && !isEditMode"
                 :style="{
                   fontSize: (styleConfig?.header?.titleSize || 20) + 'px',
-                  fontWeight: getFontWeight(styleConfig?.header?.titleWeight || 'semibold'),
+                  fontWeight: getFontWeight(styleConfig?.header?.titleWeight || 'bold'),
                   color: styleConfig?.header?.titleColor || '#0e171f',
                   lineHeight: '24px',
                   display: 'block',
@@ -50,7 +50,7 @@
       <!-- Logo Column -->
       <td
         :style="{
-          width: hasTitleOrDescription ? '240px' : '100%',
+          width: hasTitleOrDescription ? logoWidth + 'px' : '100%',
           padding: 0,
           verticalAlign: getVerticalAlign(styleConfig?.header?.verticalAlign || 'top'),
           textAlign: hasTitleOrDescription ? 'right' : 'left',
@@ -69,8 +69,8 @@
               <div
                 v-if="header.logo"
                 :style="{
-                  height: (header.logoSize === 'large' ? 72 : 48) + 'px',
-                  width: '240px',
+                  height: logoHeight + 'px',
+                  width: logoWidth + 'px',
                   backgroundImage: `url(${header.logo})`,
                   backgroundSize: 'contain',
                   backgroundRepeat: 'no-repeat',
@@ -81,12 +81,12 @@
               <!-- Logo Placeholder -->
               <table
                 v-else
-                style="
-                  width: 240px;
-                  height: 48px;
-                  border: 1px dashed #000000;
-                  border-collapse: collapse;
-                "
+                :style="{
+                  width: logoWidth + 'px',
+                  height: logoHeight + 'px',
+                  border: '1px dashed #000000',
+                  borderCollapse: 'collapse',
+                }"
                 cellpadding="0"
                 cellspacing="0"
               >
@@ -152,6 +152,7 @@ interface StyleConfig {
     logoDescriptionSize?: number
     logoDescriptionWeight?: string
     verticalAlign?: 'top' | 'middle' | 'bottom'
+    logoHeight?: number
   }
 }
 
@@ -166,15 +167,41 @@ const hasTitleOrDescription = computed(() => {
   return !!(props.header.title || props.header.description)
 })
 
+// 计算 logo 尺寸（保持 5:1 比例，但不超过内容区宽度 572px）
+const logoDimensions = computed(() => {
+  const contentWidth = 572 // 内容区最大宽度
+  const baseHeight = props.styleConfig?.header?.logoHeight ?? 48
+  const calculatedWidth = baseHeight * 5 // 5:1 比例
+  
+  // 如果计算出的宽度超过内容区宽度，按比例缩小
+  if (calculatedWidth > contentWidth) {
+    return {
+      width: contentWidth,
+      height: contentWidth / 5 // 保持 5:1 比例
+    }
+  }
+  
+  return {
+    width: calculatedWidth,
+    height: baseHeight
+  }
+})
+
+// 计算 logo 高度
+const logoHeight = computed(() => {
+  return logoDimensions.value.height
+})
+
+// 计算 logo 宽度
+const logoWidth = computed(() => {
+  return logoDimensions.value.width
+})
+
 // 字体权重转换函数
 const getFontWeight = (weight: string): string => {
   switch (weight) {
     case 'bold':
       return '700'
-    case 'semibold':
-      return '600'
-    case 'medium':
-      return '500'
     case 'normal':
     default:
       return '400'

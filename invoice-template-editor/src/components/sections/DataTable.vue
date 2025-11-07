@@ -57,8 +57,8 @@
               columnIndex === table.columns.length - 1
                 ? '0'
                 : (styleConfig?.table?.columnsPadding ?? 8) / 2 + 'px',
-            paddingTop: '2px',
-            paddingBottom: '2px',
+            paddingTop: rowIndex === 0 ? '2px' : (styleConfig?.table?.rowSpacing ?? 2) + 'px',
+            paddingBottom: rowIndex === displayRows.length - 1 ? '2px' : (styleConfig?.table?.rowSpacing ?? 2) + 'px',
             lineHeight: (styleConfig?.table?.rowTextSize || 7) + 2 + 'px',
             verticalAlign: 'top',
             height: (styleConfig?.table?.rowHeight || 13) + 'px',
@@ -170,10 +170,6 @@ const getFontWeight = (weight: string): string => {
   switch (weight) {
     case 'bold':
       return '700'
-    case 'semibold':
-      return '600'
-    case 'medium':
-      return '500'
     case 'normal':
     default:
       return '400'

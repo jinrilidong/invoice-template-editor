@@ -25,7 +25,7 @@
               <td
                 :style="{
                   fontSize: (styleConfig?.item?.labelSize || 7) + 'px',
-                  fontWeight: getFontWeight(styleConfig?.item?.labelWeight || 'semibold'),
+                  fontWeight: getFontWeight(styleConfig?.item?.labelWeight || 'bold'),
                   color: styleConfig?.item?.labelColor || '#000000',
                   lineHeight: (styleConfig?.item?.labelSize || 7) + 2 + 'px',
                   padding: '0',
@@ -113,10 +113,6 @@ const getFontWeight = (weight: string): string => {
   switch (weight) {
     case 'bold':
       return '700'
-    case 'semibold':
-      return '600'
-    case 'medium':
-      return '500'
     case 'normal':
     default:
       return '400'

@@ -13,19 +13,16 @@
           padding: '2px 0',
           lineHeight: '9px',
           verticalAlign: 'top',
+          marginRight: (styleConfig?.table?.subtotalOffset ?? 0) + 'px',
+          paddingLeft: Math.max(0, styleConfig?.table?.subtotalOffset ?? 0) + 'px',
+          paddingRight: Math.max(0, -(styleConfig?.table?.subtotalOffset ?? 0)) + 'px',
         }"
       >
         <span
           :style="{
             fontSize: (styleConfig?.table?.subtotalLabelSize ?? 7) + 'px',
             fontWeight:
-              (styleConfig?.table?.subtotalLabelWeight || 'semibold') === 'bold'
-                ? '700'
-                : (styleConfig?.table?.subtotalLabelWeight || 'semibold') === 'semibold'
-                  ? '600'
-                  : (styleConfig?.table?.subtotalLabelWeight || 'semibold') === 'medium'
-                    ? '500'
-                    : '400',
+              (styleConfig?.table?.subtotalLabelWeight || 'bold') === 'bold' ? '700' : '400',
             color: styleConfig?.table?.subtotalLabelColor || '#919191',
           }"
         >
@@ -35,13 +32,7 @@
           :style="{
             fontSize: (styleConfig?.table?.subtotalAmountSize ?? 7) + 'px',
             fontWeight:
-              (styleConfig?.table?.subtotalAmountWeight || 'semibold') === 'bold'
-                ? '700'
-                : (styleConfig?.table?.subtotalAmountWeight || 'semibold') === 'semibold'
-                  ? '600'
-                  : (styleConfig?.table?.subtotalAmountWeight || 'semibold') === 'medium'
-                    ? '500'
-                    : '400',
+              (styleConfig?.table?.subtotalAmountWeight || 'bold') === 'bold' ? '700' : '400',
             color: styleConfig?.table?.subtotalAmountColor || '#000000',
             paddingLeft: '6px',
           }"

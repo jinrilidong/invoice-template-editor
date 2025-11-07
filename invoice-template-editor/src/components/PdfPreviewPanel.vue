@@ -93,7 +93,7 @@
                 <div
                   class="logo-container w-60 overflow-hidden relative flex items-center justify-end"
                   :style="{
-                    height: (props.templateData.header?.logoSize === 'large' ? 72 : 48) + 'px',
+                    height: '48px',
                   }"
                 >
                   <img
@@ -106,7 +106,7 @@
                     v-else
                     class="border border-black border-dashed w-60 flex items-center justify-center"
                     :style="{
-                      height: (props.templateData.header?.logoSize === 'large' ? 72 : 48) + 'px',
+                      height: '48px',
                     }"
                   >
                     <span class="text-gray-400" style="font-size: 10px">Logo Placeholder</span>

@@ -1177,6 +1177,7 @@ interface SectionStyle {
     labelSize: number
     contentSize: number
     labelContentGap: number
+    topMargin?: number
   }
   // Header Section
   header: {
@@ -1209,6 +1210,7 @@ interface SectionStyle {
     itemsPerRow?: 2 | 3 | 4 | 5
     itemsSpacing: number
     labelValueGap: number
+    topMargin?: number
   }
   // Table Section
   table: {
@@ -1228,6 +1230,7 @@ interface SectionStyle {
     rowSpacing?: number
     columnsPadding: number
     subtotalOffset?: number
+    topMargin?: number
   }
   // Description Section
   description: {
@@ -1238,6 +1241,7 @@ interface SectionStyle {
     textWeight?: 'normal' | 'bold'
     textSize: number
     lineHeight: number
+    topMargin?: number
   }
   // Item Section
   item: {
@@ -1254,6 +1258,7 @@ interface SectionStyle {
     itemsPerRow?: 2 | 3 | 4 | 5
     itemsSpacing: number
     labelValueGap: number
+    topMargin?: number
   }
   // H-Info Section
   hInfo: {
@@ -1271,6 +1276,7 @@ interface SectionStyle {
     itemGap: number
     columnGap?: number
     columnsPadding: number
+    topMargin?: number
   }
   // Footer Section
   footer: {

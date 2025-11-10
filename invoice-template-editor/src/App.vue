@@ -40,9 +40,6 @@ const selectedSection = ref<string | null>(null)
 // Style configuration for PDF Template (colors, fonts, spacing)
 const styleConfig = reactive({
   baseFontSize: 7,
-  sectionGap: 10,
-  sameTypeSectionGap: 8,
-  summaryGap: 0,
   header: {
     titleColor: '#0e171f',
     titleSize: 20,
@@ -63,6 +60,7 @@ const styleConfig = reactive({
     itemsPerRow: 5 as const,
     itemsSpacing: 4,
     labelValueGap: 2,
+    topMargin: 10,
   },
   table: {
     sectionTitleColor: '#6b7280',
@@ -77,6 +75,7 @@ const styleConfig = reactive({
     rowSpacing: 2,
     columnsPadding: 4,
     subtotalOffset: 0,
+    topMargin: 10,
   },
   description: {
     labelColor: '#000000',
@@ -85,6 +84,7 @@ const styleConfig = reactive({
     textWeight: 'normal' as const,
     textSize: 7,
     lineHeight: 1.2,
+    topMargin: 10,
   },
   item: {
     sectionTitleColor: '#6b7280',
@@ -97,6 +97,7 @@ const styleConfig = reactive({
     itemsPerRow: 5 as const,
     itemsSpacing: 4,
     labelValueGap: 2,
+    topMargin: 10,
   },
   footer: {
     textColor: '#000000',
@@ -122,6 +123,7 @@ const styleConfig = reactive({
     labelSize: 10,
     contentSize: 14,
     labelContentGap: 12,
+    topMargin: 10,
   },
   hInfo: {
     sectionTitleColor: '#6b7280',
@@ -134,6 +136,7 @@ const styleConfig = reactive({
     labelValueGap: 8,
     itemGap: 4,
     columnsPadding: 8,
+    topMargin: 10,
   },
 })
 

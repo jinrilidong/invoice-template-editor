@@ -43,36 +43,6 @@
               max="24"
             />
           </div>
-          <div class="flex items-center gap-3">
-            <label class="w-32 text-sm text-[#0e171f]">Section Gap (px)</label>
-            <input
-              type="number"
-              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.sectionGap"
-              min="0"
-              max="24"
-            />
-          </div>
-          <div class="flex items-center gap-3">
-            <label class="w-32 text-sm text-[#0e171f]">Same Type Section Gap (px)</label>
-            <input
-              type="number"
-              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.sameTypeSectionGap"
-              min="0"
-              max="24"
-            />
-          </div>
-          <div class="flex items-center gap-3">
-            <label class="w-32 text-sm text-[#0e171f]">Summary Gap (px)</label>
-            <input
-              type="number"
-              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.summaryGap"
-              min="0"
-              max="24"
-            />
-          </div>
         </div>
       </section>
 
@@ -355,6 +325,16 @@
               max="16"
             />
           </div>
+          <div class="flex items-center gap-3">
+            <label class="w-32 text-sm text-[#0e171f]">Top Margin (px)</label>
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.info.topMargin"
+              min="0"
+              max="24"
+            />
+          </div>
         </div>
       </section>
 
@@ -538,6 +518,16 @@
             />
             <span class="text-xs text-gray-500">Positive: left, Negative: right</span>
           </div>
+          <div class="flex items-center gap-3">
+            <label class="w-32 text-sm text-[#0e171f]">Top Margin (px)</label>
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.table.topMargin"
+              min="0"
+              max="24"
+            />
+          </div>
         </div>
       </section>
 
@@ -629,6 +619,16 @@
               max="48"
             />
           </div>
+          <div class="flex items-center gap-3">
+            <label class="w-32 text-sm text-[#0e171f]">Top Margin (px)</label>
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.summary.topMargin"
+              min="0"
+              max="24"
+            />
+          </div>
         </div>
       </section>
 
@@ -711,6 +711,16 @@
               min="1"
               max="2"
               step="0.1"
+            />
+          </div>
+          <div class="flex items-center gap-3">
+            <label class="w-32 text-sm text-[#0e171f]">Top Margin (px)</label>
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.description.topMargin"
+              min="0"
+              max="24"
             />
           </div>
         </div>
@@ -859,6 +869,16 @@
               v-model.number="local.item.labelValueGap"
               min="0"
               max="16"
+            />
+          </div>
+          <div class="flex items-center gap-3">
+            <label class="w-32 text-sm text-[#0e171f]">Top Margin (px)</label>
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.item.topMargin"
+              min="0"
+              max="24"
             />
           </div>
         </div>
@@ -1015,6 +1035,16 @@
               v-model.number="local.hInfo.columnsPadding"
               min="0"
               max="32"
+            />
+          </div>
+          <div class="flex items-center gap-3">
+            <label class="w-32 text-sm text-[#0e171f]">Top Margin (px)</label>
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="local.hInfo.topMargin"
+              min="0"
+              max="24"
             />
           </div>
         </div>
@@ -1252,9 +1282,6 @@ interface SectionStyle {
 
 interface StyleConfig extends SectionStyle {
   baseFontSize: number
-  sectionGap: number
-  sameTypeSectionGap: number
-  summaryGap: number
   footerInfo: {
     textColor: string
     textSize: number
@@ -1316,9 +1343,6 @@ const showFooterSettings = computed(() => {
 
 const local = reactive<StyleConfig>({
   baseFontSize: props.modelValue.baseFontSize,
-  sectionGap: props.modelValue.sectionGap,
-  sameTypeSectionGap: props.modelValue.sameTypeSectionGap,
-  summaryGap: props.modelValue.summaryGap,
   summary: {
     labelText: props.modelValue.summary?.labelText || 'Total USD',
     labelColor: props.modelValue.summary?.labelColor || '#000000',
@@ -1328,6 +1352,7 @@ const local = reactive<StyleConfig>({
     labelSize: props.modelValue.summary?.labelSize || 10,
     contentSize: props.modelValue.summary?.contentSize || 14,
     labelContentGap: props.modelValue.summary?.labelContentGap ?? 12,
+    topMargin: props.modelValue.summary?.topMargin ?? 10,
   },
   header: {
     titleColor: props.modelValue.header?.titleColor || '#0e171f',
@@ -1356,6 +1381,7 @@ const local = reactive<StyleConfig>({
     itemsPerRow: props.modelValue.info?.itemsPerRow || 5,
     itemsSpacing: props.modelValue.info?.itemsSpacing ?? 4,
     labelValueGap: props.modelValue.info?.labelValueGap ?? 2,
+    topMargin: props.modelValue.info?.topMargin ?? 10,
   },
   table: {
     sectionTitleColor: props.modelValue.table?.sectionTitleColor || '#6b7280',
@@ -1372,6 +1398,7 @@ const local = reactive<StyleConfig>({
     rowSpacing: props.modelValue.table?.rowSpacing ?? 2,
     columnsPadding: props.modelValue.table?.columnsPadding ?? 4,
     subtotalOffset: props.modelValue.table?.subtotalOffset ?? 0,
+    topMargin: props.modelValue.table?.topMargin ?? 10,
   },
   description: {
     labelColor: props.modelValue.description?.labelColor || '#000000',
@@ -1381,6 +1408,7 @@ const local = reactive<StyleConfig>({
     textWeight: props.modelValue.description?.textWeight || 'normal',
     textSize: props.modelValue.description?.textSize || 7,
     lineHeight: props.modelValue.description?.lineHeight || 1.2,
+    topMargin: props.modelValue.description?.topMargin ?? 10,
   },
   item: {
     sectionTitleColor: props.modelValue.item?.sectionTitleColor || '#6b7280',
@@ -1396,6 +1424,7 @@ const local = reactive<StyleConfig>({
     itemsPerRow: props.modelValue.item?.itemsPerRow || 5,
     itemsSpacing: props.modelValue.item?.itemsSpacing ?? 4,
     labelValueGap: props.modelValue.item?.labelValueGap ?? 2,
+    topMargin: props.modelValue.item?.topMargin ?? 10,
   },
   hInfo: {
     sectionTitleColor: props.modelValue.hInfo?.sectionTitleColor || '#6b7280',
@@ -1412,6 +1441,7 @@ const local = reactive<StyleConfig>({
     itemGap: props.modelValue.hInfo?.itemGap ?? 4,
     columnGap: props.modelValue.hInfo?.columnGap ?? 8,
     columnsPadding: props.modelValue.hInfo?.columnsPadding ?? 8,
+    topMargin: props.modelValue.hInfo?.topMargin ?? 10,
   },
   footer: {
     textColor: props.modelValue.footer?.textColor || '#000000',

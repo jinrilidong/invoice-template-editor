@@ -1528,9 +1528,6 @@ interface TemplateData {
 
 interface StyleConfig {
   baseFontSize: number
-  sectionGap: number
-  sameTypeSectionGap: number
-  summaryGap: number
   header: {
     titleColor: string
     titleSize: number
@@ -1996,23 +1993,36 @@ const getDynamicStyle = computed(() => {
   }
 })
 
-// 计算section间距的函数 - 简化逻辑
+// 获取section的topMargin
+const getSectionTopMargin = (type: string, styleConfig?: any): number => {
+  switch (type) {
+    case 'info':
+      return styleConfig?.info?.topMargin ?? 10
+    case 'hInfo':
+      return styleConfig?.hInfo?.topMargin ?? 10
+    case 'table':
+      return styleConfig?.table?.topMargin ?? 10
+    case 'summary':
+      return styleConfig?.summary?.topMargin ?? 10
+    case 'description':
+      return styleConfig?.description?.topMargin ?? 10
+    case 'item':
+      return styleConfig?.item?.topMargin ?? 10
+    default:
+      return 10
+  }
+}
+
+// 计算section间距的函数 - 使用各模块的topMargin
 const calculateSectionGap = (currentSection: any, prevSection: any, styleConfig?: any): number => {
-  // 特殊规则：Summary 和 Table 之间使用专门的 summaryGap
-  if (
-    (currentSection?.content?.type === 'summary' && prevSection?.type === 'table') ||
-    (currentSection?.type === 'table' && prevSection?.content?.type === 'summary')
-  ) {
-    return styleConfig?.summaryGap || 0 // Summary 和 Table 之间的专门间距
+  // 如果是第一个section，没有上边距
+  if (!prevSection) {
+    return 0
   }
 
-  // 相同类型 section 间距
-  if (currentSection?.type === prevSection?.type) {
-    return styleConfig?.sameTypeSectionGap || 8 // 相同类型section间距
-  }
-
-  // 不同类型 section 间距（包括 Summary 和其他 section 类型）
-  return styleConfig?.sectionGap || 10 // 不同类型section间距
+  // 使用当前section的topMargin
+  const sectionType = currentSection?.type || currentSection?.content?.type
+  return getSectionTopMargin(sectionType, styleConfig)
 }
 
 // 检查是否是相同类型 - 简化逻辑

@@ -1,8 +1,5 @@
 export interface StyleConfig {
   baseFontSize: number
-  sectionGap: number
-  sameTypeSectionGap: number
-  summaryGap: number
 
   header: {
     titleColor: string
@@ -33,6 +30,7 @@ export interface StyleConfig {
     itemsPerRow?: number
     itemsSpacing?: number
     labelValueGap?: number
+    topMargin?: number
   }
 
   table: {
@@ -60,6 +58,7 @@ export interface StyleConfig {
     subtotalAmountWeight?: 'normal' | 'bold'
     subtotalAmountSize?: number
     subtotalOffset?: number
+    topMargin?: number
   }
 
   summary?: {
@@ -71,6 +70,7 @@ export interface StyleConfig {
     labelSize: number
     contentSize: number
     labelContentGap?: number
+    topMargin?: number
   }
 
   description: {
@@ -81,6 +81,7 @@ export interface StyleConfig {
     textWeight?: 'normal' | 'bold'
     textSize: number
     lineHeight: number
+    topMargin?: number
   }
 
   item: {
@@ -97,6 +98,7 @@ export interface StyleConfig {
     itemsPerRow?: number
     itemsSpacing?: number
     labelValueGap?: number
+    topMargin?: number
   }
 
   footer: {
@@ -132,5 +134,6 @@ export interface StyleConfig {
     itemGap: number
     columnsPadding: number
     columnGap?: number
+    topMargin?: number
   }
 }

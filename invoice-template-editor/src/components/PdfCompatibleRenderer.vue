@@ -52,32 +52,17 @@
                     />
                   </td>
                 </tr>
-                <!-- Section Spacer -->
-                <tr>
-                  <td
-                    :style="{ height: (props.styleConfig?.sectionGap || 10) + 'px', padding: 0 }"
-                  ></td>
-                </tr>
               </template>
 
               <!-- Info Sections -->
               <template v-if="props.sectionStates.info">
                 <tr v-for="(infoSection, index) in props.templateData.info" :key="'info-' + index">
-                  <td
-                    class="section-clickable"
-                    style="padding: 0; vertical-align: top"
-                    @click.stop="handleSectionClick('info-section')"
-                  >
-                    <InfoSection
-                      :info="infoSection"
-                      :style-config="props.styleConfig as any"
-                      :is-edit-mode="!!props.isEditMode"
-                    />
-                    <!-- Section spacer after each info section -->
+                  <td style="padding: 0; vertical-align: top">
+                    <!-- Top margin spacer before info section -->
                     <table
                       :style="{
                         width: '100%',
-                        height: (props.styleConfig?.sectionGap || 10) + 'px',
+                        height: (props.styleConfig?.info?.topMargin ?? 10) + 'px',
                       }"
                       cellpadding="0"
                       cellspacing="0"
@@ -86,6 +71,17 @@
                         <td></td>
                       </tr>
                     </table>
+                    <div
+                      class="section-clickable"
+                      style="padding: 0; vertical-align: top"
+                      @click.stop="handleSectionClick('info-section')"
+                    >
+                      <InfoSection
+                        :info="infoSection"
+                        :style-config="props.styleConfig as any"
+                        :is-edit-mode="!!props.isEditMode"
+                      />
+                    </div>
                   </td>
                 </tr>
               </template>
@@ -96,21 +92,12 @@
                   v-for="(hInfoSection, index) in props.templateData.hInfo"
                   :key="'h-info-' + index"
                 >
-                  <td
-                    class="section-clickable"
-                    style="padding: 0; vertical-align: top"
-                    @click.stop="handleSectionClick('h-info-section')"
-                  >
-                    <HInfoSection
-                      :h-info="hInfoSection"
-                      :style-config="props.styleConfig as any"
-                      :is-edit-mode="!!props.isEditMode"
-                    />
-                    <!-- Section spacer after each h-info section -->
+                  <td style="padding: 0; vertical-align: top">
+                    <!-- Top margin spacer before h-info section -->
                     <table
                       :style="{
                         width: '100%',
-                        height: (props.styleConfig?.sectionGap || 10) + 'px',
+                        height: (props.styleConfig?.hInfo?.topMargin ?? 10) + 'px',
                       }"
                       cellpadding="0"
                       cellspacing="0"
@@ -119,6 +106,17 @@
                         <td></td>
                       </tr>
                     </table>
+                    <div
+                      class="section-clickable"
+                      style="padding: 0; vertical-align: top"
+                      @click.stop="handleSectionClick('h-info-section')"
+                    >
+                      <HInfoSection
+                        :h-info="hInfoSection"
+                        :style-config="props.styleConfig as any"
+                        :is-edit-mode="!!props.isEditMode"
+                      />
+                    </div>
                   </td>
                 </tr>
               </template>
@@ -129,24 +127,12 @@
                   v-for="(tableSection, index) in props.templateData.tables"
                   :key="'table-' + index"
                 >
-                  <td
-                    class="section-clickable"
-                    style="padding: 0; vertical-align: top"
-                    @click.stop="handleSectionClick(`table-section-${index}`)"
-                  >
-                    <TableSection
-                      :table="tableSection"
-                      :style-config="props.styleConfig as any"
-                      :is-edit-mode="!!props.isEditMode"
-                    />
-                    <!-- Section spacer after each table section -->
+                  <td style="padding: 0; vertical-align: top">
+                    <!-- Top margin spacer before table section -->
                     <table
                       :style="{
                         width: '100%',
-                        height:
-                          (props.styleConfig?.sameTypeSectionGap ??
-                            props.styleConfig?.sectionGap ??
-                            10) + 'px',
+                        height: (props.styleConfig?.table?.topMargin ?? 10) + 'px',
                       }"
                       cellpadding="0"
                       cellspacing="0"
@@ -155,6 +141,17 @@
                         <td></td>
                       </tr>
                     </table>
+                    <div
+                      class="section-clickable"
+                      style="padding: 0; vertical-align: top"
+                      @click.stop="handleSectionClick(`table-section-${index}`)"
+                    >
+                      <TableSection
+                        :table="tableSection"
+                        :style-config="props.styleConfig as any"
+                        :is-edit-mode="!!props.isEditMode"
+                      />
+                    </div>
                   </td>
                 </tr>
               </template>
@@ -162,23 +159,12 @@
               <!-- Summary Section -->
               <template v-if="props.sectionStates.summary">
                 <tr>
-                  <td
-                    class="section-clickable"
-                    style="padding: 0; vertical-align: top"
-                    @click.stop="handleSectionClick('summary-section')"
-                  >
-                    <SummarySection
-                      :tables="props.templateData.tables"
-                      :summary="props.templateData.summary"
-                      :style-config="props.styleConfig as any"
-                    />
-                    <!-- Section spacer after summary section -->
+                  <td style="padding: 0; vertical-align: top">
+                    <!-- Top margin spacer before summary section -->
                     <table
                       :style="{
                         width: '100%',
-                        height:
-                          (props.styleConfig?.summaryGap ?? props.styleConfig?.sectionGap ?? 10) +
-                          'px',
+                        height: (props.styleConfig?.summary?.topMargin ?? 10) + 'px',
                       }"
                       cellpadding="0"
                       cellspacing="0"
@@ -187,6 +173,17 @@
                         <td></td>
                       </tr>
                     </table>
+                    <div
+                      class="section-clickable"
+                      style="padding: 0; vertical-align: top"
+                      @click.stop="handleSectionClick('summary-section')"
+                    >
+                      <SummarySection
+                        :tables="props.templateData.tables"
+                        :summary="props.templateData.summary"
+                        :style-config="props.styleConfig as any"
+                      />
+                    </div>
                   </td>
                 </tr>
               </template>
@@ -197,21 +194,12 @@
                   v-for="(descriptionSection, index) in props.templateData.description"
                   :key="'description-' + index"
                 >
-                  <td
-                    class="section-clickable"
-                    style="padding: 0; vertical-align: top"
-                    @click.stop="handleSectionClick('description-section')"
-                  >
-                    <DescriptionSection
-                      :description="normalizeDescription(descriptionSection)"
-                      :style-config="props.styleConfig as any"
-                      :is-edit-mode="!!props.isEditMode"
-                    />
-                    <!-- Section spacer after each description section -->
+                  <td style="padding: 0; vertical-align: top">
+                    <!-- Top margin spacer before description section -->
                     <table
                       :style="{
                         width: '100%',
-                        height: (props.styleConfig?.sectionGap || 10) + 'px',
+                        height: (props.styleConfig?.description?.topMargin ?? 10) + 'px',
                       }"
                       cellpadding="0"
                       cellspacing="0"
@@ -220,6 +208,17 @@
                         <td></td>
                       </tr>
                     </table>
+                    <div
+                      class="section-clickable"
+                      style="padding: 0; vertical-align: top"
+                      @click.stop="handleSectionClick('description-section')"
+                    >
+                      <DescriptionSection
+                        :description="normalizeDescription(descriptionSection)"
+                        :style-config="props.styleConfig as any"
+                        :is-edit-mode="!!props.isEditMode"
+                      />
+                    </div>
                   </td>
                 </tr>
               </template>
@@ -227,21 +226,12 @@
               <!-- Item Sections -->
               <template v-if="props.sectionStates.item">
                 <tr v-for="(itemSection, index) in props.templateData.item" :key="'item-' + index">
-                  <td
-                    class="section-clickable"
-                    style="padding: 0; vertical-align: top"
-                    @click.stop="handleSectionClick('item-section')"
-                  >
-                    <ItemSection
-                      :item="itemSection"
-                      :style-config="props.styleConfig as any"
-                      :is-edit-mode="!!props.isEditMode"
-                    />
-                    <!-- Section spacer after each item section -->
+                  <td style="padding: 0; vertical-align: top">
+                    <!-- Top margin spacer before item section -->
                     <table
                       :style="{
                         width: '100%',
-                        height: (props.styleConfig?.sectionGap || 10) + 'px',
+                        height: (props.styleConfig?.item?.topMargin ?? 10) + 'px',
                       }"
                       cellpadding="0"
                       cellspacing="0"
@@ -250,6 +240,17 @@
                         <td></td>
                       </tr>
                     </table>
+                    <div
+                      class="section-clickable"
+                      style="padding: 0; vertical-align: top"
+                      @click.stop="handleSectionClick('item-section')"
+                    >
+                      <ItemSection
+                        :item="itemSection"
+                        :style-config="props.styleConfig as any"
+                        :is-edit-mode="!!props.isEditMode"
+                      />
+                    </div>
                   </td>
                 </tr>
               </template>

@@ -787,6 +787,15 @@ const exportHtmlTemplate = async () => {
 
     // 8) Clean up HTML and ensure XHTML compliance
     const sanitized = inner
+      // Remove HTML comments that contain text (keep empty comments for Vue conditional rendering)
+      .replace(/<!--[\s\S]*?-->/g, (match) => {
+        // Keep empty comments (used by Vue for conditional rendering)
+        if (match.trim() === '<!---->' || match.trim() === '<!-- -->') {
+          return match
+        }
+        // Remove all other comments
+        return ''
+      })
       // ensure <br> and <img> are self-closed for XHTML
       .replace(/<br(\s*?)>/g, '<br$1 />')
       .replace(/<img([^>]*?)(?<!\/)>/g, '<img$1 />')

@@ -684,7 +684,7 @@
             <input
               type="number"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.description.labelSize"
+              v-model.number="currentDescriptionStyle.labelSize"
               min="6"
               max="24"
             />
@@ -737,7 +737,7 @@
             <input
               type="number"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.description.textSize"
+              v-model.number="currentDescriptionStyle.textSize"
               min="6"
               max="24"
             />
@@ -747,7 +747,7 @@
             <input
               type="number"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.description.lineHeight"
+              v-model.number="currentDescriptionStyle.lineHeight"
               min="1"
               max="2"
               step="0.1"
@@ -758,7 +758,7 @@
             <input
               type="number"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.description.topMargin"
+              v-model.number="currentDescriptionStyle.topMargin"
               min="0"
               max="24"
             />
@@ -788,7 +788,7 @@
             <input
               type="number"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.item.sectionTitleSize"
+              v-model.number="currentItemStyle.sectionTitleSize"
               min="6"
               max="24"
             />
@@ -831,7 +831,7 @@
             <input
               type="number"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.item.labelSize"
+              v-model.number="currentItemStyle.labelSize"
               min="6"
               max="24"
             />
@@ -864,7 +864,7 @@
             <input
               type="number"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.item.valueSize"
+              v-model.number="currentItemStyle.valueSize"
               min="6"
               max="24"
             />
@@ -884,7 +884,7 @@
             <input
               type="number"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.item.itemGap"
+              v-model.number="currentItemStyle.itemGap"
               min="0"
               max="16"
             />
@@ -893,7 +893,7 @@
             <label class="w-32 text-sm text-[#0e171f]">Items Per Row</label>
             <select
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.item.itemsPerRow"
+              v-model.number="currentItemStyle.itemsPerRow"
             >
               <option :value="5">1/5</option>
               <option :value="4">1/4</option>
@@ -906,7 +906,7 @@
             <input
               type="number"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.item.itemsSpacing"
+              v-model.number="currentItemStyle.itemsSpacing"
               min="0"
               max="16"
             />
@@ -916,7 +916,7 @@
             <input
               type="number"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.item.labelValueGap"
+              v-model.number="currentItemStyle.labelValueGap"
               min="0"
               max="16"
             />
@@ -926,7 +926,7 @@
             <input
               type="number"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.item.topMargin"
+              v-model.number="currentItemStyle.topMargin"
               min="0"
               max="24"
             />
@@ -956,7 +956,7 @@
             <input
               type="number"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.hInfo.sectionTitleSize"
+              v-model.number="currentHInfoStyle.sectionTitleSize"
               min="6"
               max="24"
             />
@@ -999,7 +999,7 @@
             <input
               type="number"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.hInfo.labelSize"
+              v-model.number="currentHInfoStyle.labelSize"
               min="6"
               max="24"
             />
@@ -1032,7 +1032,7 @@
             <input
               type="number"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.hInfo.valueSize"
+              v-model.number="currentHInfoStyle.valueSize"
               min="6"
               max="24"
             />
@@ -1052,7 +1052,7 @@
             <input
               type="number"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.hInfo.labelWidth"
+              v-model.number="currentHInfoStyle.labelWidth"
               min="40"
               max="200"
             />
@@ -1062,7 +1062,7 @@
             <input
               type="number"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.hInfo.labelValueGap"
+              v-model.number="currentHInfoStyle.labelValueGap"
               min="4"
               max="32"
             />
@@ -1072,7 +1072,7 @@
             <input
               type="number"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.hInfo.itemGap"
+              v-model.number="currentHInfoStyle.itemGap"
               min="0"
               max="16"
             />
@@ -1082,7 +1082,7 @@
             <input
               type="number"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.hInfo.columnGap"
+              v-model.number="currentHInfoStyle.columnGap"
               min="4"
               max="32"
             />
@@ -1092,7 +1092,7 @@
             <input
               type="number"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.hInfo.columnsPadding"
+              v-model.number="currentHInfoStyle.columnsPadding"
               min="0"
               max="32"
             />
@@ -1102,7 +1102,7 @@
             <input
               type="number"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.hInfo.topMargin"
+              v-model.number="currentHInfoStyle.topMargin"
               min="0"
               max="24"
             />
@@ -1410,7 +1410,7 @@ const getSectionIndex = (sectionType: string | null | undefined): number => {
   
   // 匹配末尾的数字，如 info-section-0, table-section-1
   const match = sectionType.match(/-(\d+)$/)
-  if (match) {
+  if (match && match[1]) {
     return parseInt(match[1], 10)
   }
   
@@ -1452,7 +1452,7 @@ const local = reactive({
     logoDescriptionColor: props.modelValue.header?.logoDescriptionColor || '#919191',
     logoDescriptionSize: props.modelValue.header?.logoDescriptionSize || 7,
     logoDescriptionWeight: props.modelValue.header?.logoDescriptionWeight || 'normal',
-    verticalAlign: props.modelValue.header?.verticalAlign || 'top',
+    verticalAlign: (props.modelValue.header?.verticalAlign || 'top') as 'top' | 'middle' | 'bottom',
     logoHeight: props.modelValue.header?.logoHeight ?? 48,
   },
   info: {} as StyleConfig['info'],
@@ -1475,7 +1475,11 @@ const local = reactive({
     textSize: props.modelValue.footerName?.textSize || 7,
     textWeight: props.modelValue.footerName?.textWeight || 'normal',
   },
-} as StyleConfig)
+} as StyleConfig & {
+  summary: NonNullable<StyleConfig['summary']>
+  footerInfo: NonNullable<StyleConfig['footerInfo']>
+  footerName: NonNullable<StyleConfig['footerName']>
+})
 
 // 初始化：从 modelValue 同步所有已存在的样式配置
 const syncStylesFromModelValue = () => {

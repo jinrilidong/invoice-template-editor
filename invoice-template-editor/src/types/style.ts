@@ -112,6 +112,8 @@ export interface StyleConfig {
     logoDescriptionWeight?: 'normal' | 'bold'
     // Logo height in pixels (maintains aspect ratio)
     logoHeight?: number
+    // Vertical alignment
+    verticalAlign?: 'top' | 'middle' | 'bottom'
   }
 
   // 支持多个实例，使用索引作为 key

@@ -182,19 +182,19 @@
 
       <!-- Info Section -->
       <section v-if="showInfoSettings">
-        <h3 class="text-sm font-semibold text-[#0e171f] mb-3">Info Section</h3>
+        <h3 class="text-sm font-semibold text-[#0e171f] mb-3">Info Section {{ currentInfoIndex > 0 ? `#${currentInfoIndex + 1}` : '' }}</h3>
         <div class="space-y-3">
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Section Title Color</label>
             <input
               type="color"
               class="h-8 w-12 border border-[#d3ddde] rounded"
-              v-model="local.info.sectionTitleColor"
+              v-model="currentInfoStyle.sectionTitleColor"
             />
             <input
               type="text"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model="local.info.sectionTitleColor"
+              v-model="currentInfoStyle.sectionTitleColor"
             />
           </div>
           <div class="flex items-center gap-3">
@@ -202,7 +202,7 @@
             <input
               type="number"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.info.sectionTitleSize"
+              v-model.number="currentInfoStyle.sectionTitleSize"
               min="6"
               max="24"
             />
@@ -211,23 +211,33 @@
             <label class="w-32 text-sm text-[#0e171f]">Section Title Weight</label>
             <select
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model="local.info.sectionTitleWeight"
+              v-model="currentInfoStyle.sectionTitleWeight"
             >
               <option value="normal">Normal</option>
               <option value="bold">Bold</option>
             </select>
           </div>
           <div class="flex items-center gap-3">
+            <label class="w-32 text-sm text-[#0e171f]">Section Title Bottom Margin (px)</label>
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="currentInfoStyle.sectionTitleBottomMargin"
+              min="0"
+              max="16"
+            />
+          </div>
+          <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Label Color</label>
             <input
               type="color"
               class="h-8 w-12 border border-[#d3ddde] rounded"
-              v-model="local.info.labelColor"
+              v-model="currentInfoStyle.labelColor"
             />
             <input
               type="text"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model="local.info.labelColor"
+              v-model="currentInfoStyle.labelColor"
             />
           </div>
           <div class="flex items-center gap-3">
@@ -235,7 +245,7 @@
             <input
               type="number"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.info.labelSize"
+              v-model.number="currentInfoStyle.labelSize"
               min="6"
               max="24"
             />
@@ -244,7 +254,7 @@
             <label class="w-32 text-sm text-[#0e171f]">Label Weight</label>
             <select
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model="local.info.labelWeight"
+              v-model="currentInfoStyle.labelWeight"
             >
               <option value="normal">Normal</option>
               <option value="bold">Bold</option>
@@ -255,12 +265,12 @@
             <input
               type="color"
               class="h-8 w-12 border border-[#d3ddde] rounded"
-              v-model="local.info.valueColor"
+              v-model="currentInfoStyle.valueColor"
             />
             <input
               type="text"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model="local.info.valueColor"
+              v-model="currentInfoStyle.valueColor"
             />
           </div>
           <div class="flex items-center gap-3">
@@ -268,7 +278,7 @@
             <input
               type="number"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.info.valueSize"
+              v-model.number="currentInfoStyle.valueSize"
               min="6"
               max="24"
             />
@@ -277,7 +287,7 @@
             <label class="w-32 text-sm text-[#0e171f]">Value Weight</label>
             <select
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model="local.info.valueWeight"
+              v-model="currentInfoStyle.valueWeight"
             >
               <option value="normal">Normal</option>
               <option value="bold">Bold</option>
@@ -288,7 +298,7 @@
             <input
               type="number"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.info.itemGap"
+              v-model.number="currentInfoStyle.itemGap"
               min="0"
               max="16"
             />
@@ -297,7 +307,7 @@
             <label class="w-32 text-sm text-[#0e171f]">Items Per Row</label>
             <select
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.info.itemsPerRow"
+              v-model.number="currentInfoStyle.itemsPerRow"
             >
               <option :value="5">1/5</option>
               <option :value="4">1/4</option>
@@ -310,7 +320,7 @@
             <input
               type="number"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.info.itemsSpacing"
+              v-model.number="currentInfoStyle.itemsSpacing"
               min="0"
               max="16"
             />
@@ -320,7 +330,7 @@
             <input
               type="number"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.info.labelValueGap"
+              v-model.number="currentInfoStyle.labelValueGap"
               min="0"
               max="16"
             />
@@ -330,7 +340,7 @@
             <input
               type="number"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.info.topMargin"
+              v-model.number="currentInfoStyle.topMargin"
               min="0"
               max="24"
             />
@@ -340,19 +350,19 @@
 
       <!-- Table Section -->
       <section v-if="showTableSettings">
-        <h3 class="text-sm font-semibold text-[#0e171f] mb-3">Table Section</h3>
+        <h3 class="text-sm font-semibold text-[#0e171f] mb-3">Table Section {{ currentTableIndex > 0 ? `#${currentTableIndex + 1}` : '' }}</h3>
         <div class="space-y-3">
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Section Title Color</label>
             <input
               type="color"
               class="h-8 w-12 border border-[#d3ddde] rounded"
-              v-model="local.table.sectionTitleColor"
+              v-model="currentTableStyle.sectionTitleColor"
             />
             <input
               type="text"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model="local.table.sectionTitleColor"
+              v-model="currentTableStyle.sectionTitleColor"
             />
           </div>
           <div class="flex items-center gap-3">
@@ -360,7 +370,7 @@
             <input
               type="number"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.table.sectionTitleSize"
+              v-model.number="currentTableStyle.sectionTitleSize"
               min="6"
               max="24"
             />
@@ -369,23 +379,33 @@
             <label class="w-32 text-sm text-[#0e171f]">Section Title Weight</label>
             <select
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model="local.table.sectionTitleWeight"
+              v-model="currentTableStyle.sectionTitleWeight"
             >
               <option value="normal">Normal</option>
               <option value="bold">Bold</option>
             </select>
           </div>
           <div class="flex items-center gap-3">
+            <label class="w-32 text-sm text-[#0e171f]">Section Title Bottom Margin (px)</label>
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="currentTableStyle.sectionTitleBottomMargin"
+              min="0"
+              max="16"
+            />
+          </div>
+          <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Subsection Title Color</label>
             <input
               type="color"
               class="h-8 w-12 border border-[#d3ddde] rounded"
-              v-model="local.table.subsectionTitleColor"
+              v-model="currentTableStyle.subsectionTitleColor"
             />
             <input
               type="text"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model="local.table.subsectionTitleColor"
+              v-model="currentTableStyle.subsectionTitleColor"
             />
           </div>
           <div class="flex items-center gap-3">
@@ -393,7 +413,7 @@
             <input
               type="number"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.table.subsectionTitleSize"
+              v-model.number="currentTableStyle.subsectionTitleSize"
               min="6"
               max="24"
             />
@@ -402,30 +422,40 @@
             <label class="w-32 text-sm text-[#0e171f]">Subsection Title Weight</label>
             <select
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model="local.table.subsectionTitleWeight"
+              v-model="currentTableStyle.subsectionTitleWeight"
             >
               <option value="normal">Normal</option>
               <option value="bold">Bold</option>
             </select>
           </div>
           <div class="flex items-center gap-3">
+            <label class="w-32 text-sm text-[#0e171f]">Subsection Title Bottom Margin (px)</label>
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="currentTableStyle.subsectionTitleBottomMargin"
+              min="0"
+              max="16"
+            />
+          </div>
+          <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Header Color</label>
             <input
               type="color"
               class="h-8 w-12 border border-[#d3ddde] rounded"
-              v-model="local.table.headerColor"
+              v-model="currentTableStyle.headerColor"
             />
             <input
               type="text"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model="local.table.headerColor"
+              v-model="currentTableStyle.headerColor"
             />
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Column Name Weight</label>
             <select
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model="local.table.columnNameWeight"
+              v-model="currentTableStyle.columnNameWeight"
             >
               <option value="normal">Normal</option>
               <option value="bold">Bold</option>
@@ -436,7 +466,7 @@
             <input
               type="number"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.table.columnNameSize"
+              v-model.number="currentTableStyle.columnNameSize"
               min="6"
               max="24"
             />
@@ -446,12 +476,12 @@
             <input
               type="color"
               class="h-8 w-12 border border-[#d3ddde] rounded"
-              v-model="local.table.rowTextColor"
+              v-model="currentTableStyle.rowTextColor"
             />
             <input
               type="text"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model="local.table.rowTextColor"
+              v-model="currentTableStyle.rowTextColor"
             />
           </div>
           <div class="flex items-center gap-3">
@@ -459,7 +489,7 @@
             <input
               type="number"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.table.rowTextSize"
+              v-model.number="currentTableStyle.rowTextSize"
               min="6"
               max="24"
             />
@@ -469,12 +499,12 @@
             <input
               type="color"
               class="h-8 w-12 border border-[#d3ddde] rounded"
-              v-model="local.table.borderColor"
+              v-model="currentTableStyle.borderColor"
             />
             <input
               type="text"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model="local.table.borderColor"
+              v-model="currentTableStyle.borderColor"
             />
           </div>
           <div class="flex items-center gap-3">
@@ -482,7 +512,7 @@
             <input
               type="number"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.table.rowHeight"
+              v-model.number="currentTableStyle.rowHeight"
               min="8"
               max="24"
             />
@@ -492,7 +522,7 @@
             <input
               type="number"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.table.rowSpacing"
+              v-model.number="currentTableStyle.rowSpacing"
               min="0"
               max="10"
             />
@@ -502,7 +532,7 @@
             <input
               type="number"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.table.columnsPadding"
+              v-model.number="currentTableStyle.columnsPadding"
               min="0"
               max="16"
             />
@@ -512,7 +542,7 @@
             <input
               type="number"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.table.subtotalOffset"
+              v-model.number="currentTableStyle.subtotalOffset"
               min="-200"
               max="200"
             />
@@ -523,7 +553,7 @@
             <input
               type="number"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model.number="local.table.topMargin"
+              v-model.number="currentTableStyle.topMargin"
               min="0"
               max="24"
             />
@@ -634,19 +664,19 @@
 
       <!-- Description Section -->
       <section v-if="showDescriptionSettings">
-        <h3 class="text-sm font-semibold text-[#0e171f] mb-3">Description Section</h3>
+        <h3 class="text-sm font-semibold text-[#0e171f] mb-3">Description Section {{ currentDescriptionIndex > 0 ? `#${currentDescriptionIndex + 1}` : '' }}</h3>
         <div class="space-y-3">
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Label Color</label>
             <input
               type="color"
               class="h-8 w-12 border border-[#d3ddde] rounded"
-              v-model="local.description.labelColor"
+              v-model="currentDescriptionStyle.labelColor"
             />
             <input
               type="text"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model="local.description.labelColor"
+              v-model="currentDescriptionStyle.labelColor"
             />
           </div>
           <div class="flex items-center gap-3">
@@ -663,30 +693,40 @@
             <label class="w-32 text-sm text-[#0e171f]">Label Weight</label>
             <select
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model="local.description.labelWeight"
+              v-model="currentDescriptionStyle.labelWeight"
             >
               <option value="normal">Normal</option>
               <option value="bold">Bold</option>
             </select>
           </div>
           <div class="flex items-center gap-3">
+            <label class="w-32 text-sm text-[#0e171f]">Label Bottom Margin (px)</label>
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="currentDescriptionStyle.labelBottomMargin"
+              min="0"
+              max="16"
+            />
+          </div>
+          <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Text Color</label>
             <input
               type="color"
               class="h-8 w-12 border border-[#d3ddde] rounded"
-              v-model="local.description.textColor"
+              v-model="currentDescriptionStyle.textColor"
             />
             <input
               type="text"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model="local.description.textColor"
+              v-model="currentDescriptionStyle.textColor"
             />
           </div>
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Text Weight</label>
             <select
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model="local.description.textWeight"
+              v-model="currentDescriptionStyle.textWeight"
             >
               <option value="normal">Normal</option>
               <option value="bold">Bold</option>
@@ -728,19 +768,19 @@
 
       <!-- Item Section -->
       <section v-if="showItemSettings">
-        <h3 class="text-sm font-semibold text-[#0e171f] mb-3">Item Section</h3>
+        <h3 class="text-sm font-semibold text-[#0e171f] mb-3">Item Section {{ currentItemIndex > 0 ? `#${currentItemIndex + 1}` : '' }}</h3>
         <div class="space-y-3">
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Section Title Color</label>
             <input
               type="color"
               class="h-8 w-12 border border-[#d3ddde] rounded"
-              v-model="local.item.sectionTitleColor"
+              v-model="currentItemStyle.sectionTitleColor"
             />
             <input
               type="text"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model="local.item.sectionTitleColor"
+              v-model="currentItemStyle.sectionTitleColor"
             />
           </div>
           <div class="flex items-center gap-3">
@@ -757,23 +797,33 @@
             <label class="w-32 text-sm text-[#0e171f]">Section Title Weight</label>
             <select
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model="local.item.sectionTitleWeight"
+              v-model="currentItemStyle.sectionTitleWeight"
             >
               <option value="normal">Normal</option>
               <option value="bold">Bold</option>
             </select>
           </div>
           <div class="flex items-center gap-3">
+            <label class="w-32 text-sm text-[#0e171f]">Section Title Bottom Margin (px)</label>
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="currentItemStyle.sectionTitleBottomMargin"
+              min="0"
+              max="16"
+            />
+          </div>
+          <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Label Color</label>
             <input
               type="color"
               class="h-8 w-12 border border-[#d3ddde] rounded"
-              v-model="local.item.labelColor"
+              v-model="currentItemStyle.labelColor"
             />
             <input
               type="text"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model="local.item.labelColor"
+              v-model="currentItemStyle.labelColor"
             />
           </div>
           <div class="flex items-center gap-3">
@@ -790,7 +840,7 @@
             <label class="w-32 text-sm text-[#0e171f]">Label Weight</label>
             <select
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model="local.item.labelWeight"
+              v-model="currentItemStyle.labelWeight"
             >
               <option value="normal">Normal</option>
               <option value="bold">Bold</option>
@@ -801,12 +851,12 @@
             <input
               type="color"
               class="h-8 w-12 border border-[#d3ddde] rounded"
-              v-model="local.item.valueColor"
+              v-model="currentItemStyle.valueColor"
             />
             <input
               type="text"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model="local.item.valueColor"
+              v-model="currentItemStyle.valueColor"
             />
           </div>
           <div class="flex items-center gap-3">
@@ -823,7 +873,7 @@
             <label class="w-32 text-sm text-[#0e171f]">Value Weight</label>
             <select
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model="local.item.valueWeight"
+              v-model="currentItemStyle.valueWeight"
             >
               <option value="normal">Normal</option>
               <option value="bold">Bold</option>
@@ -886,19 +936,19 @@
 
       <!-- H-Info Section -->
       <section v-if="showHInfoSettings">
-        <h3 class="text-sm font-semibold text-[#0e171f] mb-3">H-Info Section</h3>
+        <h3 class="text-sm font-semibold text-[#0e171f] mb-3">H-Info Section {{ currentHInfoIndex > 0 ? `#${currentHInfoIndex + 1}` : '' }}</h3>
         <div class="space-y-3">
           <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Section Title Color</label>
             <input
               type="color"
               class="h-8 w-12 border border-[#d3ddde] rounded"
-              v-model="local.hInfo.sectionTitleColor"
+              v-model="currentHInfoStyle.sectionTitleColor"
             />
             <input
               type="text"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model="local.hInfo.sectionTitleColor"
+              v-model="currentHInfoStyle.sectionTitleColor"
             />
           </div>
           <div class="flex items-center gap-3">
@@ -915,23 +965,33 @@
             <label class="w-32 text-sm text-[#0e171f]">Section Title Weight</label>
             <select
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model="local.hInfo.sectionTitleWeight"
+              v-model="currentHInfoStyle.sectionTitleWeight"
             >
               <option value="normal">Normal</option>
               <option value="bold">Bold</option>
             </select>
           </div>
           <div class="flex items-center gap-3">
+            <label class="w-32 text-sm text-[#0e171f]">Section Title Bottom Margin (px)</label>
+            <input
+              type="number"
+              class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
+              v-model.number="currentHInfoStyle.sectionTitleBottomMargin"
+              min="0"
+              max="16"
+            />
+          </div>
+          <div class="flex items-center gap-3">
             <label class="w-32 text-sm text-[#0e171f]">Label Color</label>
             <input
               type="color"
               class="h-8 w-12 border border-[#d3ddde] rounded"
-              v-model="local.hInfo.labelColor"
+              v-model="currentHInfoStyle.labelColor"
             />
             <input
               type="text"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model="local.hInfo.labelColor"
+              v-model="currentHInfoStyle.labelColor"
             />
           </div>
           <div class="flex items-center gap-3">
@@ -948,7 +1008,7 @@
             <label class="w-32 text-sm text-[#0e171f]">Label Weight</label>
             <select
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model="local.hInfo.labelWeight"
+              v-model="currentHInfoStyle.labelWeight"
             >
               <option value="normal">Normal</option>
               <option value="bold">Bold</option>
@@ -959,12 +1019,12 @@
             <input
               type="color"
               class="h-8 w-12 border border-[#d3ddde] rounded"
-              v-model="local.hInfo.valueColor"
+              v-model="currentHInfoStyle.valueColor"
             />
             <input
               type="text"
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model="local.hInfo.valueColor"
+              v-model="currentHInfoStyle.valueColor"
             />
           </div>
           <div class="flex items-center gap-3">
@@ -981,7 +1041,7 @@
             <label class="w-32 text-sm text-[#0e171f]">Value Weight</label>
             <select
               class="flex-1 border border-[#d3ddde] rounded px-2 py-1 text-sm"
-              v-model="local.hInfo.valueWeight"
+              v-model="currentHInfoStyle.valueWeight"
             >
               <option value="normal">Normal</option>
               <option value="bold">Bold</option>
@@ -1165,6 +1225,19 @@
 <script setup lang="ts">
 import { reactive, watch, computed } from 'vue'
 import TextButton from './TextButton.vue'
+import {
+  getInfoStyle,
+  getTableStyle,
+  getDescriptionStyle,
+  getItemStyle,
+  getHInfoStyle,
+  createDefaultInfoStyle,
+  createDefaultTableStyle,
+  createDefaultDescriptionStyle,
+  createDefaultItemStyle,
+  createDefaultHInfoStyle,
+  cloneStyle,
+} from '@/utils/style-helper'
 
 interface SectionStyle {
   // Summary Section
@@ -1320,11 +1393,11 @@ const showHeaderSettings = computed(() => {
 })
 
 const showInfoSettings = computed(() => {
-  return props.selectedSection === 'info-section'
+  return props.selectedSection?.startsWith('info-section')
 })
 
 const showHInfoSettings = computed(() => {
-  return props.selectedSection === 'h-info-section'
+  return props.selectedSection?.startsWith('h-info-section')
 })
 
 const showTableSettings = computed(() => {
@@ -1336,12 +1409,34 @@ const showSummarySettings = computed(() => {
 })
 
 const showDescriptionSettings = computed(() => {
-  return props.selectedSection === 'description-section'
+  return props.selectedSection?.startsWith('description-section')
 })
 
 const showItemSettings = computed(() => {
-  return props.selectedSection === 'item-section'
+  return props.selectedSection?.startsWith('item-section')
 })
+
+// 从 selectedSection 提取索引
+// 支持格式：info-section-0, table-section-1, item-section-2, h-info-section-0, description-section-1
+const getSectionIndex = (sectionType: string | null | undefined): number => {
+  if (!sectionType) return 0
+  
+  // 匹配末尾的数字，如 info-section-0, table-section-1
+  const match = sectionType.match(/-(\d+)$/)
+  if (match) {
+    return parseInt(match[1], 10)
+  }
+  
+  // 如果没有匹配到数字，返回 0（默认第一个）
+  return 0
+}
+
+// 获取当前选中的 section 索引
+const currentInfoIndex = computed(() => getSectionIndex(props.selectedSection))
+const currentTableIndex = computed(() => getSectionIndex(props.selectedSection))
+const currentDescriptionIndex = computed(() => getSectionIndex(props.selectedSection))
+const currentItemIndex = computed(() => getSectionIndex(props.selectedSection))
+const currentHInfoIndex = computed(() => getSectionIndex(props.selectedSection))
 
 const showFooterSettings = computed(() => {
   return props.selectedSection === 'footer-section'
@@ -1373,82 +1468,11 @@ const local = reactive<StyleConfig>({
     verticalAlign: props.modelValue.header?.verticalAlign || 'top',
     logoHeight: props.modelValue.header?.logoHeight ?? 48,
   },
-  info: {
-    sectionTitleColor: props.modelValue.info?.sectionTitleColor || '#6b7280',
-    sectionTitleWeight: props.modelValue.info?.sectionTitleWeight || 'bold',
-    sectionTitleSize: props.modelValue.info?.sectionTitleSize || 7,
-    labelColor: props.modelValue.info?.labelColor || '#000000',
-    labelWeight: props.modelValue.info?.labelWeight || 'bold',
-    labelSize: props.modelValue.info?.labelSize || 7,
-    valueColor: props.modelValue.info?.valueColor || '#919191',
-    valueWeight: props.modelValue.info?.valueWeight || 'normal',
-    valueSize: props.modelValue.info?.valueSize || 7,
-    itemGap: props.modelValue.info?.itemGap ?? 2,
-    itemsPerRow: props.modelValue.info?.itemsPerRow || 5,
-    itemsSpacing: props.modelValue.info?.itemsSpacing ?? 4,
-    labelValueGap: props.modelValue.info?.labelValueGap ?? 2,
-    topMargin: props.modelValue.info?.topMargin ?? 10,
-  },
-  table: {
-    sectionTitleColor: props.modelValue.table?.sectionTitleColor || '#6b7280',
-    sectionTitleSize: props.modelValue.table?.sectionTitleSize || 7,
-    subsectionTitleColor: props.modelValue.table?.subsectionTitleColor || '#000000',
-    subsectionTitleSize: props.modelValue.table?.subsectionTitleSize || 7,
-    headerColor: props.modelValue.table?.headerColor || '#919191',
-    columnNameWeight: props.modelValue.table?.columnNameWeight || 'bold',
-    columnNameSize: props.modelValue.table?.columnNameSize || 7,
-    rowTextColor: props.modelValue.table?.rowTextColor || '#000000',
-    rowTextSize: props.modelValue.table?.rowTextSize || 7,
-    borderColor: props.modelValue.table?.borderColor || '#d2d2d2',
-    rowHeight: props.modelValue.table?.rowHeight || 13,
-    rowSpacing: props.modelValue.table?.rowSpacing ?? 2,
-    columnsPadding: props.modelValue.table?.columnsPadding ?? 4,
-    subtotalOffset: props.modelValue.table?.subtotalOffset ?? 0,
-    topMargin: props.modelValue.table?.topMargin ?? 10,
-  },
-  description: {
-    labelColor: props.modelValue.description?.labelColor || '#000000',
-    labelSize: props.modelValue.description?.labelSize || 7,
-    labelWeight: props.modelValue.description?.labelWeight || 'bold',
-    textColor: props.modelValue.description?.textColor || '#919191',
-    textWeight: props.modelValue.description?.textWeight || 'normal',
-    textSize: props.modelValue.description?.textSize || 7,
-    lineHeight: props.modelValue.description?.lineHeight || 1.2,
-    topMargin: props.modelValue.description?.topMargin ?? 10,
-  },
-  item: {
-    sectionTitleColor: props.modelValue.item?.sectionTitleColor || '#6b7280',
-    sectionTitleWeight: props.modelValue.item?.sectionTitleWeight || 'bold',
-    sectionTitleSize: props.modelValue.item?.sectionTitleSize || 7,
-    labelColor: props.modelValue.item?.labelColor || '#000000',
-    labelWeight: props.modelValue.item?.labelWeight || 'bold',
-    labelSize: props.modelValue.item?.labelSize || 7,
-    valueColor: props.modelValue.item?.valueColor || '#919191',
-    valueWeight: props.modelValue.item?.valueWeight || 'normal',
-    valueSize: props.modelValue.item?.valueSize || 7,
-    itemGap: props.modelValue.item?.itemGap ?? 2,
-    itemsPerRow: props.modelValue.item?.itemsPerRow || 5,
-    itemsSpacing: props.modelValue.item?.itemsSpacing ?? 4,
-    labelValueGap: props.modelValue.item?.labelValueGap ?? 2,
-    topMargin: props.modelValue.item?.topMargin ?? 10,
-  },
-  hInfo: {
-    sectionTitleColor: props.modelValue.hInfo?.sectionTitleColor || '#6b7280',
-    sectionTitleWeight: props.modelValue.hInfo?.sectionTitleWeight || 'bold',
-    sectionTitleSize: props.modelValue.hInfo?.sectionTitleSize || 7,
-    labelColor: props.modelValue.hInfo?.labelColor || '#000000',
-    labelWeight: props.modelValue.hInfo?.labelWeight || 'bold',
-    labelSize: props.modelValue.hInfo?.labelSize || 7,
-    valueColor: props.modelValue.hInfo?.valueColor || '#919191',
-    valueWeight: props.modelValue.hInfo?.valueWeight || 'normal',
-    valueSize: props.modelValue.hInfo?.valueSize || 7,
-    labelWidth: props.modelValue.hInfo?.labelWidth ?? 80,
-    labelValueGap: props.modelValue.hInfo?.labelValueGap ?? 8,
-    itemGap: props.modelValue.hInfo?.itemGap ?? 4,
-    columnGap: props.modelValue.hInfo?.columnGap ?? 8,
-    columnsPadding: props.modelValue.hInfo?.columnsPadding ?? 8,
-    topMargin: props.modelValue.hInfo?.topMargin ?? 10,
-  },
+  info: {} as Record<number, any>,
+  table: {} as Record<number, any>,
+  description: {} as Record<number, any>,
+  item: {} as Record<number, any>,
+  hInfo: {} as Record<number, any>,
   footer: {
     textColor: props.modelValue.footer?.textColor || '#000000',
     textSize: props.modelValue.footer?.textSize || 7,
@@ -1463,6 +1487,146 @@ const local = reactive<StyleConfig>({
     textColor: props.modelValue.footerName?.textColor || '#000000',
     textSize: props.modelValue.footerName?.textSize || 7,
     textWeight: props.modelValue.footerName?.textWeight || 'normal',
+  },
+})
+
+// 初始化：从 modelValue 同步所有已存在的样式配置
+const syncStylesFromModelValue = () => {
+  // 同步 info 样式
+  if (props.modelValue.info) {
+    Object.keys(props.modelValue.info).forEach((key) => {
+      const index = Number(key)
+      if (!local.info[index]) {
+        local.info[index] = cloneStyle(props.modelValue.info[index])
+      }
+    })
+  }
+  // 同步 table 样式
+  if (props.modelValue.table) {
+    Object.keys(props.modelValue.table).forEach((key) => {
+      const index = Number(key)
+      if (!local.table[index]) {
+        local.table[index] = cloneStyle(props.modelValue.table[index])
+      }
+    })
+  }
+  // 同步 description 样式
+  if (props.modelValue.description) {
+    Object.keys(props.modelValue.description).forEach((key) => {
+      const index = Number(key)
+      if (!local.description[index]) {
+        local.description[index] = cloneStyle(props.modelValue.description[index])
+      }
+    })
+  }
+  // 同步 item 样式
+  if (props.modelValue.item) {
+    Object.keys(props.modelValue.item).forEach((key) => {
+      const index = Number(key)
+      if (!local.item[index]) {
+        local.item[index] = cloneStyle(props.modelValue.item[index])
+      }
+    })
+  }
+  // 同步 hInfo 样式
+  if (props.modelValue.hInfo) {
+    Object.keys(props.modelValue.hInfo).forEach((key) => {
+      const index = Number(key)
+      if (!local.hInfo[index]) {
+        local.hInfo[index] = cloneStyle(props.modelValue.hInfo[index])
+      }
+    })
+  }
+}
+
+// 初始化时同步
+syncStylesFromModelValue()
+
+// 监听 modelValue 变化，同步新添加的样式配置
+watch(
+  () => props.modelValue,
+  () => {
+    syncStylesFromModelValue()
+  },
+  { deep: true },
+)
+
+// 获取当前选中索引的样式对象（用于编辑）
+const currentInfoStyle = computed({
+  get: () => {
+    const index = currentInfoIndex.value
+    // 如果该索引的样式不存在，从 modelValue 获取或创建默认样式
+    if (!local.info[index]) {
+      const existing = getInfoStyle(props.modelValue, index)
+      local.info[index] = existing ? cloneStyle(existing) : createDefaultInfoStyle()
+    }
+    return local.info[index]
+  },
+  set: (value) => {
+    const index = currentInfoIndex.value
+    local.info[index] = value
+  },
+})
+
+const currentTableStyle = computed({
+  get: () => {
+    const index = currentTableIndex.value
+    if (!local.table[index]) {
+      const existing = getTableStyle(props.modelValue, index)
+      local.table[index] = existing ? cloneStyle(existing) : createDefaultTableStyle()
+    }
+    return local.table[index]
+  },
+  set: (value) => {
+    const index = currentTableIndex.value
+    local.table[index] = value
+  },
+})
+
+const currentDescriptionStyle = computed({
+  get: () => {
+    const index = currentDescriptionIndex.value
+    if (!local.description[index]) {
+      const existing = getDescriptionStyle(props.modelValue, index)
+      local.description[index] = existing
+        ? cloneStyle(existing)
+        : createDefaultDescriptionStyle()
+    }
+    return local.description[index]
+  },
+  set: (value) => {
+    const index = currentDescriptionIndex.value
+    local.description[index] = value
+  },
+})
+
+const currentItemStyle = computed({
+  get: () => {
+    const index = currentItemIndex.value
+    if (!local.item[index]) {
+      const existing = getItemStyle(props.modelValue, index)
+      local.item[index] = existing ? cloneStyle(existing) : createDefaultItemStyle()
+    }
+    return local.item[index]
+  },
+  set: (value) => {
+    const index = currentItemIndex.value
+    local.item[index] = value
+  },
+})
+
+const currentHInfoStyle = computed({
+  get: () => {
+    const index = currentHInfoIndex.value
+    if (!local.hInfo[index]) {
+      const existing = getHInfoStyle(props.modelValue, index)
+      local.hInfo[index] = existing ? cloneStyle(existing) : createDefaultHInfoStyle()
+    }
+    return local.hInfo[index]
+  },
+  set: (value) => {
+    const index = currentHInfoIndex.value
+    local.hInfo[index] = value
   },
 })
 

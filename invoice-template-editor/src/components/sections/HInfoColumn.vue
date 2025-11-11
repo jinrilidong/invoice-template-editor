@@ -9,7 +9,7 @@
         :style="{
           padding:
             '0 0 ' +
-            (itemIndex < column.items.length - 1 ? (styleConfig?.hInfo?.itemGap ?? 4) : 0) +
+            (itemIndex < column.items.length - 1 ? (sectionStyle?.itemGap ?? 4) : 0) +
             'px 0',
         }"
       >
@@ -23,11 +23,11 @@
           <tr>
             <td
               :style="{
-                width: (styleConfig?.hInfo?.labelWidth || 80) + 'px',
-                fontSize: (styleConfig?.hInfo?.labelSize || 7) + 'px',
-                fontWeight: getFontWeight(styleConfig?.hInfo?.labelWeight || 'bold'),
-                color: styleConfig?.hInfo?.labelColor || '#000000',
-                lineHeight: (styleConfig?.hInfo?.labelSize || 7) + 2 + 'px',
+                width: (sectionStyle?.labelWidth || 80) + 'px',
+                fontSize: (sectionStyle?.labelSize || 7) + 'px',
+                fontWeight: getFontWeight(sectionStyle?.labelWeight || 'bold'),
+                color: sectionStyle?.labelColor || '#000000',
+                lineHeight: (sectionStyle?.labelSize || 7) + 2 + 'px',
                 padding: 0,
                 verticalAlign: 'top',
               }"
@@ -37,11 +37,11 @@
             </td>
             <td
               :style="{
-                fontSize: (styleConfig?.hInfo?.valueSize || 7) + 'px',
-                fontWeight: getFontWeight(styleConfig?.hInfo?.valueWeight || 'normal'),
-                color: styleConfig?.hInfo?.valueColor || '#919191',
-                lineHeight: (styleConfig?.hInfo?.valueSize || 7) + 2 + 'px',
-                padding: (styleConfig?.hInfo?.labelValueGap ?? 0) + 'px 0 0 0',
+                fontSize: (sectionStyle?.valueSize || 7) + 'px',
+                fontWeight: getFontWeight(sectionStyle?.valueWeight || 'normal'),
+                color: sectionStyle?.valueColor || '#919191',
+                lineHeight: (sectionStyle?.valueSize || 7) + 2 + 'px',
+                padding: (sectionStyle?.labelValueGap ?? 0) + 'px 0 0 0',
                 verticalAlign: 'top',
               }"
             >
@@ -61,10 +61,10 @@
           <tr>
             <td
               :style="{
-                fontSize: (styleConfig?.hInfo?.labelSize || 7) + 'px',
-                fontWeight: getFontWeight(styleConfig?.hInfo?.labelWeight || 'bold'),
-                color: styleConfig?.hInfo?.labelColor || '#000000',
-                lineHeight: (styleConfig?.hInfo?.labelSize || 7) + 2 + 'px',
+                fontSize: (sectionStyle?.labelSize || 7) + 'px',
+                fontWeight: getFontWeight(sectionStyle?.labelWeight || 'bold'),
+                color: sectionStyle?.labelColor || '#000000',
+                lineHeight: (sectionStyle?.labelSize || 7) + 2 + 'px',
                 padding: 0,
               }"
             >
@@ -75,11 +75,11 @@
           <tr>
             <td
               :style="{
-                fontSize: (styleConfig?.hInfo?.valueSize || 7) + 'px',
-                fontWeight: getFontWeight(styleConfig?.hInfo?.valueWeight || 'normal'),
-                color: styleConfig?.hInfo?.valueColor || '#919191',
-                lineHeight: (styleConfig?.hInfo?.valueSize || 7) + 2 + 'px',
-                padding: (styleConfig?.hInfo?.labelValueGap ?? 2) + 'px 0 0 0',
+                fontSize: (sectionStyle?.valueSize || 7) + 'px',
+                fontWeight: getFontWeight(sectionStyle?.valueWeight || 'normal'),
+                color: sectionStyle?.valueColor || '#919191',
+                lineHeight: (sectionStyle?.valueSize || 7) + 2 + 'px',
+                padding: (sectionStyle?.labelValueGap ?? 2) + 'px 0 0 0',
               }"
             >
               <div v-if="!isEditMode" v-html="toXhtml(item.value)"></div>
@@ -93,8 +93,11 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { toXhtml } from '@/utils/text'
 import EditableText from '../EditableText.vue'
+import { getHInfoStyle } from '@/utils/style-helper'
+
 interface HInfoItem {
   id: string
   label: string
@@ -108,12 +111,16 @@ interface HInfoColumn {
 
 import type { StyleConfig } from '@/types/style'
 
-defineProps<{
+const props = defineProps<{
   column: HInfoColumn
   styleConfig: StyleConfig
+  sectionIndex?: number
   labelValueLayout: 'horizontal' | 'vertical'
   isEditMode?: boolean
 }>()
+
+// 获取当前索引的样式
+const sectionStyle = computed(() => getHInfoStyle(props.styleConfig, props.sectionIndex ?? 0))
 
 // 字体权重转换函数
 const getFontWeight = (weight: string): string => {

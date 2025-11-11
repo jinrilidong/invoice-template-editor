@@ -8,11 +8,11 @@
     <tr v-if="hInfo.sectionTitle || isEditMode">
       <td
         :style="{
-          fontSize: (styleConfig?.hInfo?.sectionTitleSize || 7) + 'px',
-          fontWeight: getFontWeight(styleConfig?.hInfo?.sectionTitleWeight || 'bold'),
-          color: styleConfig?.hInfo?.sectionTitleColor || '#6b7280',
-          lineHeight: (styleConfig?.hInfo?.sectionTitleSize || 7) + 2 + 'px',
-          padding: '0 0 2px 0',
+          fontSize: (sectionStyle?.sectionTitleSize || 7) + 'px',
+          fontWeight: getFontWeight(sectionStyle?.sectionTitleWeight || 'bold'),
+          color: sectionStyle?.sectionTitleColor || '#6b7280',
+          lineHeight: (sectionStyle?.sectionTitleSize || 7) + 2 + 'px',
+          padding: `0 0 ${sectionStyle?.sectionTitleBottomMargin ?? 2}px 0`,
         }"
       >
         <template v-if="!isEditMode">{{ hInfo.sectionTitle }}</template>
@@ -41,17 +41,18 @@
               :style="{
                 width: getColumnWidthPercent(columnIndex) + '%',
                 paddingLeft:
-                  columnIndex === 0 ? '0' : (styleConfig?.hInfo?.columnsPadding ?? 8) / 2 + 'px',
+                  columnIndex === 0 ? '0' : (sectionStyle?.columnsPadding ?? 8) / 2 + 'px',
                 paddingRight:
                   columnIndex === hInfo.columns.length - 1
                     ? '0'
-                    : (styleConfig?.hInfo?.columnsPadding ?? 8) / 2 + 'px',
+                    : (sectionStyle?.columnsPadding ?? 8) / 2 + 'px',
                 verticalAlign: 'top',
               }"
             >
               <HInfoColumn
                 :column="column"
                 :style-config="styleConfig"
+                :section-index="sectionIndex"
                 :label-value-layout="hInfo.labelValueLayout || 'vertical'"
                 :is-edit-mode="isEditMode"
               />
@@ -64,8 +65,10 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import HInfoColumn from './HInfoColumn.vue'
 import EditableText from '../EditableText.vue'
+import { getHInfoStyle } from '@/utils/style-helper'
 
 interface HInfoItem {
   id: string
@@ -91,8 +94,12 @@ import type { StyleConfig } from '@/types/style'
 const props = defineProps<{
   hInfo: HInfo
   styleConfig: StyleConfig
+  sectionIndex?: number
   isEditMode?: boolean
 }>()
+
+// 获取当前索引的样式
+const sectionStyle = computed(() => getHInfoStyle(props.styleConfig, props.sectionIndex ?? 0))
 
 // 列宽按索引计算
 

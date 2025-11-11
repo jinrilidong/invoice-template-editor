@@ -8,11 +8,11 @@
     <tr v-if="item.sectionTitle || isEditMode">
       <td
         :style="{
-          fontSize: (styleConfig?.item?.sectionTitleSize || 7) + 'px',
-          fontWeight: getFontWeight(styleConfig?.item?.sectionTitleWeight || 'bold'),
-          color: styleConfig?.item?.sectionTitleColor || '#6b7280',
-          lineHeight: (styleConfig?.item?.sectionTitleSize || 7) + 2 + 'px',
-          padding: '0 0 2px 0',
+          fontSize: (sectionStyle?.sectionTitleSize || 7) + 'px',
+          fontWeight: getFontWeight(sectionStyle?.sectionTitleWeight || 'bold'),
+          color: sectionStyle?.sectionTitleColor || '#6b7280',
+          lineHeight: (sectionStyle?.sectionTitleSize || 7) + 2 + 'px',
+          padding: `0 0 ${sectionStyle?.sectionTitleBottomMargin ?? 2}px 0`,
         }"
       >
         <template v-if="!isEditMode">{{ item.sectionTitle }}</template>
@@ -32,6 +32,7 @@
         <ItemItemsTable
           :items="item.items"
           :style-config="styleConfig"
+          :section-index="sectionIndex"
           :is-edit-mode="isEditMode"
         />
       </td>
@@ -40,8 +41,10 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import ItemItemsTable from './ItemItemsTable.vue'
 import EditableText from '../EditableText.vue'
+import { getItemStyle } from '@/utils/style-helper'
 
 interface ItemItem {
   id: string
@@ -57,11 +60,15 @@ interface Item {
 
 import type { StyleConfig } from '@/types/style'
 
-defineProps<{
+const props = defineProps<{
   item: Item
   styleConfig: StyleConfig
+  sectionIndex?: number
   isEditMode?: boolean
 }>()
+
+// 获取当前索引的样式
+const sectionStyle = computed(() => getItemStyle(props.styleConfig, props.sectionIndex ?? 0))
 
 // 字体权重转换函数
 const getFontWeight = (weight: string): string => {

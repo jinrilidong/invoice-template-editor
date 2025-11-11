@@ -62,7 +62,7 @@
                     <table
                       :style="{
                         width: '100%',
-                        height: (props.styleConfig?.info?.topMargin ?? 10) + 'px',
+                        height: (getInfoStyle(props.styleConfig, index)?.topMargin ?? 10) + 'px',
                       }"
                       cellpadding="0"
                       cellspacing="0"
@@ -74,11 +74,12 @@
                     <div
                       class="section-clickable"
                       style="padding: 0; vertical-align: top"
-                      @click.stop="handleSectionClick('info-section')"
+                      @click.stop="handleSectionClick(`info-section-${index}`)"
                     >
                       <InfoSection
                         :info="infoSection"
                         :style-config="props.styleConfig as any"
+                        :section-index="index"
                         :is-edit-mode="!!props.isEditMode"
                       />
                     </div>
@@ -97,7 +98,7 @@
                     <table
                       :style="{
                         width: '100%',
-                        height: (props.styleConfig?.hInfo?.topMargin ?? 10) + 'px',
+                        height: (getHInfoStyle(props.styleConfig, index)?.topMargin ?? 10) + 'px',
                       }"
                       cellpadding="0"
                       cellspacing="0"
@@ -109,11 +110,12 @@
                     <div
                       class="section-clickable"
                       style="padding: 0; vertical-align: top"
-                      @click.stop="handleSectionClick('h-info-section')"
+                      @click.stop="handleSectionClick(`h-info-section-${index}`)"
                     >
                       <HInfoSection
                         :h-info="hInfoSection"
                         :style-config="props.styleConfig as any"
+                        :section-index="index"
                         :is-edit-mode="!!props.isEditMode"
                       />
                     </div>
@@ -132,7 +134,7 @@
                     <table
                       :style="{
                         width: '100%',
-                        height: (props.styleConfig?.table?.topMargin ?? 10) + 'px',
+                        height: (getTableStyle(props.styleConfig, index)?.topMargin ?? 10) + 'px',
                       }"
                       cellpadding="0"
                       cellspacing="0"
@@ -149,6 +151,7 @@
                       <TableSection
                         :table="tableSection"
                         :style-config="props.styleConfig as any"
+                        :section-index="index"
                         :is-edit-mode="!!props.isEditMode"
                       />
                     </div>
@@ -199,7 +202,7 @@
                     <table
                       :style="{
                         width: '100%',
-                        height: (props.styleConfig?.description?.topMargin ?? 10) + 'px',
+                        height: (getDescriptionStyle(props.styleConfig, index)?.topMargin ?? 10) + 'px',
                       }"
                       cellpadding="0"
                       cellspacing="0"
@@ -211,11 +214,12 @@
                     <div
                       class="section-clickable"
                       style="padding: 0; vertical-align: top"
-                      @click.stop="handleSectionClick('description-section')"
+                      @click.stop="handleSectionClick(`description-section-${index}`)"
                     >
                       <DescriptionSection
                         :description="normalizeDescription(descriptionSection)"
                         :style-config="props.styleConfig as any"
+                        :section-index="index"
                         :is-edit-mode="!!props.isEditMode"
                       />
                     </div>
@@ -231,7 +235,7 @@
                     <table
                       :style="{
                         width: '100%',
-                        height: (props.styleConfig?.item?.topMargin ?? 10) + 'px',
+                        height: (getItemStyle(props.styleConfig, index)?.topMargin ?? 10) + 'px',
                       }"
                       cellpadding="0"
                       cellspacing="0"
@@ -243,11 +247,12 @@
                     <div
                       class="section-clickable"
                       style="padding: 0; vertical-align: top"
-                      @click.stop="handleSectionClick('item-section')"
+                      @click.stop="handleSectionClick(`item-section-${index}`)"
                     >
                       <ItemSection
                         :item="itemSection"
                         :style-config="props.styleConfig as any"
+                        :section-index="index"
                         :is-edit-mode="!!props.isEditMode"
                       />
                     </div>
@@ -318,6 +323,13 @@ import FooterSection from './sections/FooterSection.vue'
 import type { TemplateData } from '../types/section'
 import type { StyleConfig } from '../types/style'
 import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
+import {
+  getInfoStyle,
+  getTableStyle,
+  getDescriptionStyle,
+  getItemStyle,
+  getHInfoStyle,
+} from '../utils/style-helper'
 
 // PDF页面尺寸常量
 const PAGE_WIDTH = 612

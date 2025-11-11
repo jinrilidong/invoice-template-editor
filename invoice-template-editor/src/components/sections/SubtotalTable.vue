@@ -13,27 +13,27 @@
           padding: '2px 0',
           lineHeight: '9px',
           verticalAlign: 'top',
-          marginRight: (styleConfig?.table?.subtotalOffset ?? 0) + 'px',
-          paddingLeft: Math.max(0, styleConfig?.table?.subtotalOffset ?? 0) + 'px',
-          paddingRight: Math.max(0, -(styleConfig?.table?.subtotalOffset ?? 0)) + 'px',
+          marginRight: (sectionStyle?.subtotalOffset ?? 0) + 'px',
+          paddingLeft: Math.max(0, sectionStyle?.subtotalOffset ?? 0) + 'px',
+          paddingRight: Math.max(0, -(sectionStyle?.subtotalOffset ?? 0)) + 'px',
         }"
       >
         <span
           :style="{
-            fontSize: (styleConfig?.table?.subtotalLabelSize ?? 7) + 'px',
+            fontSize: (sectionStyle?.subtotalLabelSize ?? 7) + 'px',
             fontWeight:
-              (styleConfig?.table?.subtotalLabelWeight || 'bold') === 'bold' ? '700' : '400',
-            color: styleConfig?.table?.subtotalLabelColor || '#919191',
+              (sectionStyle?.subtotalLabelWeight || 'bold') === 'bold' ? '700' : '400',
+            color: sectionStyle?.subtotalLabelColor || '#919191',
           }"
         >
-          {{ styleConfig?.table?.subtotalLabelText || 'Subtotal' }}
+          {{ sectionStyle?.subtotalLabelText || 'Subtotal' }}
         </span>
         <span
           :style="{
-            fontSize: (styleConfig?.table?.subtotalAmountSize ?? 7) + 'px',
+            fontSize: (sectionStyle?.subtotalAmountSize ?? 7) + 'px',
             fontWeight:
-              (styleConfig?.table?.subtotalAmountWeight || 'bold') === 'bold' ? '700' : '400',
-            color: styleConfig?.table?.subtotalAmountColor || '#000000',
+              (sectionStyle?.subtotalAmountWeight || 'bold') === 'bold' ? '700' : '400',
+            color: sectionStyle?.subtotalAmountColor || '#000000',
             paddingLeft: '6px',
           }"
         >
@@ -45,6 +45,9 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
+import { getTableStyle } from '@/utils/style-helper'
+
 interface TableColumn {
   id: string
   name: string
@@ -75,7 +78,11 @@ import type { StyleConfig } from '@/types/style'
 const props = defineProps<{
   table: Table
   styleConfig: StyleConfig
+  sectionIndex?: number
 }>()
+
+// 获取当前索引的样式
+const sectionStyle = computed(() => getTableStyle(props.styleConfig, props.sectionIndex ?? 0))
 
 // 计算列宽度
 const getColumnWidth = (column: TableColumn): number => {

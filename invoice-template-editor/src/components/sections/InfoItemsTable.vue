@@ -11,12 +11,12 @@
           v-for="(item, colIndex) in rowItems"
           :key="item.id"
           :style="{
-            width: 100 / (styleConfig?.info?.itemsPerRow || 5) + '%',
-            paddingLeft: colIndex === 0 ? '0' : (styleConfig?.info?.itemsSpacing ?? 8) / 2 + 'px',
+            width: 100 / (sectionStyle?.itemsPerRow || 5) + '%',
+            paddingLeft: colIndex === 0 ? '0' : (sectionStyle?.itemsSpacing ?? 8) / 2 + 'px',
             paddingRight:
               colIndex === rowItems.length - 1
                 ? '0'
-                : (styleConfig?.info?.itemsSpacing ?? 8) / 2 + 'px',
+                : (sectionStyle?.itemsSpacing ?? 8) / 2 + 'px',
             verticalAlign: 'top',
           }"
         >
@@ -24,10 +24,10 @@
             <tr>
               <td
                 :style="{
-                  fontSize: (styleConfig?.info?.labelSize || 7) + 'px',
-                  fontWeight: getFontWeight(styleConfig?.info?.labelWeight || 'bold'),
-                  color: styleConfig?.info?.labelColor || '#000000',
-                  lineHeight: (styleConfig?.info?.labelSize || 7) + 2 + 'px',
+                  fontSize: (sectionStyle?.labelSize || 7) + 'px',
+                  fontWeight: getFontWeight(sectionStyle?.labelWeight || 'bold'),
+                  color: sectionStyle?.labelColor || '#000000',
+                  lineHeight: (sectionStyle?.labelSize || 7) + 2 + 'px',
                   padding: '0',
                 }"
               >
@@ -38,11 +38,11 @@
             <tr>
               <td
                 :style="{
-                  fontSize: (styleConfig?.info?.valueSize || 7) + 'px',
-                  fontWeight: getFontWeight(styleConfig?.info?.valueWeight || 'normal'),
-                  color: styleConfig?.info?.valueColor || '#919191',
-                  lineHeight: (styleConfig?.info?.valueSize || 7) + 2 + 'px',
-                  padding: (styleConfig?.info?.labelValueGap ?? 2) + 'px 0 0 0',
+                  fontSize: (sectionStyle?.valueSize || 7) + 'px',
+                  fontWeight: getFontWeight(sectionStyle?.valueWeight || 'normal'),
+                  color: sectionStyle?.valueColor || '#919191',
+                  lineHeight: (sectionStyle?.valueSize || 7) + 2 + 'px',
+                  padding: (sectionStyle?.labelValueGap ?? 2) + 'px 0 0 0',
                 }"
               >
                 <div v-if="!isEditMode" v-html="toXhtml(item.value)"></div>
@@ -53,10 +53,10 @@
         </td>
         <!-- 填充空单元格，保持网格结构；无边缘额外间距 -->
         <td
-          v-for="n in (styleConfig?.info?.itemsPerRow || 5) - rowItems.length"
+          v-for="n in (sectionStyle?.itemsPerRow || 5) - rowItems.length"
           :key="'empty-' + n"
           :style="{
-            width: 100 / (styleConfig?.info?.itemsPerRow || 5) + '%',
+            width: 100 / (sectionStyle?.itemsPerRow || 5) + '%',
             padding: '0',
           }"
         >
@@ -69,8 +69,8 @@
         :key="'row-gap-after-' + rowIndex"
       >
         <td
-          :colspan="styleConfig?.info?.itemsPerRow || 5"
-          :style="{ height: (styleConfig?.info?.itemGap ?? 4) + 'px', padding: 0 }"
+          :colspan="sectionStyle?.itemsPerRow || 5"
+          :style="{ height: (sectionStyle?.itemGap ?? 4) + 'px', padding: 0 }"
         ></td>
       </tr>
     </template>
@@ -89,17 +89,21 @@ interface InfoItem {
 }
 
 import type { StyleConfig } from '@/types/style'
+import { getInfoStyle } from '@/utils/style-helper'
 
 const props = defineProps<{
   items: InfoItem[]
   styleConfig: StyleConfig
+  sectionIndex?: number
   isEditMode?: boolean
 }>()
+
+const sectionStyle = computed(() => getInfoStyle(props.styleConfig, props.sectionIndex ?? 0))
 
 // 将items按行分组，每行5个
 const itemRows = computed(() => {
   const rows: InfoItem[][] = []
-  const itemsPerRow = props.styleConfig?.info?.itemsPerRow || 5
+  const itemsPerRow = sectionStyle.value?.itemsPerRow || 5
 
   for (let i = 0; i < props.items.length; i += itemsPerRow) {
     rows.push(props.items.slice(i, i + itemsPerRow))

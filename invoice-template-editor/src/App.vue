@@ -9,6 +9,13 @@ import NotificationManager from './components/NotificationManager.vue'
 import { useConfirmDialog } from './composables/useConfirmDialog'
 import { useUndoSystem } from './composables/useUndoSystem'
 import type { TemplateData } from './types/section'
+import {
+  createDefaultInfoStyle,
+  createDefaultTableStyle,
+  createDefaultDescriptionStyle,
+  createDefaultItemStyle,
+  createDefaultHInfoStyle,
+} from './utils/style-helper'
 
 // Local storage key names
 const STORAGE_KEY = 'invoice-template-editor-data'
@@ -50,54 +57,16 @@ const styleConfig = reactive({
     verticalAlign: 'top' as 'top' | 'middle' | 'bottom',
   },
   info: {
-    sectionTitleColor: '#6b7280',
-    sectionTitleWeight: 'bold' as const,
-    labelColor: '#000000',
-    labelWeight: 'bold' as const,
-    valueColor: '#919191',
-    valueWeight: 'normal' as const,
-    itemGap: 2,
-    itemsPerRow: 5 as const,
-    itemsSpacing: 4,
-    labelValueGap: 2,
-    topMargin: 10,
+    0: createDefaultInfoStyle(),
   },
   table: {
-    sectionTitleColor: '#6b7280',
-    sectionTitleWeight: 'bold' as const,
-    subsectionTitleColor: '#000000',
-    subsectionTitleWeight: 'bold' as const,
-    headerColor: '#919191',
-    columnNameWeight: 'bold' as const,
-    rowTextColor: '#000000',
-    borderColor: '#d2d2d2',
-    rowHeight: 13,
-    rowSpacing: 2,
-    columnsPadding: 4,
-    subtotalOffset: 0,
-    topMargin: 10,
+    0: createDefaultTableStyle(),
   },
   description: {
-    labelColor: '#000000',
-    labelWeight: 'bold' as const,
-    textColor: '#919191',
-    textWeight: 'normal' as const,
-    textSize: 7,
-    lineHeight: 1.2,
-    topMargin: 10,
+    0: createDefaultDescriptionStyle(),
   },
   item: {
-    sectionTitleColor: '#6b7280',
-    sectionTitleWeight: 'bold' as const,
-    labelColor: '#000000',
-    labelWeight: 'bold' as const,
-    valueColor: '#919191',
-    valueWeight: 'normal' as const,
-    itemGap: 2,
-    itemsPerRow: 5 as const,
-    itemsSpacing: 4,
-    labelValueGap: 2,
-    topMargin: 10,
+    0: createDefaultItemStyle(),
   },
   footer: {
     textColor: '#000000',
@@ -126,17 +95,7 @@ const styleConfig = reactive({
     topMargin: 10,
   },
   hInfo: {
-    sectionTitleColor: '#6b7280',
-    sectionTitleWeight: 'bold' as const,
-    labelColor: '#000000',
-    labelWeight: 'bold' as const,
-    valueColor: '#919191',
-    valueWeight: 'normal' as const,
-    labelWidth: 80,
-    labelValueGap: 8,
-    itemGap: 4,
-    columnsPadding: 8,
-    topMargin: 10,
+    0: createDefaultHInfoStyle(),
   },
 })
 
@@ -528,7 +487,27 @@ const handleImportFileChange = async (event: Event) => {
     Object.assign(templateData, migrated.data)
     // 覆盖 styleConfig（如果存在）
     if (migrated.styleConfig && typeof migrated.styleConfig === 'object') {
-      Object.assign(styleConfig, migrated.styleConfig)
+      const oldStyleConfig = migrated.styleConfig as any
+      const migratedStyleConfig: any = { ...oldStyleConfig }
+      
+      // 迁移旧格式的 styleConfig 到新格式
+      if (oldStyleConfig.info && !oldStyleConfig.info[0] && typeof oldStyleConfig.info === 'object' && !Array.isArray(oldStyleConfig.info)) {
+        migratedStyleConfig.info = { 0: oldStyleConfig.info }
+      }
+      if (oldStyleConfig.table && !oldStyleConfig.table[0] && typeof oldStyleConfig.table === 'object' && !Array.isArray(oldStyleConfig.table)) {
+        migratedStyleConfig.table = { 0: oldStyleConfig.table }
+      }
+      if (oldStyleConfig.description && !oldStyleConfig.description[0] && typeof oldStyleConfig.description === 'object' && !Array.isArray(oldStyleConfig.description)) {
+        migratedStyleConfig.description = { 0: oldStyleConfig.description }
+      }
+      if (oldStyleConfig.item && !oldStyleConfig.item[0] && typeof oldStyleConfig.item === 'object' && !Array.isArray(oldStyleConfig.item)) {
+        migratedStyleConfig.item = { 0: oldStyleConfig.item }
+      }
+      if (oldStyleConfig.hInfo && !oldStyleConfig.hInfo[0] && typeof oldStyleConfig.hInfo === 'object' && !Array.isArray(oldStyleConfig.hInfo)) {
+        migratedStyleConfig.hInfo = { 0: oldStyleConfig.hInfo }
+      }
+      
+      Object.assign(styleConfig, migratedStyleConfig)
     }
     // 保存历史节点
     undoSystem.saveState(sectionStates.value, templateData, styleConfig)
@@ -587,7 +566,36 @@ const loadFromLocalStorage = () => {
 
       // Restore style config (适用于所有版本)
       if (parsedData.styleConfig) {
-        Object.assign(styleConfig, parsedData.styleConfig)
+        // 迁移旧格式的 styleConfig 到新格式
+        const oldStyleConfig = parsedData.styleConfig as any
+        const migratedStyleConfig: any = { ...oldStyleConfig }
+        
+        // 迁移 info: 从单一对象转为 Record<number, InfoSectionStyle>
+        if (oldStyleConfig.info && !oldStyleConfig.info[0] && typeof oldStyleConfig.info === 'object' && !Array.isArray(oldStyleConfig.info)) {
+          migratedStyleConfig.info = { 0: oldStyleConfig.info }
+        }
+        
+        // 迁移 table: 从单一对象转为 Record<number, TableSectionStyle>
+        if (oldStyleConfig.table && !oldStyleConfig.table[0] && typeof oldStyleConfig.table === 'object' && !Array.isArray(oldStyleConfig.table)) {
+          migratedStyleConfig.table = { 0: oldStyleConfig.table }
+        }
+        
+        // 迁移 description: 从单一对象转为 Record<number, DescriptionSectionStyle>
+        if (oldStyleConfig.description && !oldStyleConfig.description[0] && typeof oldStyleConfig.description === 'object' && !Array.isArray(oldStyleConfig.description)) {
+          migratedStyleConfig.description = { 0: oldStyleConfig.description }
+        }
+        
+        // 迁移 item: 从单一对象转为 Record<number, ItemSectionStyle>
+        if (oldStyleConfig.item && !oldStyleConfig.item[0] && typeof oldStyleConfig.item === 'object' && !Array.isArray(oldStyleConfig.item)) {
+          migratedStyleConfig.item = { 0: oldStyleConfig.item }
+        }
+        
+        // 迁移 hInfo: 从单一对象转为 Record<number, HInfoSectionStyle>
+        if (oldStyleConfig.hInfo && !oldStyleConfig.hInfo[0] && typeof oldStyleConfig.hInfo === 'object' && !Array.isArray(oldStyleConfig.hInfo)) {
+          migratedStyleConfig.hInfo = { 0: oldStyleConfig.hInfo }
+        }
+        
+        Object.assign(styleConfig, migratedStyleConfig)
       }
 
       console.log('Data loaded from local storage')
@@ -1286,6 +1294,73 @@ const autoSave = () => {
     saveToLocalStorage()
   }, 1000) // Auto save after 1 second
 }
+
+// 同步样式配置：当添加新 section 时，自动创建对应的样式配置
+watch(
+  () => templateData.info?.length,
+  (newLength, oldLength) => {
+    if (newLength && newLength > (oldLength || 0)) {
+      // 添加了新 info section，为新的索引创建默认样式
+      for (let i = oldLength || 0; i < newLength; i++) {
+        if (!styleConfig.info[i]) {
+          styleConfig.info[i] = createDefaultInfoStyle()
+        }
+      }
+    }
+  },
+)
+
+watch(
+  () => templateData.tables?.length,
+  (newLength, oldLength) => {
+    if (newLength && newLength > (oldLength || 0)) {
+      for (let i = oldLength || 0; i < newLength; i++) {
+        if (!styleConfig.table[i]) {
+          styleConfig.table[i] = createDefaultTableStyle()
+        }
+      }
+    }
+  },
+)
+
+watch(
+  () => templateData.description?.length,
+  (newLength, oldLength) => {
+    if (newLength && newLength > (oldLength || 0)) {
+      for (let i = oldLength || 0; i < newLength; i++) {
+        if (!styleConfig.description[i]) {
+          styleConfig.description[i] = createDefaultDescriptionStyle()
+        }
+      }
+    }
+  },
+)
+
+watch(
+  () => templateData.item?.length,
+  (newLength, oldLength) => {
+    if (newLength && newLength > (oldLength || 0)) {
+      for (let i = oldLength || 0; i < newLength; i++) {
+        if (!styleConfig.item[i]) {
+          styleConfig.item[i] = createDefaultItemStyle()
+        }
+      }
+    }
+  },
+)
+
+watch(
+  () => templateData.hInfo?.length,
+  (newLength, oldLength) => {
+    if (newLength && newLength > (oldLength || 0)) {
+      for (let i = oldLength || 0; i < newLength; i++) {
+        if (!styleConfig.hInfo[i]) {
+          styleConfig.hInfo[i] = createDefaultHInfoStyle()
+        }
+      }
+    }
+  },
+)
 
 // Listen for data changes, auto save and save to history
 watch(

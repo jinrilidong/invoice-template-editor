@@ -9,10 +9,10 @@
       <td
         :style="{
           fontSize: '7px',
-          fontWeight: getFontWeight(styleConfig?.table?.sectionTitleWeight || 'bold'),
-          color: styleConfig?.table?.sectionTitleColor || '#6b7280',
+          fontWeight: getFontWeight(sectionStyle?.sectionTitleWeight || 'bold'),
+          color: sectionStyle?.sectionTitleColor || '#6b7280',
           lineHeight: '9px',
-          padding: '0 0 2px 0',
+          padding: `0 0 ${sectionStyle?.sectionTitleBottomMargin ?? 2}px 0`,
         }"
       >
         {{ table.sectionTitle }}
@@ -24,10 +24,10 @@
       <td
         :style="{
           fontSize: '7px',
-          fontWeight: getFontWeight(styleConfig?.table?.subsectionTitleWeight || 'bold'),
-          color: styleConfig?.table?.subsectionTitleColor || '#000000',
+          fontWeight: getFontWeight(sectionStyle?.subsectionTitleWeight || 'bold'),
+          color: sectionStyle?.subsectionTitleColor || '#000000',
           lineHeight: '9px',
-          padding: '0 0 2px 0',
+          padding: `0 0 ${sectionStyle?.subsectionTitleBottomMargin ?? 2}px 0`,
         }"
       >
         {{ table.subsectionTitle }}
@@ -37,22 +37,29 @@
     <!-- Data Table -->
     <tr v-if="table.columns && table.columns.length > 0">
       <td style="padding: 0">
-        <DataTable :table="table" :style-config="styleConfig" :is-edit-mode="isEditMode" />
+        <DataTable
+          :table="table"
+          :style-config="styleConfig"
+          :section-index="sectionIndex"
+          :is-edit-mode="isEditMode"
+        />
       </td>
     </tr>
 
     <!-- Subtotal -->
     <tr v-if="table.showSubtotal && table.total !== null && table.total !== undefined">
       <td style="padding: 0">
-        <SubtotalTable :table="table" :style-config="styleConfig" />
+        <SubtotalTable :table="table" :style-config="styleConfig" :section-index="sectionIndex" />
       </td>
     </tr>
   </table>
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import DataTable from './DataTable.vue'
 import SubtotalTable from './SubtotalTable.vue'
+import { getTableStyle } from '@/utils/style-helper'
 
 interface TableColumn {
   id: string
@@ -81,11 +88,15 @@ interface Table {
 
 import type { StyleConfig } from '@/types/style'
 
-defineProps<{
+const props = defineProps<{
   table: Table
   styleConfig: StyleConfig
+  sectionIndex?: number
   isEditMode?: boolean
 }>()
+
+// 获取当前索引的样式
+const sectionStyle = computed(() => getTableStyle(props.styleConfig, props.sectionIndex ?? 0))
 
 // 字体权重转换函数
 const getFontWeight = (weight: string): string => {

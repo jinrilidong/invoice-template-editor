@@ -1,3 +1,101 @@
+// 基础样式接口定义
+export interface InfoSectionStyle {
+  sectionTitleColor: string
+  sectionTitleWeight?: 'normal' | 'bold'
+  sectionTitleSize?: number
+  sectionTitleBottomMargin?: number
+  labelColor: string
+  labelWeight?: 'normal' | 'bold'
+  labelSize?: number
+  valueColor: string
+  valueWeight?: 'normal' | 'bold'
+  valueSize?: number
+  itemGap: number
+  itemsPerRow?: number
+  itemsSpacing?: number
+  labelValueGap?: number
+  topMargin?: number
+}
+
+export interface TableSectionStyle {
+  sectionTitleColor: string
+  sectionTitleWeight?: 'normal' | 'bold'
+  sectionTitleSize?: number
+  sectionTitleBottomMargin?: number
+  subsectionTitleColor?: string
+  subsectionTitleWeight?: 'normal' | 'bold'
+  subsectionTitleSize?: number
+  subsectionTitleBottomMargin?: number
+  headerColor: string
+  columnNameWeight?: 'normal' | 'bold'
+  columnNameSize?: number
+  rowTextColor?: string
+  rowTextSize?: number
+  rowHeight: number
+  rowSpacing?: number
+  columnsPadding: number
+  borderColor?: string
+  // 小计样式（可选）
+  subtotalLabelText?: string
+  subtotalLabelColor?: string
+  subtotalLabelWeight?: 'normal' | 'bold'
+  subtotalLabelSize?: number
+  subtotalAmountColor?: string
+  subtotalAmountWeight?: 'normal' | 'bold'
+  subtotalAmountSize?: number
+  subtotalOffset?: number
+  topMargin?: number
+}
+
+export interface DescriptionSectionStyle {
+  labelColor: string
+  labelWeight?: 'normal' | 'bold'
+  labelSize?: number
+  labelBottomMargin?: number
+  textColor: string
+  textWeight?: 'normal' | 'bold'
+  textSize: number
+  lineHeight: number
+  topMargin?: number
+}
+
+export interface ItemSectionStyle {
+  sectionTitleColor: string
+  sectionTitleWeight?: 'normal' | 'bold'
+  sectionTitleSize?: number
+  sectionTitleBottomMargin?: number
+  labelColor: string
+  labelWeight?: 'normal' | 'bold'
+  labelSize?: number
+  valueColor: string
+  valueWeight?: 'normal' | 'bold'
+  valueSize?: number
+  itemGap: number
+  itemsPerRow?: number
+  itemsSpacing?: number
+  labelValueGap?: number
+  topMargin?: number
+}
+
+export interface HInfoSectionStyle {
+  sectionTitleColor: string
+  sectionTitleWeight?: 'normal' | 'bold'
+  sectionTitleSize?: number
+  sectionTitleBottomMargin?: number
+  labelColor: string
+  labelWeight?: 'normal' | 'bold'
+  labelSize?: number
+  valueColor: string
+  valueWeight?: 'normal' | 'bold'
+  valueSize?: number
+  labelWidth: number
+  labelValueGap: number
+  itemGap: number
+  columnsPadding: number
+  columnGap?: number
+  topMargin?: number
+}
+
 export interface StyleConfig {
   baseFontSize: number
 
@@ -16,50 +114,12 @@ export interface StyleConfig {
     logoHeight?: number
   }
 
-  info: {
-    sectionTitleColor: string
-    sectionTitleWeight?: 'normal' | 'bold'
-    sectionTitleSize?: number
-    labelColor: string
-    labelWeight?: 'normal' | 'bold'
-    labelSize?: number
-    valueColor: string
-    valueWeight?: 'normal' | 'bold'
-    valueSize?: number
-    itemGap: number
-    itemsPerRow?: number
-    itemsSpacing?: number
-    labelValueGap?: number
-    topMargin?: number
-  }
-
-  table: {
-    sectionTitleColor: string
-    sectionTitleWeight?: 'normal' | 'bold'
-    sectionTitleSize?: number
-    subsectionTitleColor?: string
-    subsectionTitleWeight?: 'normal' | 'bold'
-    subsectionTitleSize?: number
-    headerColor: string
-    columnNameWeight?: 'normal' | 'bold'
-    columnNameSize?: number
-    rowTextColor?: string
-    rowTextSize?: number
-    rowHeight: number
-    rowSpacing?: number
-    columnsPadding: number
-    borderColor?: string
-    // 小计样式（可选）
-    subtotalLabelText?: string
-    subtotalLabelColor?: string
-    subtotalLabelWeight?: 'normal' | 'bold'
-    subtotalLabelSize?: number
-    subtotalAmountColor?: string
-    subtotalAmountWeight?: 'normal' | 'bold'
-    subtotalAmountSize?: number
-    subtotalOffset?: number
-    topMargin?: number
-  }
+  // 支持多个实例，使用索引作为 key
+  info: Record<number, InfoSectionStyle>
+  table: Record<number, TableSectionStyle>
+  description: Record<number, DescriptionSectionStyle>
+  item: Record<number, ItemSectionStyle>
+  hInfo: Record<number, HInfoSectionStyle>
 
   summary?: {
     labelText?: string
@@ -70,34 +130,6 @@ export interface StyleConfig {
     labelSize: number
     contentSize: number
     labelContentGap?: number
-    topMargin?: number
-  }
-
-  description: {
-    labelColor: string
-    labelWeight?: 'normal' | 'bold'
-    labelSize?: number
-    textColor: string
-    textWeight?: 'normal' | 'bold'
-    textSize: number
-    lineHeight: number
-    topMargin?: number
-  }
-
-  item: {
-    sectionTitleColor: string
-    sectionTitleWeight?: 'normal' | 'bold'
-    sectionTitleSize?: number
-    labelColor: string
-    labelWeight?: 'normal' | 'bold'
-    labelSize?: number
-    valueColor: string
-    valueWeight?: 'normal' | 'bold'
-    valueSize?: number
-    itemGap: number
-    itemsPerRow?: number
-    itemsSpacing?: number
-    labelValueGap?: number
     topMargin?: number
   }
 
@@ -117,23 +149,5 @@ export interface StyleConfig {
     textColor: string
     textSize: number
     textWeight?: 'normal' | 'bold'
-  }
-
-  hInfo: {
-    sectionTitleColor: string
-    sectionTitleWeight?: 'normal' | 'bold'
-    sectionTitleSize?: number
-    labelColor: string
-    labelWeight?: 'normal' | 'bold'
-    labelSize?: number
-    valueColor: string
-    valueWeight?: 'normal' | 'bold'
-    valueSize?: number
-    labelWidth: number
-    labelValueGap: number
-    itemGap: number
-    columnsPadding: number
-    columnGap?: number
-    topMargin?: number
   }
 }

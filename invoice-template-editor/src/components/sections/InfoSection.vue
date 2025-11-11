@@ -8,11 +8,11 @@
     <tr v-if="info.sectionTitle || isEditMode">
       <td
         :style="{
-          fontSize: (styleConfig?.info?.sectionTitleSize || 7) + 'px',
-          fontWeight: getFontWeight(styleConfig?.info?.sectionTitleWeight || 'semibold'),
-          color: styleConfig?.info?.sectionTitleColor || '#6b7280',
-          lineHeight: (styleConfig?.info?.sectionTitleSize || 7) + 2 + 'px',
-          padding: '0 0 2px 0',
+          fontSize: (sectionStyle?.sectionTitleSize || 7) + 'px',
+          fontWeight: getFontWeight(sectionStyle?.sectionTitleWeight || 'bold'),
+          color: sectionStyle?.sectionTitleColor || '#6b7280',
+          lineHeight: (sectionStyle?.sectionTitleSize || 7) + 2 + 'px',
+          padding: `0 0 ${sectionStyle?.sectionTitleBottomMargin ?? 2}px 0`,
         }"
       >
         <template v-if="!isEditMode">{{ info.sectionTitle }}</template>
@@ -32,6 +32,7 @@
         <InfoItemsTable
           :items="info.items"
           :style-config="styleConfig"
+          :section-index="sectionIndex ?? 0"
           :is-edit-mode="isEditMode"
         />
       </td>
@@ -56,12 +57,17 @@ interface Info {
 }
 
 import type { StyleConfig } from '@/types/style'
+import { getInfoStyle } from '@/utils/style-helper'
+import { computed } from 'vue'
 
-defineProps<{
+const props = defineProps<{
   info: Info
   styleConfig: StyleConfig
+  sectionIndex?: number
   isEditMode?: boolean
 }>()
+
+const sectionStyle = computed(() => getInfoStyle(props.styleConfig, props.sectionIndex ?? 0))
 
 // 字体权重转换函数
 const getFontWeight = (weight: string): string => {

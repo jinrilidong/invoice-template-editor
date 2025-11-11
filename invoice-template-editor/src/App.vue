@@ -9,6 +9,7 @@ import NotificationManager from './components/NotificationManager.vue'
 import { useConfirmDialog } from './composables/useConfirmDialog'
 import { useUndoSystem } from './composables/useUndoSystem'
 import type { TemplateData } from './types/section'
+import type { StyleConfig } from './types/style'
 import {
   createDefaultInfoStyle,
   createDefaultTableStyle,
@@ -45,7 +46,7 @@ const previewKey = ref(0)
 const selectedSection = ref<string | null>(null)
 
 // Style configuration for PDF Template (colors, fonts, spacing)
-const styleConfig = reactive({
+const styleConfig = reactive<StyleConfig>({
   baseFontSize: 7,
   header: {
     titleColor: '#0e171f',

@@ -1225,6 +1225,7 @@
 <script setup lang="ts">
 import { reactive, watch, computed } from 'vue'
 import TextButton from './TextButton.vue'
+import type { StyleConfig } from '@/types/style'
 import {
   getInfoStyle,
   getTableStyle,
@@ -1359,20 +1360,6 @@ interface SectionStyle {
   }
 }
 
-interface StyleConfig extends SectionStyle {
-  baseFontSize: number
-  footerInfo: {
-    textColor: string
-    textSize: number
-    textWeight?: 'normal' | 'bold'
-  }
-  footerName: {
-    textColor: string
-    textSize: number
-    textWeight?: 'normal' | 'bold'
-  }
-}
-
 const props = defineProps<{
   modelValue: StyleConfig
   selectedSection?: string | null
@@ -1442,14 +1429,14 @@ const showFooterSettings = computed(() => {
   return props.selectedSection === 'footer-section'
 })
 
-const local = reactive<StyleConfig>({
+const local = reactive({
   baseFontSize: props.modelValue.baseFontSize,
   summary: {
     labelText: props.modelValue.summary?.labelText || 'Total USD',
     labelColor: props.modelValue.summary?.labelColor || '#000000',
-    labelWeight: props.modelValue.summary?.labelWeight || 'bold',
+    labelWeight: (props.modelValue.summary?.labelWeight || 'bold') as 'normal' | 'bold',
     contentColor: props.modelValue.summary?.contentColor || '#000000',
-    contentWeight: props.modelValue.summary?.contentWeight || 'bold',
+    contentWeight: (props.modelValue.summary?.contentWeight || 'bold') as 'normal' | 'bold',
     labelSize: props.modelValue.summary?.labelSize || 10,
     contentSize: props.modelValue.summary?.contentSize || 14,
     labelContentGap: props.modelValue.summary?.labelContentGap ?? 12,
@@ -1468,11 +1455,11 @@ const local = reactive<StyleConfig>({
     verticalAlign: props.modelValue.header?.verticalAlign || 'top',
     logoHeight: props.modelValue.header?.logoHeight ?? 48,
   },
-  info: {} as Record<number, any>,
-  table: {} as Record<number, any>,
-  description: {} as Record<number, any>,
-  item: {} as Record<number, any>,
-  hInfo: {} as Record<number, any>,
+  info: {} as StyleConfig['info'],
+  table: {} as StyleConfig['table'],
+  description: {} as StyleConfig['description'],
+  item: {} as StyleConfig['item'],
+  hInfo: {} as StyleConfig['hInfo'],
   footer: {
     textColor: props.modelValue.footer?.textColor || '#000000',
     textSize: props.modelValue.footer?.textSize || 7,
@@ -1488,7 +1475,7 @@ const local = reactive<StyleConfig>({
     textSize: props.modelValue.footerName?.textSize || 7,
     textWeight: props.modelValue.footerName?.textWeight || 'normal',
   },
-})
+} as StyleConfig)
 
 // 初始化：从 modelValue 同步所有已存在的样式配置
 const syncStylesFromModelValue = () => {
@@ -1496,8 +1483,9 @@ const syncStylesFromModelValue = () => {
   if (props.modelValue.info) {
     Object.keys(props.modelValue.info).forEach((key) => {
       const index = Number(key)
-      if (!local.info[index]) {
-        local.info[index] = cloneStyle(props.modelValue.info[index])
+      const style = props.modelValue.info[index]
+      if (style && !local.info[index]) {
+        local.info[index] = cloneStyle(style)
       }
     })
   }
@@ -1505,8 +1493,9 @@ const syncStylesFromModelValue = () => {
   if (props.modelValue.table) {
     Object.keys(props.modelValue.table).forEach((key) => {
       const index = Number(key)
-      if (!local.table[index]) {
-        local.table[index] = cloneStyle(props.modelValue.table[index])
+      const style = props.modelValue.table[index]
+      if (style && !local.table[index]) {
+        local.table[index] = cloneStyle(style)
       }
     })
   }
@@ -1514,8 +1503,9 @@ const syncStylesFromModelValue = () => {
   if (props.modelValue.description) {
     Object.keys(props.modelValue.description).forEach((key) => {
       const index = Number(key)
-      if (!local.description[index]) {
-        local.description[index] = cloneStyle(props.modelValue.description[index])
+      const style = props.modelValue.description[index]
+      if (style && !local.description[index]) {
+        local.description[index] = cloneStyle(style)
       }
     })
   }
@@ -1523,8 +1513,9 @@ const syncStylesFromModelValue = () => {
   if (props.modelValue.item) {
     Object.keys(props.modelValue.item).forEach((key) => {
       const index = Number(key)
-      if (!local.item[index]) {
-        local.item[index] = cloneStyle(props.modelValue.item[index])
+      const style = props.modelValue.item[index]
+      if (style && !local.item[index]) {
+        local.item[index] = cloneStyle(style)
       }
     })
   }
@@ -1532,8 +1523,9 @@ const syncStylesFromModelValue = () => {
   if (props.modelValue.hInfo) {
     Object.keys(props.modelValue.hInfo).forEach((key) => {
       const index = Number(key)
-      if (!local.hInfo[index]) {
-        local.hInfo[index] = cloneStyle(props.modelValue.hInfo[index])
+      const style = props.modelValue.hInfo[index]
+      if (style && !local.hInfo[index]) {
+        local.hInfo[index] = cloneStyle(style)
       }
     })
   }
@@ -1633,7 +1625,7 @@ const currentHInfoStyle = computed({
 watch(
   local,
   () => {
-    emit('update:modelValue', { ...local })
+    emit('update:modelValue', { ...local } as StyleConfig)
   },
   { deep: true },
 )

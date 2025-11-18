@@ -673,8 +673,22 @@ const formatHtml = (html: string): string => {
         // 闭合标签，减少缩进
         indent = Math.max(0, indent - 1)
         result.push(indentStr.repeat(indent) + part)
+      } else if (part.match(/^<br\s*\/?>$/i)) {
+        // <br /> 标签：如果前一个部分是文本内容，则追加到同一行；否则单独一行
+        const prevIndex = result.length - 1
+        if (prevIndex >= 0) {
+          const prevPart = result[prevIndex]
+          // 检查前一个部分是否是文本内容（不以 < 开头，且不是空行）
+          if (prevPart && !prevPart.trim().startsWith('<') && prevPart.trim()) {
+            // 将 <br /> 追加到前一个文本内容的同一行
+            result[prevIndex] = prevPart + part
+            continue
+          }
+        }
+        // 如果没有前一个文本内容，则按正常自闭合标签处理
+        result.push(indentStr.repeat(indent) + part)
       } else if (part.endsWith('/>') || part.endsWith(' />')) {
-        // 自闭合标签，不改变缩进
+        // 其他自闭合标签，不改变缩进
         result.push(indentStr.repeat(indent) + part)
       } else {
         // 开始标签，增加缩进
@@ -808,6 +822,18 @@ const exportHtmlTemplate = async () => {
       // ensure <br> and <img> are self-closed for XHTML
       .replace(/<br(\s*?)>/g, '<br$1 />')
       .replace(/<img([^>]*?)(?<!\/)>/g, '<img$1 />')
+      // Fix <br /> position: move standalone <br /> to the end of previous text line
+      // This prevents extra spaces in right-aligned text when rendered by OpenHTMLtoPDF
+      // Pattern: text content + whitespace + newline + whitespace + <br /> + whitespace + newline
+      // Replace with: text content + <br /> + newline
+      .replace(/([^\n<]+?)(\s*\n\s*)<br\s*\/?>\s*\n/gi, (match, text, whitespace) => {
+        // Only process if the text doesn't end with a tag and contains non-whitespace content
+        const trimmedText = text.trim()
+        if (trimmedText && !trimmedText.endsWith('>')) {
+          return trimmedText + '<br />\n'
+        }
+        return match
+      })
 
     // 9) Format HTML code
     const formattedBody = formatHtml(sanitized)
